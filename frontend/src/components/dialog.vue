@@ -9,7 +9,8 @@
 </template>
    
 <script>
-import { defineComponent, h, ref } from "vue";
+import API from "../store/axiosInstance.js"
+import { defineComponent, h, ref, watch } from "vue";
 import { useDialog, NDialogProvider, NInput, NButton } from "naive-ui";
 import imgUrl from "../assets/logo.png"
 export default defineComponent({
@@ -22,9 +23,52 @@ export default defineComponent({
     const dialog = useDialog()
     const username = ref("");
     const password = ref("")
+    const visible = ref(false)
     // 定义用户名与密码
-    const handleConfirm = (initial_username) => {
+    function login(initial_username) {
+      API({
+          url:'login/',
+          method:'post',
+          data:{
+            "user_name": username.value,
+            "password": password.value,
+          }
+      }).then((res)=>{
+          console.log(res.data.data.data.token)
+          window.localStorage.setItem("token",res.data.data.data.token)
+          initial_username.value = username.value
+          visible.value = true
+      }).catch((error) => {
+          console.log(error);
+      })
+    }
+    function register(initial_username) {
+      API({
+          url:'register/',
+          method:'post',
+          data:{
+            "user_name": username.value,
+            "password": password.value,
+          }
+      }).then((res)=>{
+          console.log(res.data.data.data.token)
+          window.localStorage.setItem("token",res.data.data.data.token)
+          initial_username.value = username.value
+          visible.value = true
+      }).catch((error) => {
+          console.log(error);
+      })
+    }
+    watch(visible, (newVal, _) => {
+      console.log(newVal)
+      if (newVal == true) {
+        dialog.destroyAll()
+      }
+    })
+    const handleConfirm = (initial_username, api) => {
       // 实现登录弹窗
+      // 现在暂时把登录与注册弹窗放在一起
+      // 之后会尝试分开
       dialog.warning({
           icon: () => {
             return h("img", {
@@ -36,8 +80,9 @@ export default defineComponent({
             })
           },
           title: () => {
+            var content = (api == 'login' ? "登录" : "注册")
             return h(
-              "div", "登录"
+              "div", content
             )
           },
           content: () => {  
@@ -101,9 +146,16 @@ export default defineComponent({
           positiveText: '登录',
           negativeText: '取消',
           onPositiveClick: () => {
-            initial_username.value = username.value
+            if(api == "login"){
+              login(initial_username)
+            }
+            else {
+              register(initial_username)
+            }
+            return false
           },
           onNegativeClick: () => {
+            return true
           }
         })
     }

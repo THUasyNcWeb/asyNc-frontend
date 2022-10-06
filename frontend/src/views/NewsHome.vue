@@ -9,6 +9,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import Dialog from '@/components/dialog.vue'
+import API from "../store/axiosInstance.js"
 import { 
     NInput, 
     NLayoutHeader, 
@@ -42,9 +43,10 @@ export default defineComponent({
         // 引入弹窗空间
         const username = ref("")
         // 存储主页显示的用户名
-        function dialogHand (){
+        function dialogHand (api){
             // 打开登录弹窗
-            sonRef.value.handleConfirm(username)
+            sonRef.value.handleConfirm(username, api)
+            // console.log(api)
         }
         function handleSelect (key){
             if(key == "edit") {
@@ -55,6 +57,17 @@ export default defineComponent({
                 // 等待跳转
             }
         }
+        function getNews() {
+            API({
+                headers:{"Authorization": window.localStorage.getItem("token")},
+                url:'all_news/',
+                method:'get',
+                // headers:{}
+            }).then((res)=>{
+                console.log(res);
+            });
+        }
+        
         const options = [
             {
                 label:"个人主页",
@@ -67,6 +80,7 @@ export default defineComponent({
         ]
         // 用户名对应的下拉菜单选项
         return {
+            getNews,
             handleSelect,
             options,
             sonRef,
@@ -86,6 +100,9 @@ export default defineComponent({
         </n-dialog-provider>
         <!-- 布置弹窗控件 -->
         <n-layout-header style="height:30px; background: white;text-align: right;">
+            <n-button @click="getNews">
+                测试
+            </n-button>
             <div class="guide_button">
                 <a href="http://www.baidu.com">
                     网页
@@ -144,13 +161,15 @@ export default defineComponent({
                     </n-dropdown>
                 </div>
                 <div v-else>
-                    <n-button @click="dialogHand" :bordered="false">
+                    <n-button @click="dialogHand('login')" :bordered="false">
                         登录
+                    </n-button>
+                    <n-button @click="dialogHand('register')" :bordered="false">
+                        注册
                     </n-button>
                 </div>
                 <!-- 若当前未登录，则布置登录按钮 -->
             </div>
-
             <n-tooltip :show-arrow="false" trigger="hover">
                 <template #trigger>
                     <div class="guide_button">
@@ -164,11 +183,11 @@ export default defineComponent({
             <n-card class="main_card">
                 <div>
                     <img src="../assets/log-news.png"
-                        style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;" />
-                    <n-input-group>
-                        <n-input style="width:500px;border-radius: 0%;" placeholder="百度一下，我也不知道">
+                        style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
+                    <n-input-group style="display: inline-block;width: 600px;">
+                        <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
                         </n-input>
-                        <n-button style=" border-radius: 0%;  background: blue; height: 34px;margin-right: 10px;"
+                        <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
                             text-color="white">
                             百度一下
                         </n-button>
