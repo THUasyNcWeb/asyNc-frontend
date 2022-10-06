@@ -7,7 +7,8 @@
  -->
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import Dialog from '@/components/dialog.vue'
 import { 
     NInput, 
     NLayoutHeader, 
@@ -15,27 +16,75 @@ import {
     NButton, 
     NDivider,
     NTooltip,
+    NDialogProvider,
+    NDropdown,
+    NMessageProvider,
+    NInputGroup,
     } from 'naive-ui'
 export default defineComponent({
     components: {
         NInput,
+        NInputGroup,
         NLayoutHeader,
         NCard,
         NButton,
         NDivider,
         NTooltip,
+        NDialogProvider,
+        NMessageProvider,
+        Dialog,
+        NDropdown,
     },
     // 引入naive ui组件
+    
     setup() {
-        return {
-            username: "zyj578335934" // 当前页面用户名
+        const sonRef = ref(null)
+        // 引入弹窗空间
+        const username = ref("")
+        // 存储主页显示的用户名
+        function dialogHand (){
+            // 打开登录弹窗
+            sonRef.value.handleConfirm(username)
         }
-    }
+        function handleSelect (key){
+            if(key == "edit") {
+                username.value = ""
+                // 若是退出登录界面，则关闭弹窗
+            }
+            else {
+                // 等待跳转
+            }
+        }
+        const options = [
+            {
+                label:"个人主页",
+                key:"Home",
+            },
+            {
+                label:"退出",
+                key:"edit",
+            }
+        ]
+        // 用户名对应的下拉菜单选项
+        return {
+            handleSelect,
+            options,
+            sonRef,
+            dialogHand,
+            username // 当前页面用户名
+        }
+    },
 })
 </script>
   
 <template>
     <body>
+        <n-dialog-provider> 
+            <n-message-provider>
+                <Dialog ref="sonRef"></Dialog>
+            </n-message-provider>
+        </n-dialog-provider>
+        <!-- 布置弹窗控件 -->
         <n-layout-header style="height:30px; background: white;text-align: right;">
             <div class="guide_button">
                 <a href="http://www.baidu.com">
@@ -82,15 +131,24 @@ export default defineComponent({
                     文库
                 </a>
             </div>
-            <n-divider vertical="True" />
+            <n-divider :vertical=true />
             <div class="guide_button">
                 <a href="http://www.baidu.com">
                     百度首页
                 </a>
             </div>
             <div class="guide_button">
-                {{username}}
-                <!-- 这里应该跳转到账号管理界面 -->
+                <div v-if="username != ''">
+                    <n-dropdown trigger = "hover" :options="options" @select="handleSelect">
+                        <div class="guide_button">{{username}}</div>
+                    </n-dropdown>
+                </div>
+                <div v-else>
+                    <n-button @click="dialogHand" :bordered="false">
+                        登录
+                    </n-button>
+                </div>
+                <!-- 若当前未登录，则布置登录按钮 -->
             </div>
 
             <n-tooltip :show-arrow="false" trigger="hover">

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import NewsHome from "../views/NewsHome.vue";
 
 Vue.use(VueRouter);
 
@@ -15,8 +15,8 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
     {
         path: "/",
-        name: "Home",
-        component: Home,
+        name: "NewsHome",
+        component: NewsHome,
         meta: {
             title: "百度新闻——海量中文资讯平台",
         },

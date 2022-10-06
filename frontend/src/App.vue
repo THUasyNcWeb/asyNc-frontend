@@ -7,17 +7,22 @@
  -->
 
 <template>
-  <Home />
+  <body>
+    <NewsHome />
+  </body>
+
 </template>
 
 <script>
-import Home from './views/NewsHome.vue';
 
+import NewsHome from './views/NewsHome.vue';
+import Dialog from './components/dialog.vue';
 export default {
   name: 'App',
   components: {
-    Home
-  }
+    NewsHome,
+    Dialog
+}
 }
 </script>
 
