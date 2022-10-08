@@ -62,10 +62,11 @@ export default defineComponent({
     watch(visible, (newVal, _) => {
       console.log(newVal)
       if (newVal == true) {
+        visible.value = false
         dialog.destroyAll()
       }
     })
-    const handleConfirm = (initial_username, api) => {
+    const handleLogin = (initial_username) => {
       // 实现登录弹窗
       // 现在暂时把登录与注册弹窗放在一起
       // 之后会尝试分开
@@ -80,7 +81,7 @@ export default defineComponent({
             })
           },
           title: () => {
-            var content = (api == 'login' ? "登录" : "注册")
+            var content = "登录"
             return h(
               "div", content
             )
@@ -146,12 +147,94 @@ export default defineComponent({
           positiveText: '登录',
           negativeText: '取消',
           onPositiveClick: () => {
-            if(api == "login"){
-              login(initial_username)
-            }
-            else {
-              register(initial_username)
-            }
+            login(initial_username)
+            return false
+          },
+          onNegativeClick: () => {
+            return true
+          }
+        })
+    }
+    const handleRegister = (initial_username) => {
+      // 实现注册弹窗
+      dialog.warning({
+          icon: () => {
+            return h("img", {
+              src:imgUrl,
+              style:{
+                width:"100%",
+                height:"100%",
+              }
+            })
+          },
+          title: () => {
+            var content = "注册"
+            return h(
+              "div", content
+            )
+          },
+          content: () => {  
+            return h("div",[
+              h("div", [
+                h("div",{
+                  innerHTML:"用户名",
+                  style: {
+                    "width":"12%",
+                    "margin-right":"10px",
+                    "display": "inline-block" , 
+                  }
+                }),
+
+                h(NInput, {
+                  style: {
+                    "width":"85%",
+                    "margin-bottom": "10px",
+                  },
+                  type:"text",
+                  placeholder:"手机号/用户名/邮箱",
+                  Props: {
+                    value: username
+                  },
+                  onInput: (event) => {
+                    username.value = event
+                    console.log(username.value)
+                  },
+                }),
+                
+              ])
+              ,
+              h("div", [
+                h("div",{
+                  innerHTML:"密码",
+                  style: {
+                    "width":"12%",
+                    "margin-right":"10px",
+                    "display": "inline-block", 
+                  }
+                }),
+                h(NInput, {
+                  style: {
+                    "width":"85%",
+                    "margin-bottom": "10px",
+                  },
+                  type:"password",
+                  placeholder:"密码",
+                  'show-password-on': "click",
+                  Props: {
+                    value: password
+                  },
+                  onInput: (event) => {
+                    password.value = event
+                    console.log(password.value)
+                  },
+                }),
+              ])
+            ])
+          },
+          positiveText: '注册',
+          negativeText: '取消',
+          onPositiveClick: () => {
+            register(initial_username)
             return false
           },
           onNegativeClick: () => {
@@ -161,7 +244,8 @@ export default defineComponent({
     }
     return{
       username,
-      handleConfirm
+      handleLogin,
+      handleRegister,
     };
   }
 });

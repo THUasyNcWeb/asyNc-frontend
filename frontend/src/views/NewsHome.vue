@@ -23,6 +23,7 @@ import {
     NInputGroup,
     } from 'naive-ui'
 export default defineComponent({
+    
     components: {
         NInput,
         NInputGroup,
@@ -45,8 +46,12 @@ export default defineComponent({
         // 存储主页显示的用户名
         function dialogHand (api){
             // 打开登录弹窗
-            sonRef.value.handleConfirm(username, api)
-            // console.log(api)
+            if (api == 'login'){
+                sonRef.value.handleLogin(username)
+            }
+            else {
+                sonRef.value.handleRegister(username)
+            }
         }
         function handleSelect (key){
             if(key == "edit") {
@@ -54,7 +59,10 @@ export default defineComponent({
                 // 若是退出登录界面，则关闭弹窗
             }
             else {
-                // 等待跳转
+
+                //主要实现存储参数的功能
+                sessionStorage.setItem("username", username.value);
+                window.open('/user', '_blank')
             }
         }
         function getNews() {

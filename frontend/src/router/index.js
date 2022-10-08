@@ -1,16 +1,9 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import NewsHome from "../views/NewsHome.vue";
+import UserHome from "../views/UserHome.vue";
 
-Vue.use(VueRouter);
 
-const originalPush = VueRouter.prototype.push
-
-VueRouter.prototype.push = function push(location) {
-
-    return originalPush.call(this, location).catch(err => err)
-    // 捕获跳转时错误
-}
 
 const routes = [
     {
@@ -21,12 +14,38 @@ const routes = [
             title: "百度新闻——海量中文资讯平台",
         },
     },
+    {
+        path: "/user",
+        name: "UserHome",
+        component: UserHome,
+        meta: {
+            title: "用户主页",
+        },
+        children: [
+            // 注册子路由，方便进行嵌套路由管理
+        {
+            path:"/user/userInformation/:user_name",
+            name:"userInformation",
+            component: () => import("../views/user/userInformation.vue"),
+            meta: {
+                title: "详细用户信息"
+            }
+        },
+        {
+            path:"/user/modifyPassword/:user_name",
+            name:"modifyPassword",
+            component:() => import("../views/user/modifyPassword.vue"),
+            meta: {
+                title: "修改密码"
+            }
+        }
+        ]
+    },
 ];
 
-const router = new VueRouter({
-    mode: "history",
-    base: process.env.BASE_URL,
-    routes,
-});
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
 
 export default router;
