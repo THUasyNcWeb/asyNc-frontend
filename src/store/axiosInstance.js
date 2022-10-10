@@ -7,9 +7,12 @@
 */
 import axios from 'axios'
 
+import Config from '../../config/config.json'
+
+
 //使用axios下面的create([config])方法创建axios实例，其中config参数为axios最基本的配置信息。
 const API = axios.create({
-    baseURL:'https://127.0.0.1:8000',// baseUrl
+    baseURL: Config.url + ':' + Config.port + '/',       // baseUrl
 	timeout: 2000                   // 请求超时设置，单位ms
 })
 
