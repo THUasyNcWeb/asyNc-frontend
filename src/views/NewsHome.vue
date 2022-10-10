@@ -78,6 +78,10 @@ export default defineComponent({
         const sonRef = ref(null)
         // 引入弹窗空间
         const username = ref("")
+        if (window.localStorage.getItem('token') != '') {
+            username.value = 'Yoimiya'
+        }
+        // 读取存储在localStorage中的token，从而得知初始化应当自动登录的用户
         // 存储主页显示的用户名
         function dialogHand (api){
             // 打开登录弹窗
