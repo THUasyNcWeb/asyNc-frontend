@@ -3,7 +3,13 @@ module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
   devServer:{
-    https: true
+    https: true,
+    client: {
+      webSocketURL: 'ws://0.0.0.0:8080/ws',
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    }
   }
 })
 

@@ -21,6 +21,13 @@ import {
     NDropdown,
     NMessageProvider,
     NInputGroup,
+    NSpace,
+    NH1,
+    NH2,
+    NH3,
+    NImage,
+    NGrid,
+    NGridItem,
     } from 'naive-ui'
 export default defineComponent({
     
@@ -36,10 +43,38 @@ export default defineComponent({
         NMessageProvider,
         Dialog,
         NDropdown,
+        NSpace,
+        NH1,
+        NH2,
+        NH3,
+        NImage,
+        NGrid,
+        NGridItem,
     },
     // 引入naive ui组件
     
     setup() {
+        const all_news = [
+            {
+                "title": "重要通知：清华大学国庆假期长达七天",
+                "content":"据记者了解，清华大学2022年国庆假期竟达到了前所未有的七天，众多清华学子欢欣鼓舞，盛赞学校的英明领导。",
+                "picture_url":"//inews.gtimg.com/newsapp_bt/0/15313938517/1000",
+                "news_url":"https://www.bilibili.com/video/BV1GJ411x7h7/?spm_id_from=333.788.recommend_more_video.0&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
+            },
+            {
+                "title": "“一见清心”新生舞会将于本周日举办",
+                "content":"据记者了解，清华大学一字班延期一年的新生舞会将于2022年10月10日（即本周日）与二字班新生一同举办，众多一字班老生摩拳擦掌，想要与二字班新生一决高下。",
+                "picture_url":"",
+                "news_url":"https://www.bilibili.com/video/BV1uT4y1P7CX/?spm_id_from=333.788.recommend_more_video.5&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
+            },
+            {
+                "title": "Program Buddy活动即将举行，参与人员男女比例令人落泪",
+                "content":"2022年秋季学期Program Buddy活动即将举行，据内部人员了解，志愿者更希望自己用于女性同伴，优先选择男性同伴的志愿者竟只有五人。",
+                "picture_url":"//inews.gtimg.com/newsapp_bt/0/15313938517/1000",
+                "news_url":"https://www.bilibili.com/video/BV1AK411g7xc/?spm_id_from=333.788.recommend_more_video.2&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
+            }
+        ]
+
         const sonRef = ref(null)
         // 引入弹窗空间
         const username = ref("")
@@ -93,6 +128,7 @@ export default defineComponent({
             options,
             sonRef,
             dialogHand,
+            all_news,
             username // 当前页面用户名
         }
     },
@@ -184,13 +220,13 @@ export default defineComponent({
                         百度新闻客户端
                     </div>
                 </template>
-                <img src="../assets/log-news.png" style="height:50px;weight:30px" />
+                <img :src="require(`@/assets/log-news.png`)" style="height:50px;weight:30px" />
             </n-tooltip>
         </n-layout-header>
         <n-card class="background">
             <n-card class="main_card">
                 <div>
-                    <img src="../assets/log-news.png"
+                    <img :src="require(`@/assets/log-news.png`)"
                         style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
                     <n-input-group style="display: inline-block;width: 600px;">
                         <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
@@ -202,12 +238,44 @@ export default defineComponent({
                     </n-input-group>
                     <a href="http://www.baidu.com">帮助</a>
                 </div>
-                <div style="height:2000px;margin-top: 100px;">
+                <!-- <div style="height:2000px;margin-top: 100px;">
                     重要新闻：清华大学国庆假期长达七天！
-                </div>
+                </div> -->
+                    <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
+                        <div v-if="news.picture_url != ''">
+                            <n-grid cols="4" item-responsive>
+                                <n-grid-item span="0 400:1 600:2 800:3">
+                                    <div>
+                                        <a :href="news.news_url" target="_blank">
+                                            <n-h3 style="text-align:left">
+                                                {{news.title}}
+                                            </n-h3>
+                                        </a>
+                                        <div style="text-align:left">
+                                            {{news.content}}
+                                        </div>
+                                    </div>
+                                </n-grid-item>
+                                <n-grid-item>
+                                    <n-image :src = "news.picture_url" :fallback-src = news.picture_url width=100 />
+                                </n-grid-item>
+                            </n-grid>
+                        </div>
+                        <div v-else>
+                            <div>
+                                <a :href="news.news_url" target="_blank">
+                                    <n-h3 style="text-align:left">
+                                        {{news.title}}
+                                    </n-h3>
+                                </a>
+                                <div style="text-align:left">
+                                    {{news.content}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
             </n-card>
         </n-card>
-
     </body>
     
 </template>
