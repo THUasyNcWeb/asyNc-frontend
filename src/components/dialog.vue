@@ -12,7 +12,7 @@
 import API from "../store/axiosInstance.js"
 import { defineComponent, h, ref, watch } from "vue";
 import { useDialog, NDialogProvider, NInput, NButton } from "naive-ui";
-import imgUrl from "../assets/logo.png"
+import imgUrl from "@/assets/logo.png"
 export default defineComponent({
   components: {
     NDialogProvider,
