@@ -11,16 +11,16 @@
             请设置新密码
         </n-H1>
         <n-H5>
-            用户名
+            旧密码
         </n-H5>
-        <n-input style="width:100%">
-            请输入用户名
+        <n-input style="width:100%" placeholder="请输入旧密码">
+            
         </n-input>
         <n-H5>
-            密码
+            新密码
         </n-H5>
-        <n-input style="width:100%;">
-            请输入密码
+        <n-input style="width:100%;" placeholder="请输入新密码">
+            
         </n-input>
         <n-button style="margin-top: 10px;">
             确定
@@ -42,7 +42,7 @@ export default {
     setup() {
         const router = useRoute()
         const now_username = router.params.user_name
-        // 获取props
+        // 当前用户名
         return {
             now_username
         }
