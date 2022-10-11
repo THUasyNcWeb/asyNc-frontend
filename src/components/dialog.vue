@@ -52,7 +52,7 @@ export default defineComponent({
           }
       }).then((res)=>{
           console.log(res.data.data.data.token)
-          window.localStorage.setItem("token",res.data.data.data.token)
+          window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
           visible.value = true
       }).catch((error) => {
