@@ -8,7 +8,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import Dialog from '@/components/dialog.vue'
+import Dialog from '@/components/InputDialog.vue'
 import API from "../store/axiosInstance.js"
 import { 
     NInput, 
@@ -21,9 +21,6 @@ import {
     NDropdown,
     NMessageProvider,
     NInputGroup,
-    NSpace,
-    NH1,
-    NH2,
     NH3,
     NImage,
     NGrid,
@@ -43,9 +40,6 @@ export default defineComponent({
         NMessageProvider,
         Dialog,
         NDropdown,
-        NSpace,
-        NH1,
-        NH2,
         NH3,
         NImage,
         NGrid,
