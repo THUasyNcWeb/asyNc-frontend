@@ -12,8 +12,10 @@
       <n-layout-header bordered style="height:50px;text-align:center;" >
         <tr style="height:50px; ">
           <th>
-            <n-image :src="require(`@/assets/log-news.png`)"
+            <router-link to="/">
+              <n-image :src="require(`@/assets/log-news.png`)"
               style="height:30px;"></n-image>
+            </router-link>
           </th>
           <n-divider :vertical=true />
           <th style="width:90%">
@@ -34,7 +36,7 @@
       </n-layout-header>
       <n-layout has-sider>
         <n-layout-sider bordered content-style="padding: 24px;">
-          <n-menu :options="menuOptions" />
+          <n-menu :options="menuOptions" default-value="info" />
         </n-layout-sider>
         <n-layout-content content-style="padding: 24px;">
           <router-view></router-view>
@@ -47,7 +49,7 @@
 
 <script>
 import {h,defineComponent} from "vue"
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import {NAnchorLink, NAnchor,NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NButton,NLayoutHeader,NMenu,NInput} from 'naive-ui'
 export default defineComponent({
   components: {
@@ -73,26 +75,26 @@ export default defineComponent({
           h(
             RouterLink,
             {
-              innerHTML:'测试',
+              innerHTML:'用户信息',
               to: {
                 path:'/user/userInformation/' + username
               }
             },
           ),
-        key: 'test',
+        key: 'info',  
       },
       {
         label: () =>
           h(
             RouterLink,
             {
-              innerHTML:'测试修改',
+              innerHTML:'修改密码',
               to: {
                 path:'/user/modifyPassword/' + username
               }
             },
           ),
-        key: 'test_modify',
+        key: 'modify',
       },
     ]
     // 加入侧边导航栏菜单，每一个选项对应一个路由跳转
@@ -100,18 +102,33 @@ export default defineComponent({
     const options = [
         {
             label:"切换账号",
-            key:"Home",
+            key:"change",
         },
         {
             label:"退出登录",
             key:"edit",
         }
     ]
-    const username = sessionStorage.getItem("username")
+    
+    var username = sessionStorage.getItem("username")
+
+    function handleSelect (key){
+      if(key == "edit") {
+          window.localStorage.removeItem('token')
+          username = ""
+          const router = useRouter();
+          router.push("/");
+      }
+      else {
+          //主要实现存储参数的功能
+          // 准备弹窗
+      }
+    }
     return {
       menuOptions,
       username,
       options,
+      handleSelect,
     }
   }
 })

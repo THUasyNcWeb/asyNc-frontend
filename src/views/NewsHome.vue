@@ -78,7 +78,7 @@ export default defineComponent({
         const sonRef = ref(null)
         // 引入弹窗空间
         const username = ref("")
-        if (window.localStorage.getItem('token') != '') {
+        if (window.localStorage.getItem('token') != null) {
             username.value = 'Yoimiya'
         }
         // 读取存储在localStorage中的token，从而得知初始化应当自动登录的用户
@@ -94,14 +94,14 @@ export default defineComponent({
         }
         function handleSelect (key){
             if(key == "edit") {
+                window.localStorage.removeItem('token')
                 username.value = ""
                 // 若是退出登录界面，则关闭弹窗
             }
             else {
-
                 //主要实现存储参数的功能
                 sessionStorage.setItem("username", username.value);
-                window.open('/user', '_blank')
+                window.open('/user/userInformation/' + username.value, '_blank')
             }
         }
         function getNews() {
@@ -148,9 +148,6 @@ export default defineComponent({
         </n-dialog-provider>
         <!-- 布置弹窗控件 -->
         <n-layout-header style="height:30px; background: white;text-align: right;">
-            <n-button @click="getNews">
-                测试
-            </n-button>
             <div class="guide_button">
                 <a href="http://www.baidu.com">
                     网页
@@ -242,9 +239,6 @@ export default defineComponent({
                     </n-input-group>
                     <a href="http://www.baidu.com">帮助</a>
                 </div>
-                <!-- <div style="height:2000px;margin-top: 100px;">
-                    重要新闻：清华大学国庆假期长达七天！
-                </div> -->
                     <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
                         <div v-if="news.picture_url != ''">
                             <n-grid cols="4" item-responsive>
