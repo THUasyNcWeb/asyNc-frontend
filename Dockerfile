@@ -12,6 +12,11 @@ COPY package-lock.json $FRONTEND
 RUN npm install
 
 COPY . $FRONTEND
+
+# Apply deploy config
+
+COPY config/deploy.json config/config.json
+
 RUN npm run build
 
 # Second stage
