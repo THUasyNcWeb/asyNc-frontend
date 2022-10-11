@@ -8,7 +8,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import Dialog from '@/components/dialog.vue'
+import Dialog from '@/components/InputDialog.vue'
 import API from "../store/axiosInstance.js"
 import { 
     NInput, 
@@ -21,9 +21,6 @@ import {
     NDropdown,
     NMessageProvider,
     NInputGroup,
-    NSpace,
-    NH1,
-    NH2,
     NH3,
     NImage,
     NGrid,
@@ -43,9 +40,6 @@ export default defineComponent({
         NMessageProvider,
         Dialog,
         NDropdown,
-        NSpace,
-        NH1,
-        NH2,
         NH3,
         NImage,
         NGrid,
@@ -229,15 +223,17 @@ export default defineComponent({
                 <div>
                     <img :src="require(`@/assets/log-news.png`)"
                         style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
-                    <n-input-group style="display: inline-block;width: 600px;">
+                    <n-input-group style="display: inline-block;width: 80%;">
                         <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
                         </n-input>
                         <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
                             text-color="white">
                             百度一下
                         </n-button>
+                        <a href="http://www.baidu.com">帮助</a>
+                        <!-- 绑定为一个组，从而使排版成为一个整体 -->
                     </n-input-group>
-                    <a href="http://www.baidu.com">帮助</a>
+                    
                 </div>
                     <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
                         <div v-if="news.picture_url != ''">

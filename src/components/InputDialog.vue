@@ -6,18 +6,17 @@
  * @LastEditTime: 2022-10-06 17:43
  -->
 <template>
+  <body>
+  </body>
 </template>
    
 <script>
 import API from "../store/axiosInstance.js"
 import { defineComponent, h, ref, watch } from "vue";
-import { useDialog, NDialogProvider, NInput, NButton } from "naive-ui";
+import { useDialog, NInput } from "naive-ui";
 import imgUrl from "@/assets/logo.png"
 export default defineComponent({
-  components: {
-    NDialogProvider,
-    NInput,
-    NButton,  
+  components: { 
   },
   setup () {
     const dialog = useDialog()
@@ -52,14 +51,15 @@ export default defineComponent({
           }
       }).then((res)=>{
           console.log(res.data.data.data.token)
-          window.localStorage.setItem("token",res.data.data.data.token)
+          window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
           visible.value = true
       }).catch((error) => {
           console.log(error);
       })
     }
-    watch(visible, (newVal, _) => {
+    watch(visible, (newVal, oldVal) => {
+      console.log(oldVal)
       console.log(newVal)
       if (newVal == true) {
         visible.value = false

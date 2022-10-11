@@ -50,20 +50,16 @@
 <script>
 import {h,defineComponent} from "vue"
 import { RouterLink, useRouter } from 'vue-router'
-import {NAnchorLink, NAnchor,NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NButton,NLayoutHeader,NMenu,NInput} from 'naive-ui'
+import {NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NLayoutHeader,NMenu} from 'naive-ui'
 export default defineComponent({
   components: {
-    NAnchorLink,
-    NAnchor,
     NLayoutSider,
     NLayoutContent,
     NLayout,
     NH2,
     NSpace,
-    NButton,
     NLayoutHeader,
     NMenu,
-    NInput,
     NImage,
     NDivider,
     NDropdown,

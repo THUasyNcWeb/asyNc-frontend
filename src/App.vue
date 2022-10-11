@@ -14,18 +14,8 @@
 
 <script>
 
-import NewsHome from './views/NewsHome.vue';
-import Dialog from './components/dialog.vue';
-import Password from './views/user/modifyPassword.vue'
-import Info from './views/user/userInformation.vue'
 export default {
   name: 'App',
-  components: {
-    NewsHome,
-    Dialog,
-    Password,
-    Info,
-}
 }
 </script>
 

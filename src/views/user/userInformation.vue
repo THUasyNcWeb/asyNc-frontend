@@ -36,11 +36,9 @@
 
 <script>
 import { useRoute } from 'vue-router'
-import {NInput,NH1,NTable,NTag} from 'naive-ui'
+import {NTable,NTag} from 'naive-ui'
 export default {
     components: {
-        NInput,
-        NH1,
         NTable,
         NTag,
     },
