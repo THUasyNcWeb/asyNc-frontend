@@ -25,6 +25,7 @@ export default defineComponent({
     const visible = ref(false)
     // 定义用户名与密码
     function login(initial_username) {
+      visible.value = false
       API({
           url:'login/',
           method:'post',
@@ -36,12 +37,15 @@ export default defineComponent({
           console.log(res)
           window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
+          alert("登录成功")
           visible.value = true
       }).catch((error) => {
           console.log(error);
+          alert("用户名或密码错误")
       })
     }
     function register(initial_username) {
+      visible.value = false
       API({
           url:'register/',
           method:'post',
@@ -50,11 +54,22 @@ export default defineComponent({
             "password": password.value,
           }
       }).then((res)=>{
-          console.log(res.data.data.data.token)
+          console.log(res.data.data.token)
           window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
+          alert("注册成功")
           visible.value = true
       }).catch((error) => {
+          var code = error.response.data.code
+          if(code == 1) {
+            alert("用户名已存在")
+          }
+          else if(code == 2) {
+            alert("用户名格式不合法")
+          }
+          else if(code == 3) {
+            alert("密码格式不合法")
+          }
           console.log(error);
       })
     }
@@ -138,7 +153,6 @@ export default defineComponent({
                   },
                   onInput: (event) => {
                     password.value = event
-                    console.log(password.value)
                   },
                 }),
               ])
@@ -225,7 +239,6 @@ export default defineComponent({
                   },
                   onInput: (event) => {
                     password.value = event
-                    console.log(password.value)
                   },
                 }),
               ])

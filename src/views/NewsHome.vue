@@ -103,12 +103,10 @@ export default defineComponent({
                 headers:{"Authorization": window.localStorage.getItem("token")},
                 url:'all_news/',
                 method:'get',
-                // headers:{}
             }).then((res)=>{
                 console.log(res);
             });
         }
-        
         const options = [
             {
                 label:"个人主页",

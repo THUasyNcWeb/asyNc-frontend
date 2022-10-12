@@ -1,4 +1,3 @@
-import Vue from "vue";
 import {createRouter, createWebHistory} from "vue-router";
 import NewsHome from "../views/NewsHome.vue";
 import UserHome from "../views/UserHome.vue";
