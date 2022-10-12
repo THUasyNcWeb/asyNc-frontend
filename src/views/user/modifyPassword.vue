@@ -13,16 +13,13 @@
         <n-H5>
             旧密码
         </n-H5>
-        <n-input style="width:100%" placeholder="请输入旧密码">
-            
+        <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password">
         </n-input>
         <n-H5>
             新密码
         </n-H5>
-        <n-input style="width:100%;" placeholder="请输入新密码">
-            
-        </n-input>
-        <n-button style="margin-top: 10px;">
+        <n-input type="password" style="width:100%;" placeholder="请输入新密码" v-model:value="new_password"></n-input>
+        <n-button style="margin-top: 10px;" @click="modify">
             确定
         </n-button>
         <!-- 确定修改密码，向后端发送请求 -->
@@ -30,6 +27,8 @@
 </template>
 
 <script>
+import API from "../../store/axiosInstance.js"
+import {ref} from 'vue'
 import { useRoute } from 'vue-router'
 import {NH1, NH5, NInput,NButton} from 'naive-ui'
 export default {
@@ -43,8 +42,41 @@ export default {
         const router = useRoute()
         const now_username = router.params.user_name
         // 当前用户名
+        const old_password = ref('')
+        const new_password = ref('')
+        function modify() {
+            API({
+                headers:{"Authorization": window.localStorage.getItem("token")},
+                url:'modify_password/',
+                method:'post',
+                data:{
+                    "user_name":now_username,
+                    "old_password":old_password.value,
+                    "new_password":new_password.value,
+                }
+            }).then((res) => {
+                console.log(res)
+                alert("修改成功")
+                old_password.value = ''
+                new_password.value = ''
+
+            }).catch((error)=>{
+                console.log(error)
+                // var code = error.data.code
+                // if(code == 3) {
+                //     alert("密码错误")
+                // }
+                // else if (code == 4) {
+                //     alert("新密码格式不合法")
+                // }
+                alert("修改失败")
+            })
+        }
         return {
-            now_username
+            old_password,
+            new_password,
+            now_username,
+            modify
         }
     }
 }
