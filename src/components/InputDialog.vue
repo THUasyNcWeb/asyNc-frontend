@@ -36,9 +36,11 @@ export default defineComponent({
           console.log(res)
           window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
+          alert("登录成功")
           visible.value = true
       }).catch((error) => {
           console.log(error);
+          alert("用户名或密码错误")
       })
     }
     function register(initial_username) {
@@ -53,8 +55,19 @@ export default defineComponent({
           console.log(res.data.data.data.token)
           window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
+          alert("注册成功")
           visible.value = true
       }).catch((error) => {
+          var code = error.response.data.code
+          if(code == 1) {
+            alert("用户名已存在")
+          }
+          else if(code == 2) {
+            alert("用户名格式不合法")
+          }
+          else if(code == 3) {
+            alert("密码格式不合法")
+          }
           console.log(error);
       })
     }
