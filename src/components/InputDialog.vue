@@ -25,6 +25,7 @@ export default defineComponent({
     const visible = ref(false)
     // 定义用户名与密码
     function login(initial_username) {
+      visible.value = false
       API({
           url:'login/',
           method:'post',
@@ -44,6 +45,7 @@ export default defineComponent({
       })
     }
     function register(initial_username) {
+      visible.value = false
       API({
           url:'register/',
           method:'post',
@@ -52,7 +54,7 @@ export default defineComponent({
             "password": password.value,
           }
       }).then((res)=>{
-          console.log(res.data.data.data.token)
+          console.log(res.data.data.token)
           window.localStorage.setItem("token",res.data.data.token)
           initial_username.value = username.value
           alert("注册成功")
@@ -151,7 +153,6 @@ export default defineComponent({
                   },
                   onInput: (event) => {
                     password.value = event
-                    console.log(password.value)
                   },
                 }),
               ])
@@ -238,7 +239,6 @@ export default defineComponent({
                   },
                   onInput: (event) => {
                     password.value = event
-                    console.log(password.value)
                   },
                 }),
               ])
