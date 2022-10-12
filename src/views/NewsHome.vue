@@ -79,12 +79,7 @@ export default defineComponent({
         // 存储主页显示的用户名
         function dialogHand (api){
             // 打开登录弹窗
-            if (api == 'login'){
-                sonRef.value.handleLogin(username)
-            }
-            else {
-                sonRef.value.handleRegister(username)
-            }
+            sonRef.value.handleDialog(username, api) 
         }
         function handleSelect (key){
             if(key == "edit") {
