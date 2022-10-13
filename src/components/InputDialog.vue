@@ -15,6 +15,7 @@ import API from "../store/axiosInstance.js"
 import { defineComponent, h, ref, watch } from "vue";
 import { useDialog, NInput } from "naive-ui";
 import imgUrl from "@/assets/logo.png"
+import {useRouter} from 'vue-router'
 export default defineComponent({
   components: { 
   },
@@ -22,6 +23,7 @@ export default defineComponent({
     const dialog = useDialog()
     const username = ref("");
     const password = ref("")
+    const router = useRouter();
     // 定义用户名与密码
     const visible = ref(false)
     // 控制弹窗可视与否的变量，若变化为true则弹窗关闭
@@ -134,7 +136,7 @@ export default defineComponent({
           },
           // 弹窗的图标
           title: () => {
-            var content = "登录"
+            var content = confirmText
             return h(
               "div", content
             )
@@ -217,9 +219,46 @@ export default defineComponent({
           }
         })
     }
+    const exitDialog = () => {
+      // 退出登录按钮所对应的弹窗
+      dialog.create({
+        icon: () => {
+          return h("img", {
+            src:imgUrl,
+            style:{
+              width:"100%",
+              height:"100%",
+            }
+          })
+        },
+        // 弹窗的图标
+        content:() => {
+          return h("div", {
+            innerHTML:'真的要退出吗qwq',
+            style: {
+              "font-size":"20px",
+            },
+          })
+        },
+        positiveText: "狠心离开",
+        negativeText: "取消",
+        // 确认按钮与取消按钮对应文本
+        onPositiveClick:() => {
+          window.localStorage.removeItem('token')
+          sessionStorage.removeItem('username')
+          router.push("/");
+          // 退出后直接跳转到主页
+          return true
+        },
+        onNegativeClick: () => {
+          return true
+        }
+      })
+    }
     return{
       username,
       handleDialog,
+      exitDialog,
     };
   }
 });
