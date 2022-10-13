@@ -150,57 +150,57 @@ export default defineComponent({
             </n-message-provider>
         </n-dialog-provider>
         <!-- 布置弹窗子控件，并命名为sonRef -->
-        <n-layout-header style="height:30px; background: white;text-align: right;">
+        <n-layout-header style="height:40px; background: white;text-align: right;">
             <!-- 布置顶部导航栏 -->
             <!-- 每一个按钮对应着相同的跳转网址 -->
             <div class="guide_button">
-                <a href="http://www.baidu.com">
+                <a href="http://www.baidu.com" target="_blank">
                     网页
                 </a>
             </div>
             <div class="guide_button">
-                <a href="http://news.baidu.com/">
+                <a href="http://news.baidu.com/" target="_blank">
                     新闻
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://tieba.baidu.com/index.html">
+                <a href="https://tieba.baidu.com/index.html" target="_blank">
                     贴吧
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://zhidao.baidu.com/">
+                <a href="https://zhidao.baidu.com/" target="_blank">
                     知道
                 </a>
             </div>
             <div class="guide_button">
-                <a href="http://music.91q.com/">
+                <a href="http://music.91q.com/" target="_blank">
                     音乐
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://image.baidu.com/">
+                <a href="https://image.baidu.com/" target="_blank">
                     图片
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://v.xiaodutv.com/">
+                <a href="https://v.xiaodutv.com/" target="_blank">
                     视频
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://map.baidu.com/">
+                <a href="https://map.baidu.com/" target="_blank">
                     地图
                 </a>
             </div>
             <div class="guide_button">
-                <a href="https://wenku.baidu.com/">
+                <a href="https://wenku.baidu.com/" target="_blank">
                     文库
                 </a>
             </div>
             <n-divider :vertical=true />
             <div class="guide_button">
-                <a href="http://www.baidu.com">
+                <a href="http://www.baidu.com" target="_blank">
                     百度首页
                 </a>
             </div>
