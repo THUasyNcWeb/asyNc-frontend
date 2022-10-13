@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-08 11:00
  * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-08 17:00
+ * @LastEditTime: 2022-10-13 10:31
  -->
 <template>
     <div style="top:50px">
@@ -15,6 +15,7 @@
         </n-H5>
         <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password">
         </n-input>
+        <!-- 注意：vue3绑定变量应当使用v-model:value而不是仅仅用v-model -->
         <n-H5>
             新密码
         </n-H5>
@@ -45,8 +46,13 @@ export default {
         const old_password = ref('')
         const new_password = ref('')
         function modify() {
+            /**
+            * @description: 向后端请求修改密码
+            * @return void
+            */            
             API({
                 headers:{"Authorization": window.localStorage.getItem("token")},
+                // 携带token字段
                 url:'modify_password/',
                 method:'post',
                 data:{
@@ -55,20 +61,22 @@ export default {
                     "new_password":new_password.value,
                 }
             }).then((res) => {
+                // 若成功响应，则修改成功
                 console.log(res)
                 alert("修改成功")
                 old_password.value = ''
                 new_password.value = ''
 
             }).catch((error)=>{
+                // 否则修改失败，根据失败码来进行对应的响应
                 console.log(error)
-                // var code = error.data.code
-                // if(code == 3) {
-                //     alert("密码错误")
-                // }
-                // else if (code == 4) {
-                //     alert("新密码格式不合法")
-                // }
+                var code = error.data.code
+                if(code == 3) {
+                    alert("密码错误")
+                }
+                else if (code == 4) {
+                    alert("新密码格式不合法")
+                }
                 alert("修改失败")
             })
         }
