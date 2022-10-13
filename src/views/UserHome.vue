@@ -9,6 +9,11 @@
 <template>
   <n-space vertical size="large">
     <!-- 以space作为主控件 -->
+    <n-dialog-provider> 
+        <n-message-provider>
+            <Dialog ref="sonRef"></Dialog>
+        </n-message-provider>
+    </n-dialog-provider>
     <n-layout style="width:100%;height: 100%;">
       <n-layout-header bordered style="height:50px;text-align:center;" >
         <!-- 用户页的顶部导航栏 -->
@@ -57,21 +62,25 @@
 </template>
 
 <script>
-import {h,defineComponent} from "vue"
-import { RouterLink, useRouter } from 'vue-router'
-import {NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NLayoutHeader,NMenu} from 'naive-ui'
+import Dialog from '@/components/InputDialog.vue'
+import {h,defineComponent,ref} from "vue"
+import {RouterLink} from 'vue-router'
+import {NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NLayoutHeader,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
 export default defineComponent({
   components: {
     NLayoutSider,
     NLayoutContent,
     NLayout,
     NH2,
+    Dialog,
     NSpace,
     NLayoutHeader,
     NMenu,
     NImage,
     NDivider,
     NDropdown,
+    NDialogProvider,
+    NMessageProvider
   },
   setup() {
 
@@ -125,6 +134,8 @@ export default defineComponent({
         username = sessionStorage.getItem('username')
     }
     // 获取当前用户名称
+    const sonRef = ref(null)
+    // 引入弹窗控件
     function handleSelect (key){
         /**
         * @description: 对用户名的下拉菜单的处理
@@ -132,15 +143,14 @@ export default defineComponent({
         * @return void
         */
       if(key == "exit") {
-          window.localStorage.removeItem('token')
-          sessionStorage.removeItem('username')
-          username = ""
-          const router = useRouter();
-          router.push("/");
+        sonRef.value.exitDialog()
+        // 弹出确认弹窗
       }
       else {
           // 主要实现存储参数的功能
           // 准备弹窗
+          // 应该先退出之后再出现登录接口
+          // 本次提交暂时不实现切换用户的功能
       }
     }
     return {
@@ -148,6 +158,8 @@ export default defineComponent({
       username,
       options,
       handleSelect,
+      Dialog,
+      sonRef,
     }
   }
 })
