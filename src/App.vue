@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
  * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-03 14:11
+ * @LastEditTime: 2022-10-13 9:40
  -->
 
 <template>
@@ -20,14 +20,15 @@ export default {
 </script>
 
 <style>
+/* 默认css的style */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-
 }
+
 
 * {
   margin: 0;

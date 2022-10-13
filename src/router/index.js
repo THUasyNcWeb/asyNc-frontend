@@ -1,8 +1,14 @@
+/*
+ * @FileDescription: 注册全局路由
+ * @Author: 郑友捷
+ * @Date: 2022-10-06 18:00
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-10-13 9:38
+*/
+
 import {createRouter, createWebHistory} from "vue-router";
 import NewsHome from "../views/NewsHome.vue";
 import UserHome from "../views/UserHome.vue";
-
-
 
 const routes = [
     {
@@ -41,6 +47,8 @@ const routes = [
         ]
     },
 ];
+// 注册页面路由
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -48,3 +56,4 @@ const router = createRouter({
 })
 
 export default router;
+// 导出路由供其他组件使用
