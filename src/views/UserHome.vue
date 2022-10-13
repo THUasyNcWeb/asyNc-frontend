@@ -119,7 +119,11 @@ export default defineComponent({
         }
     ]
     // 设置顶部导航栏的下拉菜单
-    var username = sessionStorage.getItem("username")
+    
+    var username = ""
+    if (sessionStorage.getItem('username') != null) {
+        username = sessionStorage.getItem('username')
+    }
     // 获取当前用户名称
     function handleSelect (key){
         /**
@@ -129,6 +133,7 @@ export default defineComponent({
         */
       if(key == "exit") {
           window.localStorage.removeItem('token')
+          sessionStorage.removeItem('username')
           username = ""
           const router = useRouter();
           router.push("/");

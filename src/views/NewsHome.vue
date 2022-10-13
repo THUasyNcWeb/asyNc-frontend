@@ -75,8 +75,8 @@ export default defineComponent({
         // 引入弹窗控件
         const username = ref("")
         // 当前页面的用户名（若已登录）
-        if (window.localStorage.getItem('token') != null) {
-            username.value = 'Yoimiya'
+        if (sessionStorage.getItem('username') != null) {
+            username.value = sessionStorage.getItem('username')
         }
         // 读取存储在localStorage中的token，从而得知初始化应当自动登录的用户
         // 存储主页显示的用户名
@@ -96,6 +96,7 @@ export default defineComponent({
             */
             if(key == "exit") {
                 window.localStorage.removeItem('token')
+                sessionStorage.removeItem('username')
                 username.value = ""
                 // 若是退出登录界面，则关闭弹窗
             }
