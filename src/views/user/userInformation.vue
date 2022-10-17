@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import {NTable,NTag} from 'naive-ui'
 export default {
     components: {
@@ -47,10 +47,16 @@ export default {
     },
     setup() {
         const router = useRoute()
-        const now_username = router.params.user_name
-        var tags = ['原神','新冠疫情','清华']
+        var now_username:string
+        if (typeof router.params.user_name == 'string') {
+            now_username = router.params.user_name
+        }
+        else {
+            now_username = router.params.user_name[0]
+        }
+        var tags:string[] = ['原神','新冠疫情','清华']
         // 最近浏览的新闻标签，之后会通过接口和后端对接
-        var color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
+        var color_tags:string[] = ['#00FFFF','#ADFF2F','#F0E68C']
         // 标签的颜色数组
         return {
             tags,

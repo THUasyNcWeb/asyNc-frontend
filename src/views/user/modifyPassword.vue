@@ -13,13 +13,13 @@
         <n-H5>
             旧密码
         </n-H5>
-        <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password">
+        <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password.valueOf">
         </n-input>
         <!-- 注意：vue3绑定变量应当使用v-model:value而不是仅仅用v-model -->
         <n-H5>
             新密码
         </n-H5>
-        <n-input type="password" style="width:100%;" placeholder="请输入新密码" v-model:value="new_password"></n-input>
+        <n-input type="password" style="width:100%;" placeholder="请输入新密码" v-model:value="new_password.valueOf"></n-input>
         <n-button style="margin-top: 10px;" @click="modify">
             确定
         </n-button>
@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import API from "../../store/axiosInstance"
-import {ref} from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, Ref} from 'vue'
+import {useRoute} from 'vue-router'
 import {NH1, NH5, NInput,NButton} from 'naive-ui'
 export default {
     components:{
@@ -41,14 +41,20 @@ export default {
     },
     setup() {
         const router = useRoute()
-        const now_username = router.params.user_name
+        var now_username:string
+        if (typeof router.params.user_name == 'string') {
+            now_username = router.params.user_name
+        }
+        else {
+            now_username = router.params.user_name[0]
+        }
         // 当前用户名
-        const old_password = ref('')
-        const new_password = ref('')
+        const old_password:Ref<string> = ref('')
+        const new_password:Ref<string> = ref('')
         function modify() {
             /**
             * @description: 向后端请求修改密码
-            * @return void
+            * @return {void}
             */            
             API({
                 headers:{"Authorization": window.localStorage.getItem("token")},

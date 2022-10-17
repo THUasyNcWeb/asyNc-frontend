@@ -19,13 +19,13 @@ import {useRouter} from 'vue-router'
 export default defineComponent({
   setup () {
     const dialog = useDialog()
-    const username: Ref<String> = ref("");
-    const password: Ref<String> = ref("")
+    const username: Ref<string> = ref("");
+    const password: Ref<string> = ref("")
     const router = useRouter();
     // 定义用户名与密码
     const visible = ref(false)
     // 控制弹窗可视与否的变量，若变化为true则弹窗关闭
-    function login(initial_username:Ref<String>) {
+    function login(initial_username:Ref<string>) {
        /**
         * @description: 实现登录接口
         * @param {string} initial_username - 主页的用户名称的引用，方便在请求成功时修改
@@ -106,7 +106,7 @@ export default defineComponent({
         dialog.destroyAll()
       }
     })
-    const handleDialog = (initial_username:Ref<String>, api:String) => {
+    const handleDialog = (initial_username:Ref<string>, api:string) => {
       /**
         * @description: 使用render函数规定控件来实现弹窗功能，根据api规定是注册弹窗还是登录弹窗
         * @param {string} initial_username - 主页的用户名称的引用，方便在请求成功时修改
