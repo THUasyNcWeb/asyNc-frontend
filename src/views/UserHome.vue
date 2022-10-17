@@ -61,9 +61,9 @@
   
 </template>
 
-<script>
+<script lang="ts">
 import Dialog from '@/components/InputDialog.vue'
-import {h,defineComponent,ref} from "vue"
+import {h,defineComponent,ref,Ref} from "vue"
 import {RouterLink} from 'vue-router'
 import {NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NLayoutHeader,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
 export default defineComponent({
@@ -129,18 +129,18 @@ export default defineComponent({
     ]
     // 设置顶部导航栏的下拉菜单
     
-    var username = ""
+    var username:string = ""
     if (sessionStorage.getItem('username') != null) {
         username = sessionStorage.getItem('username')
     }
     // 获取当前用户名称
-    const sonRef = ref(null)
+    const sonRef:Ref<any | null> = ref(null)
     // 引入弹窗控件
-    function handleSelect (key){
+    function handleSelect (key:string){
         /**
         * @description: 对用户名的下拉菜单的处理
         * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是change则切换用户出现弹窗
-        * @return void
+        * @return {void}
         */
       if(key == "exit") {
         sonRef.value.exitDialog()

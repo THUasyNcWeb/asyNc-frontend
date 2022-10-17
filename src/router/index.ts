@@ -6,11 +6,11 @@
  * @LastEditTime: 2022-10-13 9:38
 */
 
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
 import NewsHome from "../views/NewsHome.vue";
 import UserHome from "../views/UserHome.vue";
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "NewsHome",

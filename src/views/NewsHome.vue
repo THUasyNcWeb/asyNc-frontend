@@ -6,10 +6,10 @@
  * @LastEditTime: 2022-10-13 10:07  
  -->
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, Ref, ref } from 'vue'
 import Dialog from '@/components/InputDialog.vue'
-import API from "../store/axiosInstance.js"
+import API from "../store/axiosInstance"
 import { 
     NInput, 
     NLayoutHeader, 
@@ -27,7 +27,7 @@ import {
     NGridItem,
     } from 'naive-ui'
     // 按需引入naive-ui组件
-    // 之后可能会把上述引入集中在一个固定的js文件中
+    // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
         NInput,
@@ -71,28 +71,28 @@ export default defineComponent({
         ]
         // 存储主页默认新闻内容
         // 目前暂未与后端进行对接，故新闻内容直接写死
-        const sonRef = ref(null)
+        const sonRef:Ref< any | null > = ref(null)
         // 引入弹窗控件
-        const username = ref("")
+        const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
         if (sessionStorage.getItem('username') != null) {
             username.value = sessionStorage.getItem('username')
         }
         // 读取存储在localStorage中的token，从而得知初始化应当自动登录的用户
         // 存储主页显示的用户名
-        function dialogHand (api){
+        function dialogHand (api:string){
             /**
             * @description: 弹出登录或注册接口
             * @param {string} api - 弹窗类型，可能为login或者register
-            * @return void
+            * @return {void}
             */
             sonRef.value.handleDialog(username, api) 
         }
-        function handleSelect (key){
+        function handleSelect (key:string){
             /**
             * @description: 对用户名的下拉菜单的处理
             * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是Home则出现用户管理界面
-            * @return void
+            * @return {void}
             */
             if(key == "exit") {
                 window.localStorage.removeItem('token')
@@ -109,7 +109,7 @@ export default defineComponent({
         function getNews() {
             /**
             * @description: 获取全局主页新闻
-            * @return void
+            * @return {void}
             */
             API({
                 headers:{"Authorization": window.localStorage.getItem("token")},

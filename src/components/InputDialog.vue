@@ -10,28 +10,26 @@
   </body>
 </template>
    
-<script>
-import API from "../store/axiosInstance.js"
-import { defineComponent, h, ref, watch } from "vue";
+<script lang="ts">
+import API from "../store/axiosInstance"
+import { defineComponent, h, ref,Ref, watch } from "vue";
 import { useDialog, NInput } from "naive-ui";
-import imgUrl from "@/assets/logo.png"
+import imgUrl from "../assets/logo.png"
 import {useRouter} from 'vue-router'
 export default defineComponent({
-  components: { 
-  },
   setup () {
     const dialog = useDialog()
-    const username = ref("");
-    const password = ref("")
+    const username: Ref<string> = ref("");
+    const password: Ref<string> = ref("")
     const router = useRouter();
     // 定义用户名与密码
     const visible = ref(false)
     // 控制弹窗可视与否的变量，若变化为true则弹窗关闭
-    function login(initial_username) {
+    function login(initial_username:Ref<string>) {
        /**
         * @description: 实现登录接口
         * @param {string} initial_username - 主页的用户名称的引用，方便在请求成功时修改
-        * @return void
+        * @return {void}
         */
       visible.value = false
       // 初始化为false
@@ -58,11 +56,11 @@ export default defineComponent({
         alert("用户名或密码错误")
       })
     }
-    function register(initial_username) {
+    function register(initial_username:Ref<string>) {
       /**
         * @description: 实现注册接口
         * @param {string} initial_username - 主页的用户名称的引用，方便在请求成功时修改
-        * @return void
+        * @return {void}
         */
       visible.value = false
       API({
@@ -94,12 +92,12 @@ export default defineComponent({
         console.log(error);
       })
     }
-    watch(visible, (newVal, oldVal) => {
+    watch(visible, (newVal:boolean, oldVal:boolean) => {
       /**
         * @description: 检测弹窗是否应当关闭，若visible变化为true则关闭
-        * @param {string} oldVal - visible原本的值
-        * @param {string} newVal - visible的新值
-        * @return void
+        * @param {boolean} oldVal - visible原本的值
+        * @param {boolean} newVal - visible的新值
+        * @return {void}
         */
       console.log(oldVal)
       console.log(newVal)
@@ -108,7 +106,7 @@ export default defineComponent({
         dialog.destroyAll()
       }
     })
-    const handleDialog = (initial_username, api) => {
+    const handleDialog = (initial_username:Ref<string>, api:string) => {
       /**
         * @description: 使用render函数规定控件来实现弹窗功能，根据api规定是注册弹窗还是登录弹窗
         * @param {string} initial_username - 主页的用户名称的引用，方便在请求成功时修改
