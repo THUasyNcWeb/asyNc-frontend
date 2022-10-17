@@ -37,7 +37,7 @@
     </n-table>
 </template>
 
-<script>
+<script lang="ts">
 import { useRoute } from 'vue-router'
 import {NTable,NTag} from 'naive-ui'
 export default {

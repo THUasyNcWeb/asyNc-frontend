@@ -27,8 +27,8 @@
     </div>
 </template>
 
-<script>
-import API from "../../store/axiosInstance.ts"
+<script lang="ts">
+import API from "../../store/axiosInstance"
 import {ref} from 'vue'
 import { useRoute } from 'vue-router'
 import {NH1, NH5, NInput,NButton} from 'naive-ui'

@@ -61,7 +61,7 @@
   
 </template>
 
-<script>
+<script lang="ts">
 import Dialog from '@/components/InputDialog.vue'
 import {h,defineComponent,ref} from "vue"
 import {RouterLink} from 'vue-router'

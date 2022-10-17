@@ -6,10 +6,10 @@
  * @LastEditTime: 2022-10-13 10:07  
  -->
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
 import Dialog from '@/components/InputDialog.vue'
-import API from "../store/axiosInstance.ts"
+import API from "../store/axiosInstance"
 import { 
     NInput, 
     NLayoutHeader, 
