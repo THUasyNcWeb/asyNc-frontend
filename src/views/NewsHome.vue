@@ -9,7 +9,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import Dialog from '@/components/InputDialog.vue'
-import API from "../store/axiosInstance.js"
+import API from "../store/axiosInstance.ts"
 import { 
     NInput, 
     NLayoutHeader, 
@@ -27,7 +27,7 @@ import {
     NGridItem,
     } from 'naive-ui'
     // 按需引入naive-ui组件
-    // 之后可能会把上述引入集中在一个固定的js文件中
+    // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
         NInput,
