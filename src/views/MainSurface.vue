@@ -14,41 +14,55 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-    <n-layout-header style="height:40px; background: white;text-align: right;">
+    <n-layout-header style="width:100%; height:40px; background: white;text-align:center;">
         <!-- 布置顶部导航栏 -->
         <!-- 每一个按钮对应着相同的跳转网址 -->
-        <div class="guide_button">
-            <a href="http://www.baidu.com" target="_blank">
-                百度首页
-            </a>
-        </div>
-        <n-divider :vertical=true />
-        <div class="guide_button">
-            <div v-if="username != ''">
-                <n-dropdown trigger = "hover" :options="options" @select="handleSelect">
-                    <div class="guide_button">{{username}}</div>
-                </n-dropdown>
-            </div>
-            <!-- 若当前已登录，则显示登录的用户名并布置下拉菜单 -->
-            <div v-else>
-                <n-button @click="dialogHand('login')" :bordered="false">
-                    登录
-                </n-button>
-                <n-button @click="dialogHand('register')" :bordered="false">
-                    注册
-                </n-button>
-            </div>
-            <!-- 若当前未登录，则布置登录按钮 -->
-        </div>
-        <n-tooltip :show-arrow="false" trigger="hover">
+        <!-- <n-tooltip :show-arrow="false" trigger="hover">
             <template #trigger>
                 <div class="guide_button">
                     百度新闻客户端
                 </div>
             </template>
-            <img :src="require(`@/assets/log-news.png`)" style="height:50px;weight:30px" />
+            <img :src="require(`@/assets/log-news.png`)" style="height:50px;weight:30px" /> -->
             <!-- 当鼠标移至该组件上方即可显示图片 -->
-        </n-tooltip>
+        <!-- </n-tooltip> -->
+        <tr>
+        <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
+          <th style="height:40px">
+            <router-link to="/">
+              <n-image :src="require(`@/assets/log-news.png`)"
+              style="height:30px;"></n-image>
+            </router-link>
+            <!-- 点击图片会进行跳转，跳转到主页 -->
+          </th>
+          <n-divider :vertical=true />
+          <th style="width:90%;text-align:left">
+            <n-menu mode="horizontal" :options="menuOptions" default-value="info"/>
+          </th>
+          <!-- 跳转到主页的搜索主页按钮 -->
+          <n-divider :vertical=true />
+          <th style="width:50%">
+            <div class="guide_button">
+                <div v-if="username != ''">
+                    <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
+                        <div class="guide_button">{{username}}</div>
+                    </n-dropdown>
+                </div>
+                <!-- 若当前已登录，则显示登录的用户名并布置下拉菜单 -->
+                <div v-else>
+                    <n-button @click="dialogHand('login')" :bordered="false">
+                        登录
+                    </n-button>
+                    <n-button @click="dialogHand('register')" :bordered="false">
+                        注册
+                    </n-button>
+                </div>
+                <!-- 若当前未登录，则布置登录按钮 -->
+            </div>
+          </th>
+          <!-- 布局下拉菜单，显示用户选项 -->
+          <!-- 支持切换账号和退出登录 -->
+        </tr>
     </n-layout-header>
     <n-layout>
         <router-view></router-view>
@@ -58,14 +72,16 @@
 
 <script lang="ts">
 import Dialog from "@/components/InputDialog.vue"
-import { defineComponent, Ref, ref } from 'vue'
+import { h,defineComponent, Ref, ref } from 'vue'
+import {RouterLink} from 'vue-router'
 import {  
     NLayout,
     NLayoutHeader, 
     NButton, 
     NDivider,
-    NTooltip,
     NDropdown,
+    NImage,
+    NMenu,
     NDialogProvider,
     NMessageProvider,
     } from 'naive-ui'
@@ -76,10 +92,11 @@ export default defineComponent({
         NLayout,
         NLayoutHeader,
         NButton,
+        NMenu,
         NDivider,
-        NTooltip,
         NDropdown,
         Dialog,
+        NImage,
         NDialogProvider,
         NMessageProvider,
     },
@@ -91,7 +108,7 @@ export default defineComponent({
         }
         const sonRef:Ref< any | null > = ref(null)
         // 引入弹窗控件
-        const options = [
+        const userOptions = [
             {
                 label:"个人主页",
                 key:"Home",
@@ -100,6 +117,34 @@ export default defineComponent({
                 label:"退出",
                 key:"exit",
             }
+        ]
+        const menuOptions = [
+        {
+            label: () =>
+            h(
+                RouterLink,
+                {
+                innerHTML:'主页',
+                to: {
+                    path:'/'
+                }
+                },
+            ),
+            key: 'info',  
+        },
+        {
+            label: () =>
+            h(
+                RouterLink,
+                {
+                innerHTML:'搜索',
+                to: {
+                    path:'/user/userInformation/' + username.value
+                }
+                },
+            ),
+            key: 'modify',
+        },
         ]
         function dialogHand (api:string){
             /**
@@ -132,7 +177,8 @@ export default defineComponent({
             sonRef,
             handleSelect,
             dialogHand,
-            options,
+            userOptions,
+            menuOptions,
         }
     }
 })

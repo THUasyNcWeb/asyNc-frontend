@@ -15,37 +15,6 @@
         </n-message-provider>
     </n-dialog-provider>
     <n-layout style="width:100%;height: 100%;">
-      <n-layout-header bordered style="height:50px;text-align:center;" >
-        <!-- 用户页的顶部导航栏 -->
-        <tr style="height:50px; ">
-        <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
-          <th>
-            <router-link to="/">
-              <n-image :src="require(`@/assets/log-news.png`)"
-              style="height:30px;"></n-image>
-            </router-link>
-            <!-- 点击图片会进行跳转，跳转到主页 -->
-          </th>
-          <n-divider :vertical=true />
-          <th style="width:90%">
-            <n-h2 style="text-align:left">
-              用户主页
-            </n-h2>
-          </th>
-          <th style="width:5%">
-            <router-link to='/'>搜索主页</router-link>
-          </th>
-          <!-- 跳转到主页的搜索主页按钮 -->
-          <n-divider :vertical=true />
-          <th style="width:5%">
-            <n-dropdown trigger = "hover" :options="options" @select="handleSelect">
-                {{username}}
-            </n-dropdown>
-          </th>
-          <!-- 布局下拉菜单，显示用户选项 -->
-          <!-- 支持切换账号和退出登录 -->
-        </tr>
-      </n-layout-header>
       <n-layout has-sider>
         <n-layout-sider bordered content-style="padding: 24px;">
           <n-menu :options="menuOptions" default-value="info" />
