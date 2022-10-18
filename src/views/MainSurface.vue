@@ -50,27 +50,38 @@
             <!-- 当鼠标移至该组件上方即可显示图片 -->
         </n-tooltip>
     </n-layout-header>
+    <n-layout>
+        <router-view></router-view>
+    </n-layout>
   </body>
 </template>
 
 <script lang="ts">
+import Dialog from "@/components/InputDialog.vue"
 import { defineComponent, Ref, ref } from 'vue'
 import {  
+    NLayout,
     NLayoutHeader, 
     NButton, 
     NDivider,
     NTooltip,
     NDropdown,
+    NDialogProvider,
+    NMessageProvider,
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
+        NLayout,
         NLayoutHeader,
         NButton,
         NDivider,
         NTooltip,
         NDropdown,
+        Dialog,
+        NDialogProvider,
+        NMessageProvider,
     },
     setup(){
         const username:Ref<string> = ref("")
