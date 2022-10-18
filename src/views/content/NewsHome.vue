@@ -9,7 +9,7 @@
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
 import Dialog from '@/components/InputDialog.vue'
-import API from "../store/axiosInstance"
+import API from "../../store/axiosInstance"
 import { 
     NInput, 
     NLayoutHeader, 
@@ -319,7 +319,7 @@ body {
 
 .background {
     /* 规定背景图片 */
-    background: url("../assets/background.jpg");
+    background: url("@/assets/background.jpg");
     width: 100%;
     height: 100vh;
     background-size: 100% 100%;

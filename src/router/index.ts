@@ -7,8 +7,8 @@
 */
 
 import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
-import NewsHome from "../views/NewsHome.vue";
-import UserHome from "../views/UserHome.vue";
+import NewsHome from "../views/content/NewsHome.vue";
+import UserHome from "../views/content/UserHome.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
