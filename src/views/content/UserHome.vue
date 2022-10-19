@@ -34,20 +34,15 @@
 import Dialog from '@/components/InputDialog.vue'
 import {h,defineComponent,ref,Ref} from "vue"
 import {RouterLink} from 'vue-router'
-import {NImage,NDivider,NDropdown, NLayout,NLayoutSider, NLayoutContent,NH2,NSpace,NLayoutHeader,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
+import { NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
 export default defineComponent({
   components: {
     NLayoutSider,
     NLayoutContent,
     NLayout,
-    NH2,
     Dialog,
     NSpace,
-    NLayoutHeader,
     NMenu,
-    NImage,
-    NDivider,
-    NDropdown,
     NDialogProvider,
     NMessageProvider
   },

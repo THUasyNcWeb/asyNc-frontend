@@ -14,30 +14,21 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-    <n-layout-header style="width:100%; height:40px; background: white;text-align:center;">
+    <n-layout-header style="width:100%; height:50px; background: #00FFFF;text-align:center;">
         <!-- 布置顶部导航栏 -->
         <!-- 每一个按钮对应着相同的跳转网址 -->
-        <!-- <n-tooltip :show-arrow="false" trigger="hover">
-            <template #trigger>
-                <div class="guide_button">
-                    百度新闻客户端
-                </div>
-            </template>
-            <img :src="require(`@/assets/log-news.png`)" style="height:50px;weight:30px" /> -->
-            <!-- 当鼠标移至该组件上方即可显示图片 -->
-        <!-- </n-tooltip> -->
         <tr>
         <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
-          <th style="height:40px">
+          <th style="height:50px">
             <router-link to="/">
-              <n-image :src="require(`@/assets/log-news.png`)"
-              style="height:30px;"></n-image>
+              <img :src="imgurl"
+              style="height:30px;"/>
             </router-link>
             <!-- 点击图片会进行跳转，跳转到主页 -->
           </th>
           <n-divider :vertical=true />
           <th style="width:90%;text-align:left">
-            <n-menu mode="horizontal" :options="menuOptions" default-value="info"/>
+            <n-menu mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" default-value="info"/>
           </th>
           <!-- 跳转到主页的搜索主页按钮 -->
           <n-divider :vertical=true />
@@ -71,6 +62,7 @@
 </template>
 
 <script lang="ts">
+import themeOverrides from "../components/MenuTheme"
 import Dialog from "@/components/InputDialog.vue"
 import { h,defineComponent, Ref, ref } from 'vue'
 import {RouterLink} from 'vue-router'
@@ -80,7 +72,6 @@ import {
     NButton, 
     NDivider,
     NDropdown,
-    NImage,
     NMenu,
     NDialogProvider,
     NMessageProvider,
@@ -96,7 +87,6 @@ export default defineComponent({
         NDivider,
         NDropdown,
         Dialog,
-        NImage,
         NDialogProvider,
         NMessageProvider,
     },
@@ -179,6 +169,8 @@ export default defineComponent({
             dialogHand,
             userOptions,
             menuOptions,
+            imgurl:require("../assets/log-news.png"),
+            themeOverrides,
         }
     }
 })
