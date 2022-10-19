@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineProps, ref } from 'vue';
 import { NButton, NIcon, NInput } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 

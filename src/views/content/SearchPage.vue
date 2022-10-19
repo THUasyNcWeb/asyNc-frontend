@@ -29,7 +29,7 @@
     <n-layout position="absolute" style="top: 74px;">
       <n-space vertical style="padding: 18px 96px">
         <n-list hoverable clickable>
-          <n-list-item v-for="entry in news">
+          <n-list-item v-for="entry, id in news" :key="id">
             <news-entry :news="entry" />
           </n-list-item>
         </n-list>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { NButton, NGradientText, NLayout, NLayoutContent, NLayoutHeader, NList, NListItem, NPagination, NSpace } from 'naive-ui'
+import { NButton, NGradientText, NLayout, NLayoutHeader, NList, NListItem, NPagination, NSpace } from 'naive-ui'
 import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
@@ -49,7 +49,7 @@ import router from '@/router';
 const query = router.currentRoute.value.query;
 const word = query.q as string;
 const page = parseInt(query.page as string) || 1;
-const user = 'abmfy';
+// const user = 'abmfy';
 
 // Send search request
 function search(word: String) {
