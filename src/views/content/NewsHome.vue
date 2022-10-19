@@ -128,9 +128,12 @@ export default defineComponent({
                         </n-h2>
                     <n-carousel show-arrow style="height:80%">
                         <n-carousel-item v-for="(news, index) in all_news" :key = index>
-                            <h3 style="color:wheat">{{news.title}}</h3>
-                            <img :src="news.picture_url" class="carousel-img"/>
-                            
+                            <!-- <h3 style="color:wheat">{{news.title}}</h3>
+                            <img :src="news.picture_url" class="carousel-img"/> -->
+                            <div class="pic_item">
+                                <img class="small" :src="news.picture_url" />
+                                <h2>{{news.title}}</h2>
+                            </div>
                         </n-carousel-item>
 
                     </n-carousel>
@@ -236,7 +239,28 @@ body {
 }
 .carousel-img {
   width: 100%;
+  height: 100%;
   position: relative;
   /* object-fit: cover; */
+}
+
+.pic_item {
+  position: relative;
+  height: 100%;
+}
+.pic_item:hover{
+  cursor: pointer;
+}
+
+.pic_item img {
+  width: 100%;
+  height: 100%;
+}
+
+.pic_item h2 {
+  position: absolute;
+  left: 1rem;
+  bottom: 2rem;
+  color: white;
 }
 </style>
