@@ -15,8 +15,6 @@ import {
     NButton, 
     NInputGroup,
     NH2,
-    NH3,
-    NImage,
     NGrid,
     NGridItem,
     NCarousel,
@@ -31,8 +29,6 @@ export default defineComponent({
         NInputGroup,
         NButton,
         NH2,
-        NH3,
-        NImage,
         NGrid,
         NGridItem,
         NCarousel,
@@ -126,22 +122,51 @@ export default defineComponent({
                         <n-h2 class="title_content">
                             图片新闻
                         </n-h2>
-                    <n-carousel show-arrow style="height:80%">
+                    <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
                         <n-carousel-item v-for="(news, index) in all_news" :key = index>
-                            <!-- <h3 style="color:wheat">{{news.title}}</h3>
-                            <img :src="news.picture_url" class="carousel-img"/> -->
                             <div class="pic_item">
                                 <img class="small" :src="news.picture_url" />
-                                <h2>{{news.title}}</h2>
+                                <h3>{{news.title}}</h3>
                             </div>
                         </n-carousel-item>
-
                     </n-carousel>
-
                 </n-grid-item>
             </n-grid>
         </n-card>
 
+        <n-card class="card_bordered">  
+            <n-grid cols="2" item-responsive>
+                <n-grid-item style="text-align:left">
+                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
+                    </svg>
+                    <n-h2 class="title_content">
+                        军事
+                    </n-h2>
+                    <li v-for="(news, index) in all_news" :key = index style="margin-top:5px">
+                        <a :href="news.news_url" target="_blank">
+                            {{news.title}}
+                        </a>
+                    </li>
+                </n-grid-item>
+                <n-grid-item style="text-align:left">
+                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
+                        </svg>
+                        <n-h2 class="title_content">
+                            图片新闻
+                        </n-h2>
+                    <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
+                        <n-carousel-item v-for="(news, index) in all_news" :key = index>
+                            <div class="pic_item">
+                                <img class="small" :src="news.picture_url" />
+                                <h3>{{news.title}}</h3>
+                            </div>
+                        </n-carousel-item>
+                    </n-carousel>
+                </n-grid-item>
+            </n-grid>
+        </n-card>
         <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
             <n-card class="card_bordered">
                 <div v-if="news.picture_url != ''">
@@ -166,8 +191,6 @@ export default defineComponent({
                     </n-grid>
                 </div>
                 <div v-else>
-                    <!-- 若仅有文案，则无需使用栅格 -->
-                    <!-- 直接以div进行布置即可 -->
                     <div>
                         <a :href="news.news_url" target="_blank">
                             <n-h3 style="text-align:left">
@@ -180,7 +203,10 @@ export default defineComponent({
                     </div>
                 </div>
             </n-card>
-        </div>         
+        </div>   
+        <div style="width:100%;height:30px; background-color:blue;color:white;text-align: center;">
+            copyright by asyNc
+        </div>      
     </body>
     
 </template>
@@ -257,10 +283,10 @@ body {
   height: 100%;
 }
 
-.pic_item h2 {
+.pic_item h3 {
   position: absolute;
   left: 1rem;
-  bottom: 2rem;
+  bottom: -0.5rem;
   color: white;
 }
 </style>
