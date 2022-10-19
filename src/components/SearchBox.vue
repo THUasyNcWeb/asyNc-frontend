@@ -8,7 +8,6 @@
 
 <template >
   <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
-    :style="{ 'text-align': 'left' }"
     @keyup.enter="$emit('submit', text)">
     <!-- For some margin -->
     <template #prefix>

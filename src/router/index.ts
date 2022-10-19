@@ -10,6 +10,7 @@ import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
 import NewsHome from "../views/content/NewsHome.vue";
 import UserHome from "../views/content/UserHome.vue";
 import MainSurface from "../views/MainSurface.vue"
+import SearchPage from '@/views/content/SearchPage.vue';
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -56,7 +57,14 @@ const routes: Array<RouteRecordRaw> = [
         },
         ]
     },
-    
+    {
+        path: '/search',
+        name: 'Search',
+        component: SearchPage,
+        meta: {
+            title: '搜索',
+        }
+    }
 ];
 // 注册页面路由
 
