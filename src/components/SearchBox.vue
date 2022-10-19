@@ -3,45 +3,33 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-20 01:02
+ * @LastEditTime: 2022-10-20 01:37
 -->
 
 <template >
   <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
     :style="{ 'text-align': 'left' }"
-    @keyup.enter="submit">
+    @keyup.enter="$emit('submit', text)">
     <!-- For some margin -->
     <template #prefix>
       <div/>
     </template>
     <template #suffix>
-      <n-button @click="submit" large circle quaternary type="primary">
+      <n-button @click="$emit('submit', text)" large circle quaternary type="primary">
         <n-icon size="large" :component="Search"/>
       </n-button>
     </template>
   </n-input>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { NButton, NIcon, NInput } from 'naive-ui'
+<script setup lang="ts">
+import { ref } from 'vue';
+import { NButton, NIcon, NInput } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 
-export default defineComponent({
-  components: {
-    NButton,
-    NIcon,
-    NInput,
-  },
-  setup() {
-    return {
-      Search,
-      text: ref(''),
-      submit() {
-        this.$emit('submit', this.text)
-      }
-    }
-  },
-})
+const props = defineProps({
+  text: String,
+});
 
+const text = ref(props.text ?? '');
 </script>
