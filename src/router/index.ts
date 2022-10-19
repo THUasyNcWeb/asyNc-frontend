@@ -7,45 +7,56 @@
 */
 
 import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
-import NewsHome from "../views/NewsHome.vue";
-import UserHome from "../views/UserHome.vue";
-
+import NewsHome from "../views/content/NewsHome.vue";
+import UserHome from "../views/content/UserHome.vue";
+import MainSurface from "../views/MainSurface.vue"
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "NewsHome",
-        component: NewsHome,
+        name: "MainSurface",
+        component: MainSurface,
         meta: {
-            title: "百度新闻——海量中文资讯平台",
+            title: "欢迎来到asyNc的新闻主页",
         },
-    },
-    {
-        path: "/user",
-        name: "UserHome",
-        component: UserHome,
-        meta: {
-            title: "用户主页",
-        },
-        children: [
-            // 注册子路由，方便进行嵌套路由管理
+        children:[
         {
-            path:"/user/userInformation/:user_name",
-            name:"userInformation",
-            component: () => import("../views/user/userInformation.vue"),
-            meta: {
-                title: "详细用户信息"
+            path:"/",
+            name:"NewsHome",
+            component:NewsHome,
+            meta:{
+                title:"新闻展示"
             }
         },
         {
-            path:"/user/modifyPassword/:user_name",
-            name:"modifyPassword",
-            component:() => import("../views/user/modifyPassword.vue"),
+            path: "/user",
+            name: "UserHome",
+            component: UserHome,
             meta: {
-                title: "修改密码"
+                title: "用户主页",
+            },
+            children: [
+                // 注册子路由，方便进行嵌套路由管理
+            {
+                path:"/user/userInformation/:user_name",
+                name:"userInformation",
+                component: () => import("../views/user/userInformation.vue"),
+                meta: {
+                    title: "详细用户信息"
+                }
+            },
+            {
+                path:"/user/modifyPassword/:user_name",
+                name:"modifyPassword",
+                component:() => import("../views/user/modifyPassword.vue"),
+                meta: {
+                    title: "修改密码"
+                }
             }
-        }
+            ]
+        },
         ]
     },
+    
 ];
 // 注册页面路由
 
