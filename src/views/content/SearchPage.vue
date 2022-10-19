@@ -5,22 +5,42 @@
  * @LastEditors: 王博文
  * @LastEditTime: 2022-10-20 04:56
 -->
-<template :style="{ 'text-align': 'left' }">
-  <div style="padding: 24px 96px;">
-    <n-space vertical>
-      <search-box :text="word" :style="{ width: '50%' }" @submit="search"/>
-      <n-list hoverable clickable>
-        <n-list-item v-for="entry in news">
-          <news-entry :news="entry"/> 
-        </n-list-item>
-      </n-list>
-      <n-pagination :page="page" :page-count="page_count" @update:page="jump"/>
-    </n-space>
-  </div>
+<template>
+  <n-layout position="absolute">
+    <n-layout-header bordered embedded
+      style="height: 74px; padding: 18px 96px; position: fixed">
+      <n-space align="center" justify="space-between">
+        <n-space>
+          <n-gradient-text type="success" size=24>
+            asyNc
+          </n-gradient-text>
+          <search-box :text="word" style="width: 40vw" @submit="search"/>
+        </n-space>
+        <n-space>
+          <n-button quaternary type="success">
+            登录
+          </n-button>
+          <n-button quaternary type="success">
+            注册
+          </n-button>
+        </n-space>
+      </n-space>
+    </n-layout-header>
+    <n-layout position="absolute" style="top: 74px;">
+      <n-space vertical style="padding: 18px 96px">
+        <n-list hoverable clickable>
+          <n-list-item v-for="entry in news">
+            <news-entry :news="entry" />
+          </n-list-item>
+        </n-list>
+        <n-pagination :page="page" :page-count="page_count" @update:page="jump"/>
+      </n-space>
+    </n-layout>
+  </n-layout>
 </template>
 
 <script setup lang="ts">
-import { NList, NListItem, NPagination, NSpace } from 'naive-ui'
+import { NButton, NGradientText, NLayout, NLayoutContent, NLayoutHeader, NList, NListItem, NPagination, NSpace } from 'naive-ui'
 import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
@@ -29,6 +49,7 @@ import router from '@/router';
 const query = router.currentRoute.value.query;
 const word = query.q as string;
 const page = parseInt(query.page as string) || 1;
+const user = 'abmfy';
 
 // Send search request
 function search(word: String) {

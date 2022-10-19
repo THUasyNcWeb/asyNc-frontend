@@ -6,7 +6,7 @@
  * @LastEditTime: 2022-10-20 01:37
 -->
 
-<template >
+<template>
   <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
     @keyup.enter="$emit('submit', text)">
     <!-- For some margin -->
