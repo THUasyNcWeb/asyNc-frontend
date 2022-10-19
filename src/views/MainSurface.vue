@@ -14,7 +14,7 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-    <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%; height:50px; text-align:center;">
+    <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;background-color: aqua ;height:50px; text-align:center;">
         <!-- 布置顶部导航栏 -->
         <!-- 每一个按钮对应着相同的跳转网址 -->
         <tr>
