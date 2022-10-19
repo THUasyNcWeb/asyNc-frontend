@@ -11,7 +11,6 @@ import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
 import { 
     NInput, 
-    NCard, 
     NButton, 
     NInputGroup,
     NH3,
@@ -25,7 +24,6 @@ export default defineComponent({
     components: {
         NInput,
         NInputGroup,
-        NCard,
         NButton,
         NH3,
         NImage,
@@ -82,51 +80,30 @@ export default defineComponent({
   
 <template>
     <body>
-        <n-card class="background">
-            <n-card class="main_card">
-                <div>
-                    <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-                    <img :src="require(`@/assets/log-news.png`)"
-                        style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
-                    <n-input-group style="display: inline-block;width: 80%;">
-                        <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
-                        </n-input>
-                        <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
-                            text-color="white">
-                            百度一下
-                        </n-button>
-                        <a href="http://www.baidu.com">帮助</a>
-                        <!-- 绑定为一个组，从而使排版成为一个整体 -->
-                    </n-input-group>
-                    
-                </div>
-                <!-- 展示主页新闻内容 -->
-                    <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
-                        <div v-if="news.picture_url != ''">
-                            <!-- 若新闻带有头图，则布置栅格插件来分布图片与文案 -->
-                            <n-grid cols="4" item-responsive>
-                                <n-grid-item span="0 400:1 600:2 800:3">
-                                    <div>
-                                        <!-- 插入新闻链接与文本 -->
-                                        <a :href="news.news_url" target="_blank">
-                                            <n-h3 style="text-align:left">
-                                                {{news.title}}
-                                            </n-h3>
-                                        </a>
-                                        <div style="text-align:left">
-                                            {{news.content}}
-                                        </div>
-                                    </div>
-                                </n-grid-item>
-                                <n-grid-item>
-                                    <n-image :src = "news.picture_url" :fallback-src = news.picture_url width=100 />
-                                </n-grid-item>
-                            </n-grid>
-                        </div>
-                        <div v-else>
-                            <!-- 若仅有文案，则无需使用栅格 -->
-                            <!-- 直接以div进行布置即可 -->
+        <div>
+            <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
+            <img :src="require(`@/assets/log-news.png`)"
+                style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
+            <n-input-group style="display: inline-block;width: 80%;">
+                <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
+                </n-input>
+                <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
+                    text-color="white">
+                    百度一下
+                </n-button>
+                <a href="http://www.baidu.com">帮助</a>
+                <!-- 绑定为一个组，从而使排版成为一个整体 -->
+            </n-input-group>
+            
+        </div>
+        <!-- 展示主页新闻内容 -->
+            <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
+                <div v-if="news.picture_url != ''">
+                    <!-- 若新闻带有头图，则布置栅格插件来分布图片与文案 -->
+                    <n-grid cols="4" item-responsive>
+                        <n-grid-item span="0 400:1 600:2 800:3">
                             <div>
+                                <!-- 插入新闻链接与文本 -->
                                 <a :href="news.news_url" target="_blank">
                                     <n-h3 style="text-align:left">
                                         {{news.title}}
@@ -136,10 +113,27 @@ export default defineComponent({
                                     {{news.content}}
                                 </div>
                             </div>
+                        </n-grid-item>
+                        <n-grid-item>
+                            <n-image :src = "news.picture_url" :fallback-src = news.picture_url width=100 />
+                        </n-grid-item>
+                    </n-grid>
+                </div>
+                <div v-else>
+                    <!-- 若仅有文案，则无需使用栅格 -->
+                    <!-- 直接以div进行布置即可 -->
+                    <div>
+                        <a :href="news.news_url" target="_blank">
+                            <n-h3 style="text-align:left">
+                                {{news.title}}
+                            </n-h3>
+                        </a>
+                        <div style="text-align:left">
+                            {{news.content}}
                         </div>
-                    </div>           
-            </n-card>
-        </n-card>
+                    </div>
+                </div>
+            </div>           
     </body>
     
 </template>

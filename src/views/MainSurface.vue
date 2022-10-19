@@ -14,7 +14,7 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-    <n-layout-header style="width:100%; height:50px; background: #00FFFF;text-align:center;">
+    <n-layout-header style="box-shadow:0px 2px 2px #808080;width:100%; height:50px; text-align:center;">
         <!-- 布置顶部导航栏 -->
         <!-- 每一个按钮对应着相同的跳转网址 -->
         <tr>
@@ -28,7 +28,7 @@
           </th>
           <n-divider :vertical=true />
           <th style="width:90%;text-align:left">
-            <n-menu mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" default-value="info"/>
+            <n-menu  mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" default-value="info"/>
           </th>
           <!-- 跳转到主页的搜索主页按钮 -->
           <n-divider :vertical=true />
@@ -67,7 +67,7 @@ import Dialog from "@/components/InputDialog.vue"
 import { h,defineComponent, Ref, ref } from 'vue'
 import {RouterLink} from 'vue-router'
 import {  
-    NLayout,
+    // NLayout,
     NLayoutHeader, 
     NButton, 
     NDivider,
@@ -80,7 +80,7 @@ import {
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
-        NLayout,
+        // NLayout,
         NLayoutHeader,
         NButton,
         NMenu,
