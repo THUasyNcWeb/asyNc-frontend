@@ -10,6 +10,7 @@
 import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
 import { 
+    NCard,
     NInput, 
     NButton, 
     NInputGroup,
@@ -22,6 +23,7 @@ import {
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
+        NCard,
         NInput,
         NInputGroup,
         NButton,
@@ -80,7 +82,7 @@ export default defineComponent({
   
 <template>
     <body>
-        <div>
+        <n-card class="card_bordered">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
             <img :src="require(`@/assets/log-news.png`)"
                 style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
@@ -94,10 +96,10 @@ export default defineComponent({
                 <a href="http://www.baidu.com">帮助</a>
                 <!-- 绑定为一个组，从而使排版成为一个整体 -->
             </n-input-group>
-            
-        </div>
+        </n-card>
         <!-- 展示主页新闻内容 -->
-            <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
+        <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
+            <n-card class="card_bordered">
                 <div v-if="news.picture_url != ''">
                     <!-- 若新闻带有头图，则布置栅格插件来分布图片与文案 -->
                     <n-grid cols="4" item-responsive>
@@ -133,7 +135,8 @@ export default defineComponent({
                         </div>
                     </div>
                 </div>
-            </div>           
+            </n-card>
+        </div>         
     </body>
     
 </template>
@@ -162,5 +165,16 @@ body {
     position: fixed;
     overflow: auto
     /* 保证背景可以滑动 */
+}
+
+.card_bordered {
+    border-radius:15px;
+    width:70%;
+    margin: auto; 
+    margin-top: 5%;
+    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影  红色*/
+    -0.5px 0px 5px #808080,   /*左边阴影  绿色*/
+    0.5px 0px 5px #808080,    /*右边阴影  蓝色*/
+    0px 0.5px 5px #808080;    /*下边阴影  黄色*/
 }
 </style>
