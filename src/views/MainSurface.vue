@@ -9,7 +9,7 @@
 <template>
     <body>
     <n-layout position="absolute" style="top: 0px;bottom: 0px;">
-        <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;top: 0;left: 0; position: fixed; text-align:center;">
+        <n-layout-header bordered style="width:100%;top: 0;left: 0; position: fixed; z-index: 999999; text-align:center;">
             <!-- 布置顶部导航栏 -->
             <!-- 每一个按钮对应着相同的跳转网址 -->
             <tr>
@@ -50,7 +50,7 @@
             <!-- 支持切换账号和退出登录 -->
             </tr>
         </n-layout-header>
-        <n-layout position="absolute" style="top: 50px;bottom: 0px;">
+        <n-layout position="absolute" style="top: 51px;bottom: 0px;">
             <router-view></router-view>
         </n-layout>
     </n-layout>
@@ -175,7 +175,7 @@ export default defineComponent({
             }
         }
         return{
-            now_url:"home",
+            now_url:"",
             username,
             sonRef,
             handleSelect,
