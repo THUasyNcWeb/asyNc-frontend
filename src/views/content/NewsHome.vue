@@ -167,43 +167,6 @@ export default defineComponent({
                 </n-grid-item>
             </n-grid>
         </n-card>
-        <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
-            <n-card class="card_bordered">
-                <div v-if="news.picture_url != ''">
-                    <!-- 若新闻带有头图，则布置栅格插件来分布图片与文案 -->
-                    <n-grid cols="4" item-responsive>
-                        <n-grid-item span="0 400:1 600:2 800:3">
-                            <div>
-                                <!-- 插入新闻链接与文本 -->
-                                <a :href="news.news_url" target="_blank">
-                                    <n-h3 style="text-align:left">
-                                        {{news.title}}
-                                    </n-h3>
-                                </a>
-                                <div style="text-align:left">
-                                    {{news.content}}
-                                </div>
-                            </div>
-                        </n-grid-item>
-                        <n-grid-item>
-                            <n-image :src = "news.picture_url" :fallback-src = news.picture_url width=100 />
-                        </n-grid-item>
-                    </n-grid>
-                </div>
-                <div v-else>
-                    <div>
-                        <a :href="news.news_url" target="_blank">
-                            <n-h3 style="text-align:left">
-                                {{news.title}}
-                            </n-h3>
-                        </a>
-                        <div style="text-align:left">
-                            {{news.content}}
-                        </div>
-                    </div>
-                </div>
-            </n-card>
-        </div>   
         <div style="width:100%;height:30px; background-color:blue;color:white;text-align: center;">
             copyright by asyNc
         </div>      
@@ -240,16 +203,6 @@ body {
     vertical-align: top;
 }
 
-.background {
-    /* 规定背景图片 */
-    background: url("@/assets/background.jpg");
-    width: 100%;
-    height: 100vh;
-    background-size: 100% 100%;
-    position: fixed;
-    overflow: auto
-    /* 保证背景可以滑动 */
-}
 
 .card_bordered {
     display: flex; 
@@ -257,11 +210,13 @@ body {
     border-radius:15px;
     width:80%;
     margin: auto; 
-    margin-top: 5%;
-    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影  红色*/
-    -0.5px 0px 5px #808080,   /*左边阴影  绿色*/
-    0.5px 0px 5px #808080,    /*右边阴影  蓝色*/
-    0px 0.5px 5px #808080;    /*下边阴影  黄色*/
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
+    -0.5px 0px 5px #808080,   /*左边阴影 */
+    0.5px 0px 5px #808080,    /*右边阴影 */
+    0px 0.5px 5px #808080;    /*下边阴影  */
 }
 .carousel-img {
   width: 100%;

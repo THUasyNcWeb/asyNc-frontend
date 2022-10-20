@@ -9,7 +9,7 @@
 <template>
   <body>
     <n-layout position="absolute" style="top: 0px;bottom: 0px;">
-        <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;top: 0;left: 0; position: fixed;background-color: aqua ;  text-align:center;">
+        <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;top: 0;left: 0; position: fixed; text-align:center;">
             <!-- 布置顶部导航栏 -->
             <!-- 每一个按钮对应着相同的跳转网址 -->
             <tr>
@@ -50,7 +50,7 @@
             <!-- 支持切换账号和退出登录 -->
             </tr>
         </n-layout-header>
-        <n-layout position="absolute" style="top: 64px;bottom: 0px;">
+        <n-layout class="background_image" position="absolute" style="top: 50px;bottom: 0px;">
             <router-view></router-view>
         </n-layout>
     </n-layout>
@@ -188,6 +188,15 @@ export default defineComponent({
     /* 不同按钮需在同一行 */
 }
 
-
+.background_image {
+    background-image:url('../assets/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    /*  z-index:1; */
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}
 
 </style>
