@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 前端布局vue
+ * @Author: 郑友捷
+ * @Date: 2022-10-03 19:00
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-10-20 14:00  
+ -->
 <template>
   <body>
     <router-view />
