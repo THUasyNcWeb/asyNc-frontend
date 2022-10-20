@@ -83,7 +83,7 @@ export default defineComponent({
 </script>
   
 <template>
-    <body>
+    <body class="background_image">
         <n-card class="card_bordered">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
             <img :src="require(`@/assets/log-news.png`)"
@@ -203,6 +203,16 @@ body {
     vertical-align: top;
 }
 
+.background_image {
+    background-image:url('../../assets/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    /*  z-index:1; */
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}
 
 .card_bordered {
     display: flex; 

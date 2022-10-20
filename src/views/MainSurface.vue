@@ -132,7 +132,7 @@ export default defineComponent({
                 {
                 innerHTML:'搜索',
                 to: {
-                    path:'/user/userInformation/' + username.value
+                    path:'/search' + username.value
                 }
                 },
             ),

@@ -9,6 +9,7 @@
 import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
 import NewsHome from "../views/content/NewsHome.vue";
 import UserHome from "../views/content/UserHome.vue";
+import SearchPage from "../views/content/SearchPage.vue";
 import MainSurface from "../views/MainSurface.vue"
 const routes: Array<RouteRecordRaw> = [
     {
@@ -25,6 +26,14 @@ const routes: Array<RouteRecordRaw> = [
             component:NewsHome,
             meta:{
                 title:"新闻展示"
+            }
+        },
+        {
+            path:"/search",
+            name:"Search",
+            component: SearchPage,
+            meta:{
+                title:"搜索页"
             }
         },
         {
