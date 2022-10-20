@@ -7,7 +7,7 @@
  -->
 
 <template>
-  <body>
+    <body>
     <n-layout position="absolute" style="top: 0px;bottom: 0px;">
         <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;top: 0;left: 0; position: fixed; text-align:center;">
             <!-- 布置顶部导航栏 -->
@@ -23,7 +23,7 @@
             </th>
             <n-divider :vertical=true />
             <th style="width:90%;text-align:left">
-                <n-menu  mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" default-value="info"/>
+                <n-menu  mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" :default-value="now_url" />
             </th>
             <!-- 跳转到主页的搜索主页按钮 -->
             <n-divider :vertical=true />
@@ -50,7 +50,7 @@
             <!-- 支持切换账号和退出登录 -->
             </tr>
         </n-layout-header>
-        <n-layout class="background_image" position="absolute" style="top: 50px;bottom: 0px;">
+        <n-layout position="absolute" style="top: 50px;bottom: 0px;">
             <router-view></router-view>
         </n-layout>
     </n-layout>
@@ -61,7 +61,7 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-  </body>
+    </body>
 </template>
 
 <script lang="ts">
@@ -93,6 +93,15 @@ export default defineComponent({
         NDialogProvider,
         NMessageProvider,
     },
+    created(){
+        let path = this.$route.path
+        if(path == "/") {
+            this.now_url = "home"
+        }
+        else if (path == "/search") {
+            this.now_url = "search"
+        }
+    },
     setup(){
         const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
@@ -123,7 +132,7 @@ export default defineComponent({
                 }
                 },
             ),
-            key: 'info',  
+            key: 'home',  
         },
         {
             label: () =>
@@ -132,27 +141,27 @@ export default defineComponent({
                 {
                 innerHTML:'搜索',
                 to: {
-                    path:'/search' + username.value
+                    path:'/search'
                 }
                 },
             ),
-            key: 'modify',
+            key: 'search',
         },
         ]
         function dialogHand (api:string){
             /**
-            * @description: 弹出登录或注册接口
-            * @param {string} api - 弹窗类型，可能为login或者register
-            * @return {void}
-            */
+             * @description: 弹出登录或注册接口
+             * @param {string} api - 弹窗类型，可能为login或者register
+             * @return {void}
+             */
             sonRef.value.handleDialog(username, api) 
         }
         function handleSelect (key:string){
             /**
-            * @description: 对用户名的下拉菜单的处理
-            * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是Home则出现用户管理界面
-            * @return {void}
-            */
+             * @description: 对用户名的下拉菜单的处理
+             * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是Home则出现用户管理界面
+             * @return {void}
+             */
             if(key == "exit") {
                 window.localStorage.removeItem('token')
                 sessionStorage.removeItem('username')
@@ -166,6 +175,7 @@ export default defineComponent({
             }
         }
         return{
+            now_url:"home",
             username,
             sonRef,
             handleSelect,
@@ -188,15 +198,6 @@ export default defineComponent({
     /* 不同按钮需在同一行 */
 }
 
-.background_image {
-    background-image:url('../assets/background.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    /*  z-index:1; */
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    overflow: auto;
-}
+
 
 </style>
