@@ -17,7 +17,7 @@
     <n-layout style="width:100%;height: 100%;">
       <n-layout has-sider>
         <n-layout-sider bordered content-style="padding: 24px;">
-          <n-menu :options="menuOptions" default-value="info" />
+          <n-menu :options="menuOptions" :default-value="now_url" />
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;">
@@ -46,8 +46,16 @@ export default defineComponent({
     NDialogProvider,
     NMessageProvider
   },
+  created(){
+    let path = this.$route.path
+      if(path.indexOf("/user/userInformation") == 0) {
+          this.now_url = "info"
+      }
+      else if (path.indexOf("/user/modifyPassword") == 0) {
+          this.now_url = "modify"
+      }
+  },
   setup() {
-
     const menuOptions = [
       {
         label: () =>
@@ -118,6 +126,7 @@ export default defineComponent({
       }
     }
     return {
+      now_url:"",
       menuOptions,
       username,
       options,

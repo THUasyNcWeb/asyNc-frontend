@@ -10,10 +10,10 @@
 import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
 import { 
+    NGradientText,
     NCard,
     NInput, 
     NButton, 
-    NInputGroup,
     NH2,
     NGrid,
     NGridItem,
@@ -24,9 +24,9 @@ import {
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
+        NGradientText,
         NCard,
         NInput,
-        NInputGroup,
         NButton,
         NH2,
         NGrid,
@@ -74,30 +74,48 @@ export default defineComponent({
                 console.log(res);
             });
         }
+        function search() {
+            API({
+                headers:{"Authorization": window.localStorage.getItem("token")},
+                url:'search/',
+                method:'get',
+            }).then((res)=>{
+                console.log(res);
+            });
+        }
         return {
             getNews,
             all_news,
+            search,
         }
     },
 })
 </script>
   
 <template>
-    <body>
+    <body class="background_image">
         <n-card class="card_bordered">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-            <img :src="require(`@/assets/log-news.png`)"
-                style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
-            <n-input-group style="display: inline-block;width: 80%;">
-                <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
-                </n-input>
-                <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
-                    text-color="white">
-                    百度一下
-                </n-button>
-                <a href="http://www.baidu.com">帮助</a>
-                <!-- 绑定为一个组，从而使排版成为一个整体 -->
-            </n-input-group>
+            <n-gradient-text type="success" size=24 style="margin-right: 20px;">
+                asyNc
+            </n-gradient-text>
+            <n-input style="width:60%; margin-right: 5%;" size="large" round placeholder="百度一下，我也不知道">
+            </n-input>
+            <template #prefix>
+                <div>说话</div>
+            </template>
+            <template #suffix>
+            <n-button type="primary">
+                <!-- <n-icon size="large" :component="Search"/> -->
+            </n-button>
+            </template>
+
+            <!-- <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
+                text-color="white" @click="search">
+                百度一下
+            </n-button>
+            <a href="http://www.baidu.com">帮助</a> -->
+            <!-- 绑定为一个组，从而使排版成为一个整体 -->
         </n-card>
         <!-- 展示主页新闻内容 -->
         <n-card class="card_bordered">  
@@ -167,43 +185,6 @@ export default defineComponent({
                 </n-grid-item>
             </n-grid>
         </n-card>
-        <div v-for="(news, index) in all_news" :key = index style="margin-bottom:20px;margin-top:50px;text-align:left">
-            <n-card class="card_bordered">
-                <div v-if="news.picture_url != ''">
-                    <!-- 若新闻带有头图，则布置栅格插件来分布图片与文案 -->
-                    <n-grid cols="4" item-responsive>
-                        <n-grid-item span="0 400:1 600:2 800:3">
-                            <div>
-                                <!-- 插入新闻链接与文本 -->
-                                <a :href="news.news_url" target="_blank">
-                                    <n-h3 style="text-align:left">
-                                        {{news.title}}
-                                    </n-h3>
-                                </a>
-                                <div style="text-align:left">
-                                    {{news.content}}
-                                </div>
-                            </div>
-                        </n-grid-item>
-                        <n-grid-item>
-                            <n-image :src = "news.picture_url" :fallback-src = news.picture_url width=100 />
-                        </n-grid-item>
-                    </n-grid>
-                </div>
-                <div v-else>
-                    <div>
-                        <a :href="news.news_url" target="_blank">
-                            <n-h3 style="text-align:left">
-                                {{news.title}}
-                            </n-h3>
-                        </a>
-                        <div style="text-align:left">
-                            {{news.content}}
-                        </div>
-                    </div>
-                </div>
-            </n-card>
-        </div>   
         <div style="width:100%;height:30px; background-color:blue;color:white;text-align: center;">
             copyright by asyNc
         </div>      
@@ -240,15 +221,15 @@ body {
     vertical-align: top;
 }
 
-.background {
-    /* 规定背景图片 */
-    background: url("@/assets/background.jpg");
+.background_image {
+    background-image:url('../../assets/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    /*  z-index:1; */
+    position: fixed;
     width: 100%;
     height: 100vh;
-    background-size: 100% 100%;
-    position: fixed;
-    overflow: auto
-    /* 保证背景可以滑动 */
+    overflow: auto;
 }
 
 .card_bordered {
@@ -257,11 +238,13 @@ body {
     border-radius:15px;
     width:80%;
     margin: auto; 
-    margin-top: 5%;
-    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影  红色*/
-    -0.5px 0px 5px #808080,   /*左边阴影  绿色*/
-    0.5px 0px 5px #808080,    /*右边阴影  蓝色*/
-    0px 0.5px 5px #808080;    /*下边阴影  黄色*/
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
+    -0.5px 0px 5px #808080,   /*左边阴影 */
+    0.5px 0px 5px #808080,    /*右边阴影 */
+    0px 0.5px 5px #808080;    /*下边阴影  */
 }
 .carousel-img {
   width: 100%;
