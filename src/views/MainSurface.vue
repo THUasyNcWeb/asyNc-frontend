@@ -24,12 +24,15 @@
             </th>
             <n-divider :vertical=true />
             <th style="width:90%;text-align:left">
-                <n-menu  mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" :default-value="now_url" />
+                <n-menu mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" :default-value="now_url" />
             </th>
             <!-- 跳转到主页的搜索主页按钮 -->
             <n-divider :vertical=true />
             <th style="width:50%">
                 <div class="guide_button">
+                    <n-button @click="judgeToken">
+                        测试
+                    </n-button>
                     <div v-if="username != ''">
                         <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
                             <div class="guide_button">{{username}}</div>
@@ -104,13 +107,12 @@ export default defineComponent({
         else if (path == "/search") {
             this.now_url = "search"
         }
+        this.judgeToken()
+
     },
     setup(){
         const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
-        if (sessionStorage.getItem('username') != null) {
-            username.value = sessionStorage.getItem('username')
-        }
         const sonRef:Ref< any | null > = ref(null)
         // 引入弹窗控件
         const userOptions = [
@@ -177,6 +179,29 @@ export default defineComponent({
                 window.open('/user/userInformation/' + username.value, '_blank')
             }
         }
+        function judgeToken() {
+            // 检验token是否有效
+            try{
+                let tokenString:string = localStorage.getItem("token");
+                let token = JSON.parse(decodeURIComponent(escape(window.atob(tokenString.split('.')[1]))))
+                console.log(token)
+                let expire_date =  new Date(token.expire_time * 1000)
+                console.log(expire_date)
+                let now_date = new Date()
+                console.log(now_date)
+                if (expire_date < now_date) {
+                    throw Error("The token has expired!")
+                }
+                username.value = token.user_name
+            }
+            catch(error){
+                console.log(error)
+                console.log("错啦")
+                username.value = ""
+                localStorage.removeItem("token")
+                // 清除原来无用的token
+            }
+        }
         return{
             now_url:"",
             username,
@@ -187,6 +212,7 @@ export default defineComponent({
             menuOptions,
             imgurl:require("../assets/log-news.png"),
             themeOverrides,
+            judgeToken
         }
     }
 })
