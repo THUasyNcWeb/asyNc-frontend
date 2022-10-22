@@ -7,28 +7,32 @@
  -->
 
 <template>
-  <body>
+    <body>
     <n-layout position="absolute" style="top: 0px;bottom: 0px;">
-        <n-layout-header style="box-shadow:0px 2px 2px #808080 ;width:100%;top: 0;left: 0; position: fixed;background-color: aqua ;  text-align:center;">
+        <n-layout-header bordered style="width:100%;top: 0;left: 0; position: fixed; z-index: 999999; text-align:center;">
             <!-- 布置顶部导航栏 -->
             <!-- 每一个按钮对应着相同的跳转网址 -->
             <tr>
             <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
             <th style="height:50px">
                 <router-link to="/">
-                <img :src="imgurl"
-                style="height:30px;"/>
+                <n-gradient-text type="success" size=24 style="margin-left: 10px;">
+                    asyNc
+                </n-gradient-text>
                 </router-link>
                 <!-- 点击图片会进行跳转，跳转到主页 -->
             </th>
             <n-divider :vertical=true />
             <th style="width:90%;text-align:left">
-                <n-menu  mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" default-value="info"/>
+                <n-menu mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" :default-value="now_url" />
             </th>
             <!-- 跳转到主页的搜索主页按钮 -->
             <n-divider :vertical=true />
             <th style="width:50%">
                 <div class="guide_button">
+                    <n-button @click="judgeToken">
+                        测试
+                    </n-button>
                     <div v-if="username != ''">
                         <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
                             <div class="guide_button">{{username}}</div>
@@ -50,7 +54,7 @@
             <!-- 支持切换账号和退出登录 -->
             </tr>
         </n-layout-header>
-        <n-layout position="absolute" style="top: 64px;bottom: 0px;">
+        <n-layout position="absolute" style="top: 51px;bottom: 0px;">
             <router-view></router-view>
         </n-layout>
     </n-layout>
@@ -61,7 +65,7 @@
         </n-message-provider>
     </n-dialog-provider>
     <!-- 布置弹窗子控件，并命名为sonRef -->
-  </body>
+    </body>
 </template>
 
 <script lang="ts">
@@ -77,6 +81,7 @@ import {
     NDropdown,
     NMenu,
     NDialogProvider,
+    NGradientText,
     NMessageProvider,
     } from 'naive-ui'
     // 按需引入naive-ui组件
@@ -92,13 +97,22 @@ export default defineComponent({
         Dialog,
         NDialogProvider,
         NMessageProvider,
+        NGradientText,
+    },
+    created(){
+        let path = this.$route.path
+        if(path == "/") {
+            this.now_url = "home"
+        }
+        else if (path == "/search") {
+            this.now_url = "search"
+        }
+        this.judgeToken()
+
     },
     setup(){
         const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
-        if (sessionStorage.getItem('username') != null) {
-            username.value = sessionStorage.getItem('username')
-        }
         const sonRef:Ref< any | null > = ref(null)
         // 引入弹窗控件
         const userOptions = [
@@ -123,7 +137,7 @@ export default defineComponent({
                 }
                 },
             ),
-            key: 'info',  
+            key: 'home',  
         },
         {
             label: () =>
@@ -132,27 +146,27 @@ export default defineComponent({
                 {
                 innerHTML:'搜索',
                 to: {
-                    path:'/user/userInformation/' + username.value
+                    path:'/search'
                 }
                 },
             ),
-            key: 'modify',
+            key: 'search',
         },
         ]
         function dialogHand (api:string){
             /**
-            * @description: 弹出登录或注册接口
-            * @param {string} api - 弹窗类型，可能为login或者register
-            * @return {void}
-            */
+             * @description: 弹出登录或注册接口
+             * @param {string} api - 弹窗类型，可能为login或者register
+             * @return {void}
+             */
             sonRef.value.handleDialog(username, api) 
         }
         function handleSelect (key:string){
             /**
-            * @description: 对用户名的下拉菜单的处理
-            * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是Home则出现用户管理界面
-            * @return {void}
-            */
+             * @description: 对用户名的下拉菜单的处理
+             * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是Home则出现用户管理界面
+             * @return {void}
+             */
             if(key == "exit") {
                 window.localStorage.removeItem('token')
                 sessionStorage.removeItem('username')
@@ -165,7 +179,31 @@ export default defineComponent({
                 window.open('/user/userInformation/' + username.value, '_blank')
             }
         }
+        function judgeToken() {
+            // 检验token是否有效
+            try{
+                let tokenString:string = localStorage.getItem("token");
+                let token = JSON.parse(decodeURIComponent(escape(window.atob(tokenString.split('.')[1]))))
+                console.log(token)
+                let expire_date =  new Date(token.expire_time * 1000)
+                console.log(expire_date)
+                let now_date = new Date()
+                console.log(now_date)
+                if (expire_date < now_date) {
+                    throw Error("The token has expired!")
+                }
+                username.value = token.user_name
+            }
+            catch(error){
+                console.log(error)
+                console.log("错啦")
+                username.value = ""
+                localStorage.removeItem("token")
+                // 清除原来无用的token
+            }
+        }
         return{
+            now_url:"",
             username,
             sonRef,
             handleSelect,
@@ -174,6 +212,7 @@ export default defineComponent({
             menuOptions,
             imgurl:require("../assets/log-news.png"),
             themeOverrides,
+            judgeToken
         }
     }
 })
