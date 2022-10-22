@@ -109,13 +109,6 @@ export default defineComponent({
                 <!-- <n-icon size="large" :component="Search"/> -->
             </n-button>
             </template>
-
-            <!-- <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
-                text-color="white" @click="search">
-                百度一下
-            </n-button>
-            <a href="http://www.baidu.com">帮助</a> -->
-            <!-- 绑定为一个组，从而使排版成为一个整体 -->
         </n-card>
         <!-- 展示主页新闻内容 -->
         <n-card class="card_bordered">  
@@ -192,7 +185,7 @@ export default defineComponent({
     
 </template>
   
-<style>
+<style scoped>
 body {
     margin: 0;
     padding: 0;

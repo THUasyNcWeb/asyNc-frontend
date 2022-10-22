@@ -13,13 +13,13 @@
         <n-H5>
             旧密码
         </n-H5>
-        <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password.valueOf">
+        <n-input type="password" style="width:100%" placeholder="请输入旧密码" v-model:value="old_password">
         </n-input>
         <!-- 注意：vue3绑定变量应当使用v-model:value而不是仅仅用v-model -->
         <n-H5>
             新密码
         </n-H5>
-        <n-input type="password" style="width:100%;" placeholder="请输入新密码" v-model:value="new_password.valueOf"></n-input>
+        <n-input type="password" style="width:100%;" placeholder="请输入新密码" v-model:value="new_password"></n-input>
         <n-button style="margin-top: 10px;" @click="modify">
             确定
         </n-button>

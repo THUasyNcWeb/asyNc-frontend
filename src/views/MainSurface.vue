@@ -196,7 +196,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .guide_button {
     margin-top: 5px;
     margin-right: 10px !important;
