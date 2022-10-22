@@ -17,7 +17,10 @@ app.use(router);
 app.mount("#app");
 
 function judgeToken() :(string | boolean) {
-  // 检验token是否有效
+  /**
+  * @description: 判断当前token是否有效
+  * @return {string | boolean} 若token有效则返回对应用户名，否则返回false
+  */    
   try{
       const tokenString:string = localStorage.getItem("token");
       const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))
@@ -30,12 +33,10 @@ function judgeToken() :(string | boolean) {
           throw Error("The token has expired!")
       }
       return token.user_name
-      // username.value = token.user_name
   }
   catch(error){
       console.log(error)
       console.log("错啦")
-      // username.value = ""
       localStorage.removeItem("token")
       // 清除原来无用的token
       return false
@@ -43,10 +44,15 @@ function judgeToken() :(string | boolean) {
 }
 
 router.beforeEach((to, _, next) => {
+  /**
+  * @description: 路由守卫，监听当前路由切换时是否有权限
+  * @param {string} to - 即将访问的url
+  * @param {string} next - 页面切换函数，负责切换到对应路径的视图
+  * @return {void}
+  */    
   if (to.meta.title) {
     document.title = to.meta.title as string
   }
-  window.localStorage.removeItem("token")
   if (to.path.indexOf("/user") != 0) {
     next()
   }

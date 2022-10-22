@@ -30,9 +30,6 @@
             <n-divider :vertical=true />
             <th style="width:50%">
                 <div class="guide_button">
-                    <n-button @click="judgeToken">
-                        测试
-                    </n-button>
                     <div v-if="username != ''">
                         <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
                             <div class="guide_button">{{username}}</div>
