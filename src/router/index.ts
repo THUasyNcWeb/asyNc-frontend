@@ -11,6 +11,7 @@ import NewsHome from "../views/content/NewsHome.vue";
 import UserHome from "../views/content/UserHome.vue";
 import SearchPage from "../views/content/SearchPage.vue";
 import MainSurface from "../views/MainSurface.vue"
+import LoginRegister from "../views/LoginRegister.vue"
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -65,7 +66,14 @@ const routes: Array<RouteRecordRaw> = [
         },
         ]
     },
-    
+    {
+        path:"/login",
+        name:"Login",
+        component: LoginRegister,
+        meta: {
+            title: "登录",
+        },
+    }
 ];
 // 注册页面路由
 

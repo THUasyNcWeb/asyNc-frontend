@@ -14,7 +14,6 @@
 import API from "../store/axiosInstance"
 import { defineComponent, h, ref,Ref, watch } from "vue";
 import { useDialog, NInput } from "naive-ui";
-import imgUrl from "../assets/logo.png"
 import {useRouter} from 'vue-router'
 export default defineComponent({
   setup () {
@@ -125,7 +124,7 @@ export default defineComponent({
         // 创建一个弹窗，可以实现登录与注册
           icon: () => {
             return h("img", {
-              src:imgUrl,
+              // src:imgUrl,
               style:{
                 width:"100%",
                 height:"100%",
@@ -222,7 +221,7 @@ export default defineComponent({
       dialog.create({
         icon: () => {
           return h("img", {
-            src:imgUrl,
+            // src:imgUrl,
             style:{
               width:"100%",
               height:"100%",
