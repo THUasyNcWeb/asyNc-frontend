@@ -10,10 +10,10 @@
 import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
 import { 
+    NGradientText,
     NCard,
     NInput, 
     NButton, 
-    NInputGroup,
     NH2,
     NGrid,
     NGridItem,
@@ -24,9 +24,9 @@ import {
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
+        NGradientText,
         NCard,
         NInput,
-        NInputGroup,
         NButton,
         NH2,
         NGrid,
@@ -74,9 +74,19 @@ export default defineComponent({
                 console.log(res);
             });
         }
+        function search() {
+            API({
+                headers:{"Authorization": window.localStorage.getItem("token")},
+                url:'search/',
+                method:'get',
+            }).then((res)=>{
+                console.log(res);
+            });
+        }
         return {
             getNews,
             all_news,
+            search,
         }
     },
 })
@@ -86,18 +96,26 @@ export default defineComponent({
     <body class="background_image">
         <n-card class="card_bordered">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-            <img :src="require(`@/assets/log-news.png`)"
-                style="height:40px;weight:30px;margin-right: 10px;vertical-align: -50%;display: inline-block;" />
-            <n-input-group style="display: inline-block;width: 80%;">
-                <n-input style="width:80%;border-radius: 0%;" placeholder="百度一下，我也不知道">
-                </n-input>
-                <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
-                    text-color="white">
-                    百度一下
-                </n-button>
-                <a href="http://www.baidu.com">帮助</a>
-                <!-- 绑定为一个组，从而使排版成为一个整体 -->
-            </n-input-group>
+            <n-gradient-text type="success" size=24 style="margin-right: 20px;">
+                asyNc
+            </n-gradient-text>
+            <n-input style="width:60%; margin-right: 5%;" size="large" round placeholder="百度一下，我也不知道">
+            </n-input>
+            <template #prefix>
+                <div>说话</div>
+            </template>
+            <template #suffix>
+            <n-button type="primary">
+                <!-- <n-icon size="large" :component="Search"/> -->
+            </n-button>
+            </template>
+
+            <!-- <n-button style=" border-radius: 0%;  background: blue; height: 36px;margin-right: 10px;"
+                text-color="white" @click="search">
+                百度一下
+            </n-button>
+            <a href="http://www.baidu.com">帮助</a> -->
+            <!-- 绑定为一个组，从而使排版成为一个整体 -->
         </n-card>
         <!-- 展示主页新闻内容 -->
         <n-card class="card_bordered">  
@@ -222,7 +240,7 @@ body {
     margin: auto; 
     margin-top: 2.5%;
     margin-bottom: 2.5%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
     -0.5px 0px 5px #808080,   /*左边阴影 */
     0.5px 0px 5px #808080,    /*右边阴影 */

@@ -16,8 +16,9 @@
             <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
             <th style="height:50px">
                 <router-link to="/">
-                <img :src="imgurl"
-                style="height:30px;"/>
+                <n-gradient-text type="success" size=24 style="margin-left: 10px;">
+                    asyNc
+                </n-gradient-text>
                 </router-link>
                 <!-- 点击图片会进行跳转，跳转到主页 -->
             </th>
@@ -77,6 +78,7 @@ import {
     NDropdown,
     NMenu,
     NDialogProvider,
+    NGradientText,
     NMessageProvider,
     } from 'naive-ui'
     // 按需引入naive-ui组件
@@ -92,6 +94,7 @@ export default defineComponent({
         Dialog,
         NDialogProvider,
         NMessageProvider,
+        NGradientText,
     },
     created(){
         let path = this.$route.path
