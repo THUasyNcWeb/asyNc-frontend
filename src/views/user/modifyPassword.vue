@@ -30,7 +30,6 @@
 <script lang="ts">
 import API from "../../store/axiosInstance"
 import {ref, Ref} from 'vue'
-import {useRoute} from 'vue-router'
 import {NH1, NH5, NInput,NButton} from 'naive-ui'
 export default {
     components:{
@@ -39,15 +38,13 @@ export default {
         NInput,
         NButton,
     },
+    props: {
+		username: {
+			type: String,
+			default: () => ""
+		},
+	},
     setup() {
-        const router = useRoute()
-        var now_username:string
-        if (typeof router.params.user_name == 'string') {
-            now_username = router.params.user_name
-        }
-        else {
-            now_username = router.params.user_name[0]
-        }
         // 当前用户名
         const old_password:Ref<string> = ref('')
         const new_password:Ref<string> = ref('')
@@ -62,7 +59,7 @@ export default {
                 url:'modify_password/',
                 method:'post',
                 data:{
-                    "user_name":now_username,
+                    "user_name": this.username,
                     "old_password":old_password.value,
                     "new_password":new_password.value,
                 }
@@ -89,7 +86,6 @@ export default {
         return {
             old_password,
             new_password,
-            now_username,
             modify
         }
     }

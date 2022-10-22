@@ -30,6 +30,9 @@
             <n-divider :vertical=true />
             <th style="width:50%">
                 <div class="guide_button">
+                    <n-button @click="judgeToken">
+                        测试
+                    </n-button>
                     <div v-if="username != ''">
                         <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
                             <div class="guide_button">{{username}}</div>
@@ -171,9 +174,7 @@ export default defineComponent({
                 // 若是退出登录界面，则关闭弹窗
             }
             else {
-                //主要实现存储参数的功能
-                sessionStorage.setItem("username", username.value);
-                window.open('/user/userInformation/' + username.value, '_blank')
+                window.open('/user/userInformation/', '_blank')
             }
         }
         function judgeToken() {

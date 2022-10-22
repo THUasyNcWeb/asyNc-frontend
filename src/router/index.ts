@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
             children: [
                 // 注册子路由，方便进行嵌套路由管理
             {
-                path:"/user/userInformation/:user_name",
+                path:"/user/userInformation",
                 name:"userInformation",
                 component: () => import("../views/user/userInformation.vue"),
                 meta: {
@@ -54,7 +54,7 @@ const routes: Array<RouteRecordRaw> = [
                 }
             },
             {
-                path:"/user/modifyPassword/:user_name",
+                path:"/user/modifyPassword",
                 name:"modifyPassword",
                 component:() => import("../views/user/modifyPassword.vue"),
                 meta: {

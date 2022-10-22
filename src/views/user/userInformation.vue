@@ -12,7 +12,7 @@
                 用户名
             </th>
             <th style="width:80%">
-                {{now_username}}
+                {{username}}
                 <!-- 用户名为动态，等待后端请求 -->
             </th>
         </tr>
@@ -38,29 +38,25 @@
 </template>
 
 <script lang="ts">
-import {useRoute} from 'vue-router'
 import {NTable,NTag} from 'naive-ui'
 export default {
     components: {
         NTable,
         NTag,
     },
+	props: {
+		username: {
+			type: String,
+			default: () => ""
+		},
+	},
     setup() {
-        const router = useRoute()
-        var now_username:string
-        if (typeof router.params.user_name == 'string') {
-            now_username = router.params.user_name
-        }
-        else {
-            now_username = router.params.user_name[0]
-        }
         var tags:string[] = ['原神','新冠疫情','清华']
         // 最近浏览的新闻标签，之后会通过接口和后端对接
         var color_tags:string[] = ['#00FFFF','#ADFF2F','#F0E68C']
         // 标签的颜色数组
         return {
             tags,
-            now_username,
             color_tags,
             sign:'永遠に宵宮が好き',
             // 个性签名
