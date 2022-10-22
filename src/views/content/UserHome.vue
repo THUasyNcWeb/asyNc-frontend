@@ -21,7 +21,7 @@
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;">
-          <router-view></router-view>
+          <router-view :username="username"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
@@ -33,8 +33,9 @@
 <script lang="ts">
 import Dialog from '@/components/InputDialog.vue'
 import {h,defineComponent,ref,Ref} from "vue"
-import {RouterLink} from 'vue-router'
-import { NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
+import {RouterLink, useRouter} from 'vue-router'
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
+import {judgeToken} from "@/main"
 export default defineComponent({
   components: {
     NLayoutSider,
@@ -47,7 +48,16 @@ export default defineComponent({
     NMessageProvider
   },
   created(){
-    let path = this.$route.path
+      let path = this.$route.path
+      let flag = judgeToken()
+      let router = useRouter()
+      if(typeof(flag) == "boolean") {
+          alert("请先登录或者注册")
+          router.push("/")
+      }
+      else if (typeof(flag) == "string") {
+          this.username = flag
+      }
       if(path.indexOf("/user/userInformation") == 0) {
           this.now_url = "info"
       }
@@ -102,9 +112,6 @@ export default defineComponent({
     // 设置顶部导航栏的下拉菜单
     
     var username:string = ""
-    if (sessionStorage.getItem('username') != null) {
-        username = sessionStorage.getItem('username')
-    }
     // 获取当前用户名称
     const sonRef:Ref<any | null> = ref(null)
     // 引入弹窗控件
