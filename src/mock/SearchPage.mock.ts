@@ -24,6 +24,9 @@ Mock.mock(/search/, 'post', rqst => {
       }
     }
   }
+  if (word == '危险言论') {
+    return;
+  }
   if (word) {
     news.push({
       title: `搜到了好东西：第 ${page} 页`,
