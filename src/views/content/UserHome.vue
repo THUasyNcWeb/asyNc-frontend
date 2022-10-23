@@ -9,11 +9,6 @@
 <template>
   <n-space vertical size="large">
     <!-- 以space作为主控件 -->
-    <n-dialog-provider> 
-        <n-message-provider>
-            <Dialog ref="sonRef"></Dialog>
-        </n-message-provider>
-    </n-dialog-provider>
     <n-layout style="width:100%;height: 100%;">
       <n-layout has-sider>
         <n-layout-sider bordered content-style="padding: 24px;">
@@ -31,21 +26,17 @@
 </template>
 
 <script lang="ts">
-import Dialog from '@/components/InputDialog.vue'
-import {h,defineComponent,ref,Ref} from "vue"
+import {h,defineComponent} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
-import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NDialogProvider,NMessageProvider} from 'naive-ui'
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu, } from 'naive-ui'
 import {judgeToken} from "@/main"
 export default defineComponent({
   components: {
     NLayoutSider,
     NLayoutContent,
     NLayout,
-    Dialog,
     NSpace,
     NMenu,
-    NDialogProvider,
-    NMessageProvider
   },
   created(){
       let path = this.$route.path
@@ -98,48 +89,12 @@ export default defineComponent({
     // 同时使用render函数将菜单按钮设置为可以改变路由
     // 从而触发中心内容的改变
     // 加入侧边导航栏菜单，每一个选项对应一个路由跳转
-
-    const options = [
-        {
-            label:"切换账号",
-            key:"change",
-        },
-        {
-            label:"退出登录",
-            key:"exit",
-        }
-    ]
-    // 设置顶部导航栏的下拉菜单
-    
     var username:string = ""
     // 获取当前用户名称
-    const sonRef:Ref<any | null> = ref(null)
-    // 引入弹窗控件
-    function handleSelect (key:string){
-        /**
-        * @description: 对用户名的下拉菜单的处理
-        * @param {string} key - 选中的菜单值，如为edit则是退出登录，若是change则切换用户出现弹窗
-        * @return {void}
-        */
-      if(key == "exit") {
-        sonRef.value.exitDialog()
-        // 弹出确认弹窗
-      }
-      else {
-          // 主要实现存储参数的功能
-          // 准备弹窗
-          // 应该先退出之后再出现登录接口
-          // 本次提交暂时不实现切换用户的功能
-      }
-    }
     return {
       now_url:"",
       menuOptions,
-      username,
-      options,
-      handleSelect,
-      Dialog,
-      sonRef,
+      username:"",
     }
   }
 })
