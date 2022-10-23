@@ -2,31 +2,55 @@
     <body class="back_img">
         <n-card class="card_bordered">
             <n-grid y-gap="12" :cols="1">
-                <n-grid-item style="text-align:center">
+                <n-grid-item style="text-align:center;margin-bottom: 5%;">
                     <n-gradient-text type="success" size=24 >
-                        asyNc {{title}}
+                        Welcome to asyNc!
                     </n-gradient-text>
                 </n-grid-item>
-                <n-grid-item>
-                    <n-gradient-text type="info" size=20 style=" margin-right: 5%;">
-                        用户名
-                    </n-gradient-text>
-                    <n-input  size="large" round placeholder="请输入用户名" style="width:80%;" v-model:value="username">
+                <n-grid-item v-if="title=='注册'">
+                    <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
+                        <n-gradient-text type="info" size=20 >
+                            昵称
+                        </n-gradient-text>
+                    </div>
+                    <n-input  size="large" round placeholder="请输入昵称" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item>
-                    <n-gradient-text type="info" size=20 style="display:inline-block; margin-right: 10%;">
-                        密码
+                    <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
+                        <n-gradient-text type="info" size=20 >
+                            用户名
+                        </n-gradient-text>
+                    </div>
+                    <n-input  size="large" round placeholder="请输入用户名" style="width:60%;" v-model:value="username">
+                    </n-input> 
+                </n-grid-item>
+                <n-grid-item>
+                    <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
+                        <n-gradient-text type="info" size=20 >
+                            密码
+                        </n-gradient-text>
+                    </div>
+                    <n-input type="password" size="large" round placeholder="请输入用户名" style="width:60%;" v-model:value="password">
+                    </n-input> 
+                </n-grid-item>
+                <n-grid-item v-if="title=='注册'">
+                    <n-gradient-text type="info" size=20 style=" margin-right: 5%;">
+                        再次输入密码
                     </n-gradient-text>
-                    <n-input type="password" size="large" round placeholder="请输入用户名" style="width:80%;" v-model:value="password">
+                    <n-input  size="large" round placeholder="请再次输入密码" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item style="text-align:center">
-                    <n-button type="success" style="margin-right:10%" @click="login">
-                        登录
-                    </n-button>
-                    <n-button type="success" >
-                        注册
+                    <n-button style="width:100%; margin-top:5%;" type="success" @click="() => {
+                        if(title == '登录') {
+                            login()
+                        }
+                        else {
+                            register()
+                        }
+                    }">
+                        {{title}}
                     </n-button>
                 </n-grid-item>
             </n-grid>
@@ -70,13 +94,19 @@ export default defineComponent({
         else if (router.currentRoute.value.path == "/register") {
             title = "注册"
         }
+        else {
+            alert("异常访问")
+            router.push("/")
+        }
         var username:Ref<string> = ref("")
         var password:Ref<string> = ref("")
         function login(){
-            console.log(username)
-            console.log(password)
+            /**
+            * @description: 登录功能
+            * @return {void}
+            */
             API({
-                url:'login/',
+                url: 'login/',
                 method:'post',
                 data:{
                     "user_name": username.value,
@@ -85,17 +115,39 @@ export default defineComponent({
             }).then((res)=>{
                 // 对登录接口请求成功
                 console.log(res)
-
                 window.localStorage.setItem("token",res.data.data.token)
                 // 存储token
-                // 修改主页用户名的引用
-                alert("登录成功")
-                // 触发watch关闭弹窗
+                alert("登录成功，欢迎来到asyNc！")
                 router.push("/")
             }).catch((error) => {
-                // 登录失败，弹窗不关闭
                 console.log(error);
                 alert("用户名或密码错误")
+            })  
+        }
+        function register(){
+            /**
+            * @description: 注册功能
+            * @return {void}
+            */
+           console.log(username.value)
+           console.log(password.value)
+            API({
+                url: 'register/',
+                method:'post',
+                data:{
+                    "user_name": username.value,
+                    "password": password.value,
+                }
+            }).then((res)=>{
+                // 对注册接口请求成功
+                console.log(res)
+                window.localStorage.setItem("token",res.data.data.token)
+                // 存储token
+                alert("注册成功，欢迎来到asyNc！")
+                router.push("/")
+            }).catch((error) => {
+                console.log(error);
+                alert("注册失败")
             })  
         }
         return {
@@ -103,6 +155,7 @@ export default defineComponent({
             password,
             title,
             login,
+            register,
         }
     }
 })

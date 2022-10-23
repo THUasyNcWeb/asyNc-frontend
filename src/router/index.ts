@@ -73,6 +73,14 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "登录",
         },
+    },
+    {
+        path:"/register",
+        name:"Register",
+        component: LoginRegister,
+        meta: {
+            title: "注册",
+        },
     }
 ];
 // 注册页面路由
