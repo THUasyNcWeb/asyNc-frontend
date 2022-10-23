@@ -10,10 +10,10 @@ import Mock from 'better-mock';
 Mock.setup({ timeout: '200-400' });
 
 Mock.mock(/search/, 'post', rqst => {
-  let body = JSON.parse(rqst.body);
-  let word = body.query;
-  let page = body.page;
-  let news = [];
+  const body = JSON.parse(rqst.body);
+  const word = body.query;
+  const page = body.page;
+  const news = [];
   if (word == '敏感词') {
     return {
       code: 0,
