@@ -3,18 +3,18 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-20 01:37
+ * @LastEditTime: 2022-10-24 00:25
 -->
 
 <template>
   <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
-    @keyup.enter="$emit('submit', text)">
+    @keyup.enter="search">
     <!-- For some margin -->
     <template #prefix>
       <div/>
     </template>
     <template #suffix>
-      <n-button @click="$emit('submit', text)" large circle quaternary type="primary">
+      <n-button @click="search" large circle quaternary type="primary">
         <n-icon size="large" :component="Search"/>
       </n-button>
     </template>
@@ -31,4 +31,8 @@ const props = defineProps({
 });
 
 const text = ref(props.text ?? '');
+
+function search() {
+  window.location.href = `search?q=${text.value}`;
+}
 </script>

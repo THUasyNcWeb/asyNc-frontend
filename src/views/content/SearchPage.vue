@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-20 04:56
+ * @LastEditTime: 2022-10-24 00:28
 -->
 <template>
   <n-layout position="absolute">
@@ -14,7 +14,7 @@
           <n-gradient-text type="success" size=24>
             asyNc
           </n-gradient-text>
-          <search-box :text="word" style="width: 40vw" @submit="search"/>
+          <search-box :text="word" style="width: 40vw"/>
         </n-space>
         <n-space>
           <n-button quaternary type="success">
@@ -50,12 +50,6 @@ const query = router.currentRoute.value.query;
 const word = query.q as string;
 const page = parseInt(query.page as string) || 1;
 // const user = 'abmfy';
-
-// Send search request
-function search(word: String) {
-  alert(`假装发送了搜索请求：${word}\n虽然什么都没干，但还是辛苦我自己了！`);
-  window.location.href = `search?q=${word}`;
-}
 
 // Jump to specified page
 function jump(page: number) {
