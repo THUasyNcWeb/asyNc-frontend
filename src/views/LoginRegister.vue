@@ -13,7 +13,7 @@
                             昵称
                         </n-gradient-text>
                     </div>
-                    <n-input  size="large" round placeholder="请输入昵称" style="width:60%;">
+                    <n-input size="large" round placeholder="请输入昵称" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item>
@@ -22,7 +22,7 @@
                             用户名
                         </n-gradient-text>
                     </div>
-                    <n-input  size="large" round placeholder="请输入用户名" style="width:60%;" v-model:value="username">
+                    <n-input size="large" round placeholder="请输入用户名" style="width:60%;" v-model:value="username">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item>
@@ -38,7 +38,7 @@
                     <n-gradient-text type="info" size=20 style=" margin-right: 5%;">
                         再次输入密码
                     </n-gradient-text>
-                    <n-input  size="large" round placeholder="请再次输入密码" style="width:60%;">
+                    <n-input size="large" round placeholder="请再次输入密码" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item style="text-align:center">
@@ -53,6 +53,12 @@
                         {{title}}
                     </n-button>
                 </n-grid-item>
+                <n-grid-item v-if="title=='登录'" style="text-align:center;">
+                    <a href="/register">
+                        还未注册账号?快猛戳我
+                    </a>
+                </n-grid-item>
+                <!-- 登录界面与注册界面进行勾连 -->
             </n-grid>
 
 
@@ -63,7 +69,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router';
-import {ref, Ref} from 'vue'
+import { ref, Ref } from 'vue'
 import API from "../store/axiosInstance"
 import {  
     NCard,

@@ -71,6 +71,7 @@ import {
     NDropdown,
     NMenu,
     NGradientText,
+    useDialog
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -151,6 +152,7 @@ export default defineComponent({
              */
             router.push("/" + api)
         }
+        const exitDialog = useDialog()
         function handleSelect (key:string){
             /**
              * @description: 对用户名的下拉菜单的处理
@@ -158,15 +160,27 @@ export default defineComponent({
              * @return {void}
              */
             if(key == "exit") {
-                window.localStorage.removeItem('token')
-                sessionStorage.removeItem('username')
-                username.value = ""
+                exitDialog.warning({
+                    title: '退出登录确认',
+                    content: '你确定退出登录吗QWQ？',
+                    positiveText: '确认',
+                    negativeText: '取消',
+                    onPositiveClick: () => {
+                        window.localStorage.removeItem('token')
+                        sessionStorage.removeItem('username')
+                        username.value = ""
+                        router.push("/")
+                    },
+                    onNegativeClick: () => {
+                    }
                 // 若是退出登录界面，则关闭弹窗
-            }
+                })
+            }   
             else {
                 window.open('/user/userInformation/', '_blank')
             }
         }
+
         return{
             now_url:"",
             username,
