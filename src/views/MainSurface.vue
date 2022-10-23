@@ -188,7 +188,6 @@ export default defineComponent({
             login_register,
             userOptions,
             menuOptions,
-            imgurl:require("../assets/log-news.png"),
             themeOverrides,
         }
     }
