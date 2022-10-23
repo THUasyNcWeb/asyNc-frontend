@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 01:19
+ * @LastEditTime: 2022-10-24 01:38
 -->
 <template>
   <n-layout position="absolute">
@@ -28,11 +28,16 @@
     </n-layout-header>
     <n-layout position="absolute" style="top: 74px;">
       <n-space vertical style="padding: 18px 96px">
-        <n-list hoverable clickable>
+        <n-list v-if="news.length" hoverable clickable>
           <n-list-item v-for="entry, id in news" :key="id">
             <news-entry :news="entry" />
           </n-list-item>
         </n-list>
+        <template v-else v-for="_ in 10">
+          <n-skeleton text size="medium" style="width: 30%"/>
+          <n-skeleton text :repeat="3"/>
+          <n-skeleton text style="width: 20%"/>
+        </template>
         <n-pagination :page="page" :page-count="page_count" @update:page="jump"/>
       </n-space>
     </n-layout>
@@ -49,7 +54,8 @@ import {
   NList,
   NListItem,
   NPagination,
-  NSpace
+  NSkeleton,
+  NSpace,
 } from 'naive-ui'
 
 import NewsEntry from '@/components/NewsEntry.vue'
