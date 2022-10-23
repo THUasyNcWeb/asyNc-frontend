@@ -1,4 +1,11 @@
-import * as Mock from 'better-mock';
+/*
+ * @FileDescription: 新闻搜索页面 Mock
+ * @Author: 王博文
+ * @Date: 2022-10-24 00:36
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-10-24 02:35
+ */
+import Mock from 'better-mock';
 
 Mock.setup({ timeout: '200-400' });
 
@@ -64,7 +71,20 @@ Mock.mock(/search/, 'post', rqst => {
             [7, 9],
             [10, 15]
         ]
-    }
+    },
+    {
+      title: '萨满祭司(卡牌游戏《炉石传说》中的职业)',
+      media: '百度百科',
+      url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
+      pub_time: '2022-10-24T19:02:16.305Z',
+      content: '萨满祭司是暴雪娱乐公司出品的卡牌游戏《炉石传说》中的一个职业。萨满祭司是原始元素的大师，能操纵自然的力量降下治疗之雨、倾泻熔岩洪流，或是召唤灵魂盟友助战。萨满祭司的能力反映出了自然之力的平衡：全面而强大的随从、法术、增益和伤害。',
+      picture_url: 'http://n.sinaimg.cn/sinacn07/576/w825h551/20180703/27fe-hevauxi3280692.png',
+      keywords: [
+          [0, 4],
+          [31, 35],
+          [77, 81]
+      ]
+  }
   );
   return {
     code: 0,
