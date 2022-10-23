@@ -9,6 +9,7 @@
 <script lang="ts">
 import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
+import { Search } from '@vicons/ionicons5/'
 import { 
     NGradientText,
     NCard,
@@ -19,6 +20,7 @@ import {
     NGridItem,
     NCarousel,
     NCarouselItem,
+    NIcon,
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -32,7 +34,9 @@ export default defineComponent({
         NGrid,
         NGridItem,
         NCarousel,
-        NCarouselItem
+        NCarouselItem,
+        Search,
+        NIcon,
     },
     // 引入naive ui组件
     
@@ -96,19 +100,21 @@ export default defineComponent({
     <body class="background_image">
         <n-card class="card_bordered">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-            <n-gradient-text type="success" size=24 style="margin-right: 20px;">
-                asyNc
-            </n-gradient-text>
-            <n-input style="width:60%; margin-right: 5%;" size="large" round placeholder="百度一下，我也不知道">
-            </n-input>
-            <template #prefix>
-                <div>说话</div>
-            </template>
-            <template #suffix>
-            <n-button type="primary">
-                <!-- <n-icon size="large" :component="Search"/> -->
-            </n-button>
-            </template>
+            <div style="text-align:center">
+                <n-gradient-text type="success" size=24 style="margin-right: 20px;">
+                    asyNc
+                </n-gradient-text>
+                <n-input style="width:60%; margin-right: 5%; text-align: left;" size="large" round placeholder="百度一下，我也不知道">
+                    <template #suffix>
+                        <n-button size="large" large circle quaternary type="primary">
+                                <n-icon size="large">
+                                    <Search/>
+                                </n-icon>
+                        </n-button>
+                    </template>
+                </n-input>
+
+            </div>
         </n-card>
         <!-- 展示主页新闻内容 -->
         <n-card class="card_bordered">  
@@ -227,7 +233,6 @@ body {
 
 .card_bordered {
     display: flex; 
-    text-align: center;
     border-radius:15px;
     width:80%;
     margin: auto; 
