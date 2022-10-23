@@ -3,18 +3,19 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 02:48
+ * @LastEditTime: 2022-10-24 03:23
 -->
 
 <template>
-  <n-a :href="news.url">
+  <n-a :href="news.url" style="text-decoration: none;">
     <n-thing>
       <n-h2 align-text prefix="bar">
         {{news.title}}
       </n-h2>
       <n-space>
         <n-image v-if="news.picture_url" width=160 height=120 object-fit="cover"
-          :src="news.picture_url" preview-disabled/>
+          :src="news.picture_url" preview-disabled
+          style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
         <n-ellipsis :class="{ narrow: news.picture_url, wide: !news.picture_url }" id="content"
           line-clamp=3 :tooltip="false">
           <span v-for="span in spans" :class="{ em: span.em }">
@@ -24,10 +25,10 @@
       </n-space>
       <template #footer>
         <n-space>
-          <n-text depth=3>
+          <n-text type="info">
             {{news.media}}
           </n-text>
-          <n-text type="info">
+          <n-text depth=3>
             {{news.pub_time.toLocaleDateString()}}
           </n-text>
         </n-space>
