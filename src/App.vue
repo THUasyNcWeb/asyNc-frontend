@@ -7,17 +7,20 @@
  -->
 <template>
   <body>
-    <router-view />
+    <n-dialog-provider>
+      <router-view />
+    </n-dialog-provider>
   </body>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import HelloWorld from './components/HelloWorld.vue';
-
+import { NDialogProvider } from 'naive-ui';
 @Options({
   components: {
     HelloWorld,
+    NDialogProvider
   },
 })
 export default class App extends Vue {}

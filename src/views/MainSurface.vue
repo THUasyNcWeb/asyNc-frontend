@@ -37,10 +37,10 @@
                     </div>
                     <!-- 若当前已登录，则显示登录的用户名并布置下拉菜单 -->
                     <div v-else>
-                        <n-button @click="dialogHand('login')" :bordered="false">
+                        <n-button @click="login_register('login')" :bordered="false">
                             登录
                         </n-button>
-                        <n-button @click="dialogHand('register')" :bordered="false">
+                        <n-button @click="login_register('register')" :bordered="false">
                             注册
                         </n-button>
                     </div>
@@ -55,22 +55,14 @@
             <router-view></router-view>
         </n-layout>
     </n-layout>
-
-    <n-dialog-provider> 
-        <n-message-provider>
-            <Dialog ref="sonRef"></Dialog>
-        </n-message-provider>
-    </n-dialog-provider>
-    <!-- 布置弹窗子控件，并命名为sonRef -->
     </body>
 </template>
 
 <script lang="ts">
 import themeOverrides from "../components/MenuTheme"
-import Dialog from "@/components/InputDialog.vue"
 import { h,defineComponent, Ref, ref } from 'vue'
 import {judgeToken} from "@/main"
-import {RouterLink} from 'vue-router'
+import {RouterLink,useRouter,} from 'vue-router'
 import {  
     NLayout,
     NLayoutHeader, 
@@ -78,9 +70,8 @@ import {
     NDivider,
     NDropdown,
     NMenu,
-    NDialogProvider,
     NGradientText,
-    NMessageProvider,
+    useDialog
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -92,9 +83,6 @@ export default defineComponent({
         NMenu,
         NDivider,
         NDropdown,
-        Dialog,
-        NDialogProvider,
-        NMessageProvider,
         NGradientText,
     },
     created(){
@@ -117,8 +105,6 @@ export default defineComponent({
         else if (typeof(flag) == "string") {
             username.value = flag
         }
-        const sonRef:Ref< any | null > = ref(null)
-        // 引入弹窗控件
         const userOptions = [
             {
                 label:"个人主页",
@@ -157,14 +143,16 @@ export default defineComponent({
             key: 'search',
         },
         ]
-        function dialogHand (api:string){
+        const router = useRouter()
+        function login_register (api:string){
             /**
-             * @description: 弹出登录或注册接口
-             * @param {string} api - 弹窗类型，可能为login或者register
+             * @description: 切换到登录或注册界面
+             * @param {string} api - 路径类型，可能为login或者register
              * @return {void}
              */
-            sonRef.value.handleDialog(username, api) 
+            router.push("/" + api)
         }
+        const exitDialog = useDialog()
         function handleSelect (key:string){
             /**
              * @description: 对用户名的下拉菜单的处理
@@ -172,31 +160,41 @@ export default defineComponent({
              * @return {void}
              */
             if(key == "exit") {
-                window.localStorage.removeItem('token')
-                sessionStorage.removeItem('username')
-                username.value = ""
+                exitDialog.warning({
+                    title: '退出登录确认',
+                    content: '你确定退出登录吗QWQ？',
+                    positiveText: '确认',
+                    negativeText: '取消',
+                    onPositiveClick: () => {
+                        window.localStorage.removeItem('token')
+                        sessionStorage.removeItem('username')
+                        username.value = ""
+                        router.push("/")
+                    },
+                    onNegativeClick: () => {
+                    }
                 // 若是退出登录界面，则关闭弹窗
-            }
+                })
+            }   
             else {
                 window.open('/user/userInformation/', '_blank')
             }
         }
+
         return{
             now_url:"",
             username,
-            sonRef,
             handleSelect,
-            dialogHand,
+            login_register,
             userOptions,
             menuOptions,
-            imgurl:require("../assets/log-news.png"),
             themeOverrides,
         }
     }
 })
 </script>
 
-<style>
+<style scoped>
 .guide_button {
     margin-top: 5px;
     margin-right: 10px !important;
@@ -204,7 +202,5 @@ export default defineComponent({
     display: inline-block !important;
     /* 不同按钮需在同一行 */
 }
-
-
 
 </style>
