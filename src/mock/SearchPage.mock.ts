@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-24 00:36
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 02:35
+ * @LastEditTime: 2022-10-24 03:45
  */
 import Mock from 'better-mock';
 
@@ -14,6 +14,16 @@ Mock.mock(/search/, 'post', rqst => {
   let word = body.query;
   let page = body.page;
   let news = [];
+  if (word == '敏感词') {
+    return {
+      code: 0,
+      message: 'SUCCESS',
+      data: {
+        page_count: 0,
+        news: [],
+      }
+    }
+  }
   if (word) {
     news.push({
       title: `搜到了好东西：第 ${page} 页`,
