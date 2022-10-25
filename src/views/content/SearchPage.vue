@@ -17,17 +17,26 @@
           </router-link>
           <search-box :text="state.word" style="width: 40vw" />
         </n-space>
-        <n-space>
-          <n-button quaternary type="success">
-            登录
+        <n-dropdown v-if="state.username" :options="options" @select="handleSelect">
+          <n-button quaternary>
+            {{state.username}}
           </n-button>
-          <n-button quaternary type="success">
-            注册
-          </n-button>
+        </n-dropdown>
+        <n-space v-else>
+          <router-link to="login" style="text-decoration: none">
+            <n-button>
+              登录
+            </n-button>
+          </router-link>
+          <router-link to="register" style="text-decoration: none">
+            <n-button primary type="primary">
+              注册
+            </n-button>
+          </router-link>
         </n-space>
       </n-space>
     </n-layout-header>
-    <n-layout position="absolute" style="top: 74px;">
+    <n-layout-content ref="contentRef" position="absolute" style="top: 74px;">
       <n-space vertical style="padding: 18px 96px">
         <template v-if="!state.loading">
           <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
@@ -46,17 +55,22 @@
           <n-skeleton text style="width: 20%" />
         </template>
       </n-space>
-    </n-layout>
+    </n-layout-content>
   </n-layout>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { Component, h, reactive, ref } from 'vue';
+import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
+  LayoutInst,
   NButton,
+  NDropdown,
   NEmpty,
   NGradientText,
+  NIcon,
   NLayout,
+  NLayoutContent,
   NLayoutHeader,
   NList,
   NListItem,
@@ -64,13 +78,17 @@ import {
   NSkeleton,
   NSpace,
   useMessage,
-} from 'naive-ui'
+} from 'naive-ui';
+import {
+  PersonCircleOutline as UserIcon,
+  LogOutOutline as LogoutIcon
+} from '@vicons/ionicons5';
 
 import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
-import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { judgeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
@@ -84,7 +102,12 @@ const state = reactive({
 
   news: [],
   page_count: 0,
+
+  username: judgeToken() || '',
 })
+
+// Reference to the layout content, for scrolling
+const contentRef = ref<LayoutInst | null>(null);
 
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
@@ -94,8 +117,42 @@ init(router.currentRoute.value);
 // Message box
 const message = useMessage();
 
+// Options for user menu
+const options = [
+  {
+    label: '个人中心',
+    key: 'profile',
+    icon: renderIcon(UserIcon),
+  },
+  {
+    label: '退出登录',
+    key: 'logout',
+    icon: renderIcon(LogoutIcon),
+  },
+]
+
 function error() {
   message.error('搜索时出现错误😢');
+}
+
+// Handle select event of the user menu
+function handleSelect(key: 'profile' | 'logout') {
+  switch (key) {
+    case 'profile':
+      router.push('/user/userInformation');
+      break;
+    case 'logout':
+      window.localStorage.removeItem('token');
+      sessionStorage.removeItem('username');
+      state.username = '';
+      break;
+  }
+}
+
+function renderIcon(icon: Component) {
+  return () => h(NIcon, null, {
+    default: () => h(icon),
+  });
 }
 
 // Jump to specified page
@@ -113,6 +170,9 @@ function init(to: RouteLocationNormalized) {
   
   // Set page title
   document.title = `${state.word || '搜索'} - asyNc`;
+
+  // Scroll to top
+  contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
 
   state.loading = true;
 

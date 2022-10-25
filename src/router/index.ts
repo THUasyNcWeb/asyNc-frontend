@@ -30,14 +30,6 @@ const routes: Array<RouteRecordRaw> = [
             }
         },
         {
-            path: "/search",
-            name: "Search",
-            component: SearchPage,
-            meta: {
-                title: "搜索",
-            },
-        },
-        {
             path: "/user",
             name: "UserHome",
             component: UserHome,
@@ -81,7 +73,15 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "注册",
         },
-    }
+    },
+    {
+        path: "/search",
+        name: "Search",
+        component: SearchPage,
+        meta: {
+            title: "搜索",
+        },
+    },
 ];
 // 注册页面路由
 
