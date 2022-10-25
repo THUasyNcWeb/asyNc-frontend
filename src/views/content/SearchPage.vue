@@ -36,7 +36,7 @@
         </n-space>
       </n-space>
     </n-layout-header>
-    <n-layout position="absolute" style="top: 74px;">
+    <n-layout-content ref="contentRef" position="absolute" style="top: 74px;">
       <n-space vertical style="padding: 18px 96px">
         <template v-if="!state.loading">
           <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
@@ -55,20 +55,22 @@
           <n-skeleton text style="width: 20%" />
         </template>
       </n-space>
-    </n-layout>
+    </n-layout-content>
   </n-layout>
 </template>
 
 <script setup lang="ts">
-import { Component, h, reactive } from 'vue';
+import { Component, h, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
+  LayoutInst,
   NButton,
   NDropdown,
   NEmpty,
   NGradientText,
   NIcon,
   NLayout,
+  NLayoutContent,
   NLayoutHeader,
   NList,
   NListItem,
@@ -103,6 +105,9 @@ const state = reactive({
 
   username: judgeToken() || '',
 })
+
+// Reference to the layout content, for scrolling
+const contentRef = ref<LayoutInst | null>(null);
 
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
@@ -165,6 +170,9 @@ function init(to: RouteLocationNormalized) {
   
   // Set page title
   document.title = `${state.word || '搜索'} - asyNc`;
+
+  // Scroll to top
+  contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
 
   state.loading = true;
 
