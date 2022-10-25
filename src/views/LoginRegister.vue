@@ -40,7 +40,7 @@
                             再次输入密码
                         </n-gradient-text>
                     </div>
-                    <n-input type="password" size="large" round placeholder="请再次输入密码" style="width:60%;">
+                    <n-input type="password" size="large" round placeholder="请再次输入密码" style="width:60%;" v-model:value="re_password">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item style="text-align:center">
@@ -62,8 +62,6 @@
                 </n-grid-item>
                 <!-- 登录界面与注册界面进行勾连 -->
             </n-grid>
-
-
         </n-card>
     </body>
 </template>
@@ -108,6 +106,28 @@ export default defineComponent({
         }
         var username:Ref<string> = ref("")
         var password:Ref<string> = ref("")
+        var re_password:Ref<string> = ref("")
+        
+        function judgeUser(username:string) {
+            if(username.length > 14) {
+                return false;
+            }
+            return /^[A-Za-z\u4e00-\u9fa5][-A-Za-z0-9\u4e00-\u9fa5_]*$/.test(username)
+        }
+
+        function judgePassword(password : string) {
+            if(password.length > 14 || password.length < 8){
+                return false;
+            }
+            return /^[-A-Za-z0-9_]*$/.test(password)
+        }
+
+        function judgeRepassword() {
+            if(re_password.value != password.value) {
+                return false;
+            }
+            return judgePassword(re_password.value)
+        }
         function login(){
             /**
             * @description: 登录功能
@@ -137,6 +157,18 @@ export default defineComponent({
             * @description: 注册功能
             * @return {void}
             */
+           if(judgeUser(username.value) == false) {
+                alert("输入用户名不规范")
+                return;
+           } 
+           if(judgePassword(password.value)  == false) {
+                alert("输入密码不规范")
+                return;
+           } 
+           if(judgeRepassword() == false) {
+                alert("重新输入密码不规范")
+                return;
+           } 
            console.log(username.value)
            console.log(password.value)
             API({
@@ -164,6 +196,10 @@ export default defineComponent({
             title,
             login,
             register,
+            re_password,
+            judgeUser,
+            judgePassword,
+            judgeRepassword,
         }
     }
 })
