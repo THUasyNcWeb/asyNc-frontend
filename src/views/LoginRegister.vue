@@ -38,7 +38,7 @@
                     <n-gradient-text type="info" size=20 style=" margin-right: 5%;">
                         再次输入密码
                     </n-gradient-text>
-                    <n-input size="large" round placeholder="请再次输入密码" style="width:60%;">
+                    <n-input type="password" size="large" round placeholder="请再次输入密码" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item style="text-align:center">
