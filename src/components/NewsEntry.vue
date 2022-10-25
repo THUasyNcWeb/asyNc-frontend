@@ -3,14 +3,16 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 03:23
+ * @LastEditTime: 2022-10-25 22:08
 -->
 
 <template>
   <n-a :href="news.url" style="text-decoration: none;">
     <n-thing>
       <n-h2 align-text prefix="bar">
-        {{news.title}}
+        <span v-for="span, id in titleSpans" :key="id" :class="{ em: span.em }">
+          {{span.text}}
+        </span>
       </n-h2>
       <n-space>
         <n-image v-if="news.picture_url" width=160 height=120 object-fit="cover"
@@ -18,7 +20,7 @@
           style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
         <n-ellipsis :class="{ narrow: news.picture_url, wide: !news.picture_url }" id="content"
           line-clamp=3 :tooltip="false">
-          <span v-for="span, id in spans" :key="id" :class="{ em: span.em }">
+          <span v-for="span, id in contentSpans" :key="id" :class="{ em: span.em }">
             {{span.text}}
           </span>
         </n-ellipsis>
@@ -48,36 +50,43 @@ export interface News {
   pub_time: Date,
   picture_url?: string,
   content: string,
-  keywords: Array<[number, number]>,
+  title_keywords: [number, number][],
+  keywords: [number, number][],
 }
 
 const props = defineProps<{
   news: News,
 }>();
 
+interface Span {
+  em: boolean,
+  text: string,
+}
+
 // Split content into spans for rendering keywords colored
-const spans = computed(() => {
-  const news = props.news;
-  const content = news.content;
-  const spans = [];
+function spans(text: string, keywords: [number, number][]): Span[] {
+  const spans: Span[] = [];
   let last = 0;
-  news.keywords.forEach(keyword => {
+  keywords.forEach(keyword => {
     let [begin, end] = keyword;
     spans.push({
       em: false,
-      text: content.slice(last, begin),
+      text: text.slice(last, begin),
     }, {
       em: true,
-      text: content.slice(begin, end),
+      text: text.slice(begin, end),
     });
     last = end;
   });
   spans.push({
     em: false,
-    text: content.slice(last, content.length),
+    text: text.slice(last, text.length),
   });
   return spans;
-});
+}
+
+const titleSpans = computed(() => spans(props.news.title, props.news.title_keywords));
+const contentSpans = computed(() => spans(props.news.content, props.news.keywords));
 </script>
 
 <style scoped>
