@@ -9,6 +9,7 @@ describe('NewsEntry.vue', () => {
       media: 'media',
       pub_time: new Date(),
       content: 'Hello, world!',
+      title_keywords: [],
       keywords: [[1, 5]],
     };
     const wrapper = mount(NewsEntry, {
@@ -32,6 +33,7 @@ describe('NewsEntry.vue', () => {
       pub_time: new Date(),
       picture_url: 'https://picture.img/pic1.png',
       content: 'Hello, world!',
+      title_keywords: [],
       keywords: [[1, 5]],
     };
     const wrapper = mount(NewsEntry, {
@@ -47,6 +49,7 @@ describe('NewsEntry.vue', () => {
       media: 'media',
       pub_time: new Date(),
       content: 'Hello, world! This is a long long text.',
+      title_keywords: [[0, 1], [3, 4], [4, 5]],
       keywords: [[1, 3], [7, 10]],
     };
     const wrapper = mount(NewsEntry, {
@@ -61,5 +64,15 @@ describe('NewsEntry.vue', () => {
     }
 
     expect(words).toEqual(['H', 'el', 'lo, ', 'wor', 'ld! This is a long long text.']);
+
+    const title = wrapper.find('h2').element;
+    expect(title.childElementCount).toBe(7);
+
+    const title_words = [];
+    for (const span of title.getElementsByTagName('span')) {
+      title_words.push(span.textContent);
+    }
+
+    expect(title_words).toEqual(['', 'T', 'it', 'l', '', 'e', '']);
   })
 });
