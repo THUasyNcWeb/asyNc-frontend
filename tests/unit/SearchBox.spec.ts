@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
 import SearchBox from '@/components/SearchBox.vue';
-import { NButton } from 'naive-ui';
 
 describe('SearchBox.vue', () => {
   test('test query text rendering', () => {
