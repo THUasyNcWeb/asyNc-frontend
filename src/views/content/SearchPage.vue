@@ -141,8 +141,6 @@ function handleSelect(key: 'profile' | 'logout') {
       sessionStorage.removeItem('username');
       state.username = '';
       break;
-    default:
-      let _: never = key;
   }
 }
 
