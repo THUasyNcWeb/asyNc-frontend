@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 03:45
+ * @LastEditTime: 2022-10-24 23:03
 -->
 <template>
   <n-layout position="absolute">
@@ -69,7 +69,7 @@ import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import '@/mock/SearchPage.mock';
+// import '@/mock/SearchPage.mock';
 
 // Get query parameters
 const query = router.currentRoute.value.query;
