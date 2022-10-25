@@ -21,7 +21,7 @@ describe('NewsEntry.vue', () => {
     expect(wrapper.find('#content').text()).toMatch(news.content);
 
     // Test date correctness
-    let date = wrapper.findAll('.n-text')[1].text();
+    const date = wrapper.findAll('.n-text')[1].text();
     expect(news.pub_time.toLocaleDateString()).toMatch(date);
   });
 

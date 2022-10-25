@@ -66,23 +66,23 @@ import {
   useMessage,
 } from 'naive-ui'
 
-import NewsEntry, { News } from '@/components/NewsEntry.vue'
+import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
-import { LocationQuery, onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 
 // import '@/mock/SearchPage.mock';
 
 // Query parameters
 const state = reactive({
-  query: <LocationQuery>null,
+  query: null,
   word: '',
   page: 0,
 
   loading: true,
 
-  news: <News[]>[],
+  news: [],
   page_count: 0,
 })
 
@@ -100,7 +100,7 @@ function error() {
 
 // Jump to specified page
 function jump(page: number) {
-  router.push(`search?q=${state.word}&page=${state.page}`);
+  router.push(`search?q=${state.word}&page=${page}`);
 }
 
 function init(to: RouteLocationNormalized) {
