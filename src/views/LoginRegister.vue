@@ -35,9 +35,11 @@
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item v-if="title=='注册'">
-                    <n-gradient-text type="info" size=20 style=" margin-right: 5%;">
-                        再次输入密码
-                    </n-gradient-text>
+                    <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
+                        <n-gradient-text type="info" size=20>
+                            再次输入密码
+                        </n-gradient-text>
+                    </div>
                     <n-input type="password" size="large" round placeholder="请再次输入密码" style="width:60%;">
                     </n-input> 
                 </n-grid-item>
@@ -183,7 +185,7 @@ export default defineComponent({
     border-radius:15px;
     margin-top: 10%;
     margin-left: 55%;
-    width: 30%; 
+    width: 35%; 
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
     -0.5px 0px 5px #808080,   /*左边阴影 */
