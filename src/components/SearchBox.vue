@@ -25,7 +25,9 @@
 import { defineProps, ref } from 'vue';
 import { NButton, NIcon, NInput } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
-import router from '@/router';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   text: String,
