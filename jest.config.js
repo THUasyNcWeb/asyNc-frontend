@@ -3,5 +3,8 @@ module.exports = {
   testResultsProcessor: "jest-sonar-reporter",
   collectCoverage: true,
   collectCoverageFrom: ["src/**/*.{js,ts,vue}"],
+  transformIgnorePatterns: [
+    "node_modules/(?!axios)",
+  ],
 }
 
