@@ -90,7 +90,7 @@ import router from '@/router';
 import API from '@/store/axiosInstance';
 import { judgeToken } from '@/main';
 
-import '@/mock/SearchPage.mock';
+// import '@/mock/SearchPage.mock';
 
 // Query parameters
 const state = reactive({
