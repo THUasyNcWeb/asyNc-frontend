@@ -3,16 +3,18 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 23:03
+ * @LastEditTime: 2022-10-24 23:16
 -->
 <template>
   <n-layout position="absolute">
     <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px; position: fixed">
       <n-space align="center" justify="space-between">
         <n-space>
-          <n-gradient-text type="success" size=24>
-            asyNc
-          </n-gradient-text>
+          <router-link to="/">
+            <n-gradient-text type="success" size=24>
+              asyNc
+            </n-gradient-text>
+          </router-link>
           <search-box :text="word" style="width: 40vw" />
         </n-space>
         <n-space>
