@@ -15,7 +15,7 @@
               asyNc
             </n-gradient-text>
           </router-link>
-          <search-box :text="word" style="width: 40vw" />
+          <search-box :text="state.word" style="width: 40vw" />
         </n-space>
         <n-space>
           <n-button quaternary type="success">
@@ -29,15 +29,15 @@
     </n-layout-header>
     <n-layout position="absolute" style="top: 74px;">
       <n-space vertical style="padding: 18px 96px">
-        <template v-if="!loading">
-          <n-empty v-if="!news.length" size="large" description="什么也没有找到" />
+        <template v-if="!state.loading">
+          <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
           <template v-else>
             <n-list hoverable clickable>
-              <n-list-item v-for="entry, id in news" :key="id">
+              <n-list-item v-for="entry, id in state.news" :key="id">
                 <news-entry :news="entry" />
               </n-list-item>
             </n-list>
-            <n-pagination :page="page" :page-count="page_count" @update:page="jump" />
+            <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
           </template>
         </template>
         <template v-else v-for="_ in 10" :key="_">
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive } from 'vue';
 import {
   NButton,
   NEmpty,
@@ -66,18 +66,30 @@ import {
   useMessage,
 } from 'naive-ui'
 
-import NewsEntry from '@/components/NewsEntry.vue'
+import NewsEntry, { News } from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
+import { LocationQuery, onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 
 // import '@/mock/SearchPage.mock';
 
-// Get query parameters
-const query = router.currentRoute.value.query;
-const word = query.q as string;
-const page = parseInt(query.page as string) || 1;
-// const user = 'abmfy';
+// Query parameters
+const state = reactive({
+  query: <LocationQuery>null,
+  word: '',
+  page: 0,
+
+  loading: true,
+
+  news: <News[]>[],
+  page_count: 0,
+})
+
+// Refresh when router changed
+onBeforeRouteUpdate(to => init(to));
+
+init(router.currentRoute.value);
 
 // Message box
 const message = useMessage();
@@ -86,40 +98,46 @@ function error() {
   message.error('搜索时出现错误😢');
 }
 
-// Set page title
-document.title = `${word || '搜索'} - asyNc`;
-
 // Jump to specified page
 function jump(page: number) {
-  window.location.href = `search?q=${word}&page=${page}`;
+  router.push(`search?q=${state.word}&page=${state.page}`);
 }
 
-let loading = ref(true);
+function init(to: RouteLocationNormalized) {
+  // Get query parameters
+  state.query = to.query;
+  state.word = state.query.q as string;
+  state.page = parseInt(state.query.page as string) || 1;
 
-let news = [];
-let page_count = ref(0);
+  state.news = [];
+  
+  // Set page title
+  document.title = `${state.word || '搜索'} - asyNc`;
 
-// Fetch news and page count
-API({
-  url: 'search',
-  method: 'post',
-  data: {
-    query: word,
-    page
-  }
-}).then(response => {
-  loading.value = false;
+  state.loading = true;
 
-  let data = response.data.data;
-  page_count.value = data.page_count;
-  for (const entry of data.news) {
-    // Construct Date object
-    news.push({
-      ...entry,
-      pub_time: new Date(entry.pub_time),
-    });
-  }
-}).catch(() => {
-  error();
-});
+  // Fetch news and page count
+  API({
+    url: 'search',
+    method: 'post',
+    data: {
+      query: state.word,
+      page: state.page,
+    }
+  }).then(response => {
+    state.loading = false;
+
+    let data = response.data.data;
+    state.page_count = data.page_count;
+    for (const entry of data.news) {
+      // Construct Date object
+      state.news.push({
+        ...entry,
+        pub_time: new Date(entry.pub_time),
+      });
+    }
+  }).catch(() => {
+    error();
+  });
+}
 </script>

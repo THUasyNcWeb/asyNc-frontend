@@ -25,6 +25,7 @@
 import { defineProps, ref } from 'vue';
 import { NButton, NIcon, NInput } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
+import router from '@/router';
 
 const props = defineProps({
   text: String,
@@ -33,6 +34,6 @@ const props = defineProps({
 const text = ref(props.text ?? '');
 
 function search() {
-  window.location.href = `search?q=${text.value}`;
+  router.push(`search?q=${text.value}`);
 }
 </script>
