@@ -9,35 +9,31 @@
 <script lang="ts">
 import { defineComponent} from 'vue'
 import API from "../../store/axiosInstance"
-import { Search } from '@vicons/ionicons5/'
+import SearchBox from '@/components/SearchBox.vue'
 import { 
-    NGradientText,
+    // NGradientText,
     NCard,
-    NInput, 
-    NButton, 
     NH2,
+    NH3,
     NGrid,
     NGridItem,
     NCarousel,
     NCarouselItem,
-    NIcon,
     NText,
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
     components: {
-        NGradientText,
+        // NGradientText,
         NCard,
-        NInput,
-        NButton,
         NH2,
+        NH3,
         NGrid,
         NGridItem,
         NCarousel,
         NCarouselItem,
-        Search,
-        NIcon,
+        SearchBox,
         NText,
     },
     // 引入naive ui组件
@@ -100,26 +96,15 @@ export default defineComponent({
   
 <template>
     <body class="background_image">
-        <n-card class="card_bordered">
+        <n-card class="news_bordered" style="background-color: rgba(255, 255, 255);">
             <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-            <div style="text-align:center">
-                <n-gradient-text type="success" size=24 style="margin-right: 20px;">
-                    asyNc
-                </n-gradient-text>
-                <n-input style="width:60%; margin-right: 5%; text-align: left;" size="large" round placeholder="百度一下，我也不知道">
-                    <template #suffix>
-                        <n-button size="large" large circle quaternary type="primary">
-                                <n-icon size="large">
-                                    <Search/>
-                                </n-icon>
-                        </n-button>
-                    </template>
-                </n-input>
-
+            <div style="margin-left:25%">
+                <search-box style="width: 40vw;" />
             </div>
+
         </n-card>
         <!-- 展示主页新闻内容 -->
-        <n-card class="card_bordered">  
+        <n-card class="news_bordered">  
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">
                     <n-h2 prefix="bar">
@@ -127,11 +112,13 @@ export default defineComponent({
                             热点新闻
                         </n-text>
                     </n-h2>
-                    <li v-for="(news, index) in all_news" :key = index style="margin-top:5px">
-                        <a :href="news.news_url" target="_blank">
-                            {{news.title}}
-                        </a>
-                    </li>
+                    <div v-for="(news, index) in all_news" :key = index style="margin-top:5px">
+                        <n-h3 prefix="bar" type="info">
+                            <a :href="news.news_url" target="_blank">
+                                {{news.title}}
+                            </a>
+                        </n-h3>
+                    </div>
                 </n-grid-item>
                 <n-grid-item style="text-align:left">
                     <n-h2 prefix="bar" type="info">
@@ -151,7 +138,7 @@ export default defineComponent({
             </n-grid>
         </n-card>
 
-        <n-card class="card_bordered">  
+        <n-card class="news_bordered">  
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">
                     <n-h2 prefix="bar" type="warning">
@@ -159,11 +146,13 @@ export default defineComponent({
                             军事
                         </n-text>
                     </n-h2>
-                    <li v-for="(news, index) in all_news" :key = index style="margin-top:5px">
-                        <a :href="news.news_url" target="_blank">
-                            {{news.title}}
-                        </a>
-                    </li>
+                    <div v-for="(news, index) in all_news" :key = index style="margin-top:5px">
+                        <n-h3 prefix="bar" type="info">
+                            <a :href="news.news_url" target="_blank">
+                                {{news.title}}
+                            </a>
+                        </n-h3>
+                    </div>
                 </n-grid-item>
                 <n-grid-item style="text-align:left">
                     <n-h2 prefix="bar" type="info">
@@ -209,7 +198,7 @@ export default defineComponent({
     overflow: auto;
 }
 
-.card_bordered {
+.news_bordered {
     display: flex; 
     border-radius:15px;
     width:80%;
