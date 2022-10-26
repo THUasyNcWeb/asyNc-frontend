@@ -188,6 +188,7 @@ function init(to: RouteLocationNormalized) {
 
   // Fetch news and page count
   API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
     url: 'search',
     method: 'post',
     data: {
