@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 23:16
+ * @LastEditTime: 2022-10-26 19:22
 -->
 <template>
   <n-layout position="absolute">
@@ -180,7 +180,10 @@ function init(to: RouteLocationNormalized) {
     data: {
       query: state.word,
       page: state.page,
-    }
+    },
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
   }).then(response => {
     state.loading = false;
 
