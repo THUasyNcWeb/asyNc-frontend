@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 登录注册界面
+ * @Author: 郑友捷
+ * @Date: 2022-10-20 01:21
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-10-26 16:16
+-->
 <template>
     <body class="back_img">
         <n-card class="card_bordered">
@@ -31,7 +38,7 @@
                             密码
                         </n-gradient-text>
                     </div>
-                    <n-input type="password" size="large" round placeholder="请输入用户名" style="width:60%;" v-model:value="password">
+                    <n-input type="password" size="large" round placeholder="请输入密码" style="width:60%;" v-model:value="password">
                     </n-input> 
                 </n-grid-item>
                 <n-grid-item v-if="title=='注册'">
