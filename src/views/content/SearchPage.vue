@@ -171,9 +171,6 @@ function init(to: RouteLocationNormalized) {
   // Set page title
   document.title = `${state.word || '搜索'} - asyNc`;
 
-  // Scroll to top
-  contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
-
   state.loading = true;
 
   // Fetch news and page count
@@ -196,6 +193,9 @@ function init(to: RouteLocationNormalized) {
         pub_time: new Date(entry.pub_time),
       });
     }
+
+    // Scroll to top
+    contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
   }).catch(() => {
     error();
   });
