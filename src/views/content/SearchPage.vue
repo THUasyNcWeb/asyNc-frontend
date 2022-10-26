@@ -145,6 +145,16 @@ function handleSelect(key: 'profile' | 'logout') {
       router.push('/user/userInformation');
       break;
     case 'logout':
+      API({
+          headers:{"Authorization": window.localStorage.getItem("token")},
+          // 携带token字段
+          url:'logout/',
+          method:'post'}).then((res) => {
+              console.log(res)
+          })
+          .catch((error) => {
+              console.log(error)
+      })
       window.localStorage.removeItem('token');
       sessionStorage.removeItem('username');
       state.username = '';
