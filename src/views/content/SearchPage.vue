@@ -163,7 +163,7 @@ function jump(page: number) {
 function init(to: RouteLocationNormalized) {
   // Get query parameters
   state.query = to.query;
-  state.word = state.query.q as string;
+  state.word = state.query.q as string || '';
   state.page = parseInt(state.query.page as string) || 1;
 
   state.news = [];
