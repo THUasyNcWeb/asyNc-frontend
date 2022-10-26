@@ -21,6 +21,7 @@ import {
     NCarousel,
     NCarouselItem,
     NIcon,
+    NText,
     } from 'naive-ui'
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -37,6 +38,7 @@ export default defineComponent({
         NCarouselItem,
         Search,
         NIcon,
+        NText,
     },
     // 引入naive ui组件
     
@@ -120,11 +122,10 @@ export default defineComponent({
         <n-card class="card_bordered">  
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">
-                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
-                    </svg>
-                    <n-h2 class="title_content">
-                        热点新闻
+                    <n-h2 prefix="bar">
+                        <n-text type="primary">
+                            热点新闻
+                        </n-text>
                     </n-h2>
                     <li v-for="(news, index) in all_news" :key = index style="margin-top:5px">
                         <a :href="news.news_url" target="_blank">
@@ -133,12 +134,11 @@ export default defineComponent({
                     </li>
                 </n-grid-item>
                 <n-grid-item style="text-align:left">
-                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
-                        </svg>
-                        <n-h2 class="title_content">
+                    <n-h2 prefix="bar" type="info">
+                        <n-text type="info">
                             图片新闻
-                        </n-h2>
+                        </n-text>
+                    </n-h2>
                     <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
                         <n-carousel-item v-for="(news, index) in all_news" :key = index>
                             <div class="pic_item">
@@ -154,11 +154,10 @@ export default defineComponent({
         <n-card class="card_bordered">  
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">
-                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
-                    </svg>
-                    <n-h2 class="title_content">
-                        军事
+                    <n-h2 prefix="bar" type="warning">
+                        <n-text type="warning">
+                            军事
+                        </n-text>
                     </n-h2>
                     <li v-for="(news, index) in all_news" :key = index style="margin-top:5px">
                         <a :href="news.news_url" target="_blank">
@@ -167,12 +166,11 @@ export default defineComponent({
                     </li>
                 </n-grid-item>
                 <n-grid-item style="text-align:left">
-                    <svg class="title_line" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <line x1="0" y1="0" x2="0" y2="25" style="stroke:#00008B; stroke-width:2"></line>
-                        </svg>
-                        <n-h2 class="title_content">
+                    <n-h2 prefix="bar" type="info">
+                        <n-text type="info">
                             图片新闻
-                        </n-h2>
+                        </n-text>
+                    </n-h2>
                     <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
                         <n-carousel-item v-for="(news, index) in all_news" :key = index>
                             <div class="pic_item">
@@ -199,13 +197,6 @@ export default defineComponent({
     display: inline-block;
 }
 
-.title_content{
-    margin-top: -5px;
-    color:blue;
-    font-family:Arial;
-    display: inline-block;
-    vertical-align: top;
-}
 
 .background_image {
     background-color: #E6E6E6;
