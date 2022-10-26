@@ -27,17 +27,28 @@ import {
 const state = reactive({all_news: new Array() ,category_index: new Map(), category_word: []})
 API({
     headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'all_news',
+    url:'all_news/',
     method:'get',
 }).then((res)=>{
     console.log(res);
     for(let single_new of res.data.data) {
-        if(state.category_index.has(single_new.category) == false) {
-            state.category_index.set(single_new.category,state.all_news.length)
-            state.category_word[state.all_news.length] = single_new.category
+        var now_category = "";
+        if(typeof(single_new.category) == "object"){
+            now_category = single_new.category["0"] as string
+
+        }
+        else if(typeof(single_new.category) == "string") {
+            now_category = single_new.category
+        }
+        if(now_category == "") {
+            now_category = "杂项"
+        }
+        if(state.category_index.has(now_category) == false) {
+            state.category_index.set(now_category,state.all_news.length)
+            state.category_word[state.all_news.length] = now_category
             state.all_news.push(new Array())
         }
-        state.all_news[state.category_index.get(single_new.category)].push({
+        state.all_news[state.category_index.get(now_category)].push({
             picture_url:single_new.picture_url,
             priority:single_new.priority,
             title:single_new.title,
