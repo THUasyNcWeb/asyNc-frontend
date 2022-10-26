@@ -88,11 +88,14 @@ import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
-import { judgeToken } from '@/main';
+import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
 // Query parameters
+
+
+
 const state = reactive({
   query: null,
   word: '',
@@ -103,7 +106,7 @@ const state = reactive({
   news: [],
   page_count: 0,
 
-  username: judgeToken() || '',
+  username: decodeToken() || '',
 })
 
 // Reference to the layout content, for scrolling
@@ -142,6 +145,16 @@ function handleSelect(key: 'profile' | 'logout') {
       router.push('/user/userInformation');
       break;
     case 'logout':
+      API({
+          headers:{"Authorization": window.localStorage.getItem("token")},
+          // 携带token字段
+          url:'logout/',
+          method:'post'}).then((res) => {
+              console.log(res)
+          })
+          .catch((error) => {
+              console.log(error)
+      })
       window.localStorage.removeItem('token');
       sessionStorage.removeItem('username');
       state.username = '';
@@ -175,6 +188,7 @@ function init(to: RouteLocationNormalized) {
 
   // Fetch news and page count
   API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
     url: 'search',
     method: 'post',
     data: {
