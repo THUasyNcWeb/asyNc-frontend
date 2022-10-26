@@ -30,7 +30,7 @@
                 最近浏览的新闻标签
             </th>
             <th style="width:80%">
-                <n-tag :color="{ color: color_tags[index], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag>
+                <n-tag :color="{ color: color_tags[index % 3], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag>
             </th>
             <!-- 浏览的新闻标签以tag组件进行展示，有着不同的颜色 -->
         </tr>
@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import {NTable,NTag} from 'naive-ui'
+import API from "../../store/axiosInstance"
 export default {
     components: {
         NTable,
@@ -50,6 +51,19 @@ export default {
 			default: () => ""
 		},
 	},
+    created(){
+        API({
+            headers:{"Authorization": window.localStorage.getItem("token")},
+            url:'user_info/',
+            method:'get',
+        }).then((res) => {
+            console.log(res)
+            this.tags = res.data.data.tags
+            this.sign = res.data.data.signature
+        }).catch((error) => {
+            console.log(error)
+        })
+    },
     setup() {
         var tags:string[] = ['原神','新冠疫情','清华']
         // 最近浏览的新闻标签，之后会通过接口和后端对接
