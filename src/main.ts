@@ -35,7 +35,9 @@ function decodeToken() :(string | boolean) {
   * @description: 判断当前token是否有效
   * @return {string | boolean} 若token有效则返回对应用户名，否则返回false
   */    
-  judgeToken()
+  if(localStorage.getItem("token")!= null) {
+    judgeToken()
+  }
   try{
       const tokenString:string = localStorage.getItem("token");
       const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))

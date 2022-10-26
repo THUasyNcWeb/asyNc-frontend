@@ -24,13 +24,13 @@ import {
 } from 'naive-ui'
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
-const state = reactive({all_news: new Array(), picture_news:new Array() ,category_index: new Map(), category_word: []})
+const state = reactive({all_news: new Array(), category_index: new Map(), category_word: []})
 API({
     headers:{"Authorization": window.localStorage.getItem("token")},
     url:'all_news/',
     method:'get',
 }).then((res)=>{
-    console.log(res);
+    // console.log(res);
     for(let single_new of res.data.data) {
         var now_category = "";
         if(typeof(single_new.category) == "object"){
@@ -46,23 +46,23 @@ API({
         if(state.category_index.has(now_category) == false) {
             state.category_index.set(now_category,state.all_news.length)
             state.category_word[state.all_news.length] = now_category
-            state.all_news.push(new Array())
-            state.picture_news.push(new Array())
+            state.all_news.push({word_new: new Array(), picture_new: new Array()})
         }
-        state.all_news[state.category_index.get(now_category)].push({
+        state.all_news[state.category_index.get(now_category)].word_new.push({
             picture_url:single_new.picture_url,
             priority:single_new.priority,
             title:single_new.title,
             url: single_new.url, 
         })
         if(single_new.picture_url!='') {
-            state.all_news[state.category_index.get(now_category)].push({
+            state.all_news[state.category_index.get(now_category)].picture_new.push({
                 picture_url:single_new.picture_url,
                 title:single_new.title,
             })
         }
-    console.log(state.all_news)}
-}).catch((error) => {
+    console.log(state.all_news)
+    // console.log(state.picture_news)
+}}).catch((error) => {
     console.log(error);
 }) ;
 
@@ -86,7 +86,7 @@ API({
                             {{state.category_word[index]}}
                         </n-text>
                     </n-h2>
-                    <div v-for="(news, index) in category_news" :key = index style="margin-top:5px">
+                    <div v-for="(news, index) in category_news.word_new" :key = index style="margin-top:5px">
                         <n-h3 prefix="bar" type="info">
                             <a :href="news.url" target="_blank" style="text-decoration-line: none">
                                 {{news.title}}
@@ -94,14 +94,14 @@ API({
                         </n-h3>
                     </div>
                 </n-grid-item>
-                <n-grid-item style="text-align:left">
+                <n-grid-item style="text-align:left" v-if="category_news.picture_new.length != 0">
                     <n-h2 prefix="bar" type="info">
                         <n-text type="info">
                             图片新闻
                         </n-text>
                     </n-h2>
-                    <n-carousel style="height: 80% ;background-color:black" autoplay dot-type="line" v-for="(news, pic_index) in state.picture_news[index]" :key = pic_index>
-                        <n-carousel-item v-if="news.picture_url != ''">
+                    <n-carousel style=" height:400px ;" autoplay dot-type="line">
+                        <n-carousel-item v-for="(news, pic_index) in category_news.picture_new" :key = pic_index>
                             <div class="pic_item">
                                 <a :href="news.url" target="_blank">
                                     <n-image class="small" :src="news.picture_url"  width=650 height=400 object-fit="cover" preview-disabled />
@@ -161,7 +161,7 @@ API({
 .pic_item h2 {
   position: absolute;
   left: 1rem;
-  bottom: 4rem;
+  bottom: 3rem;
   color: white;
 }
 </style>
