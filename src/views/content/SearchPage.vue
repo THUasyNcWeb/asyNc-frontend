@@ -88,11 +88,14 @@ import NewsEntry from '@/components/NewsEntry.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
-import { judgeToken } from '@/main';
+import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
 // Query parameters
+
+
+
 const state = reactive({
   query: null,
   word: '',
@@ -103,7 +106,7 @@ const state = reactive({
   news: [],
   page_count: 0,
 
-  username: judgeToken() || '',
+  username: decodeToken() || '',
 })
 
 // Reference to the layout content, for scrolling

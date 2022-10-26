@@ -61,7 +61,7 @@
 <script lang="ts">
 import themeOverrides from "../components/MenuTheme"
 import { h,defineComponent, Ref, ref } from 'vue'
-import {judgeToken} from "@/main"
+import {decodeToken} from "@/main"
 import {RouterLink,useRouter,} from 'vue-router'
 import {  
     NLayout,
@@ -97,7 +97,7 @@ export default defineComponent({
     setup(){
         const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
-        let flag = judgeToken()
+        let flag = decodeToken()
 
         if(typeof(flag) == "boolean") {
             username.value = ""

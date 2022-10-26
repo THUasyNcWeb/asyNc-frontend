@@ -24,7 +24,7 @@ import {
 } from 'naive-ui'
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
-const state = reactive({all_news: new Array() ,category_index: new Map(), category_word: []})
+const state = reactive({all_news: new Array(), picture_news:new Array() ,category_index: new Map(), category_word: []})
 API({
     headers:{"Authorization": window.localStorage.getItem("token")},
     url:'all_news/',
@@ -47,6 +47,7 @@ API({
             state.category_index.set(now_category,state.all_news.length)
             state.category_word[state.all_news.length] = now_category
             state.all_news.push(new Array())
+            state.picture_news.push(new Array())
         }
         state.all_news[state.category_index.get(now_category)].push({
             picture_url:single_new.picture_url,
@@ -54,8 +55,13 @@ API({
             title:single_new.title,
             url: single_new.url, 
         })
-    }
-    console.log(state.all_news)
+        if(single_new.picture_url!='') {
+            state.all_news[state.category_index.get(now_category)].push({
+                picture_url:single_new.picture_url,
+                title:single_new.title,
+            })
+        }
+    console.log(state.all_news)}
 }).catch((error) => {
     console.log(error);
 }) ;
@@ -82,7 +88,7 @@ API({
                     </n-h2>
                     <div v-for="(news, index) in category_news" :key = index style="margin-top:5px">
                         <n-h3 prefix="bar" type="info">
-                            <a :href="news.url" target="_blank">
+                            <a :href="news.url" target="_blank" style="text-decoration-line: none">
                                 {{news.title}}
                             </a>
                         </n-h3>
@@ -94,8 +100,8 @@ API({
                             图片新闻
                         </n-text>
                     </n-h2>
-                    <n-carousel autoplay dot-type="line" dot-placement="right">
-                        <n-carousel-item v-for="(news, index) in category_news" :key = index>
+                    <n-carousel style="height: 80% ;background-color:black" autoplay dot-type="line" v-for="(news, pic_index) in state.picture_news[index]" :key = pic_index>
+                        <n-carousel-item v-if="news.picture_url != ''">
                             <div class="pic_item">
                                 <a :href="news.url" target="_blank">
                                     <n-image class="small" :src="news.picture_url"  width=650 height=400 object-fit="cover" preview-disabled />

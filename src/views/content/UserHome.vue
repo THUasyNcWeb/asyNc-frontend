@@ -31,7 +31,7 @@
 import {h,defineComponent,Component} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
 import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider  } from 'naive-ui'
-import {judgeToken} from "@/main"
+import {decodeToken} from "@/main"
 import {
   BookOutline as BookIcon,
   PersonOutline as PersonIcon
@@ -47,7 +47,7 @@ export default defineComponent({
   },
   created(){
       let path = this.$route.path
-      let flag = judgeToken()
+      let flag = decodeToken()
       let router = useRouter()
       if(typeof(flag) == "boolean") {
           alert("请先登录或者注册")
