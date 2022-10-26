@@ -6,12 +6,12 @@
  * @LastEditTime: 2022-10-13 10:07  
  -->
 
-<script lang="ts">
-import { defineComponent} from 'vue'
+<script setup lang="ts">
+import { reactive } from 'vue';
+// import '@/mock/SearchPage.mock';
 import API from "../../store/axiosInstance"
 import SearchBox from '@/components/SearchBox.vue'
 import { 
-    // NGradientText,
     NCard,
     NH2,
     NH3,
@@ -20,78 +20,35 @@ import {
     NCarousel,
     NCarouselItem,
     NText,
-    } from 'naive-ui'
-    // 按需引入naive-ui组件
-    // 之后可能会把上述引入集中在一个固定的ts文件中
-export default defineComponent({
-    components: {
-        // NGradientText,
-        NCard,
-        NH2,
-        NH3,
-        NGrid,
-        NGridItem,
-        NCarousel,
-        NCarouselItem,
-        SearchBox,
-        NText,
-    },
-    // 引入naive ui组件
-    
-    setup() {
-        const all_news = [
-            {
-                "title": "重要通知：清华大学国庆假期长达七天",
-                "content":"据记者了解，清华大学2022年国庆假期竟达到了前所未有的七天，众多清华学子欢欣鼓舞，盛赞学校的英明领导。",
-                "picture_url":"https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg",
-                "news_url":"https://www.bilibili.com/video/BV1GJ411x7h7/?spm_id_from=333.788.recommend_more_video.0&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
-            },
-            {
-                "title": "“一见清心”新生舞会将于本周日举办",
-                "content":"据记者了解，清华大学一字班延期一年的新生舞会将于2022年10月10日（即本周日）与二字班新生一同举办，众多一字班老生摩拳擦掌，想要与二字班新生一决高下。",
-                "picture_url":"https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg",
-                "news_url":"https://www.bilibili.com/video/BV1uT4y1P7CX/?spm_id_from=333.788.recommend_more_video.5&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
-            },
-            {
-                "title": "Program Buddy活动即将举行，参与人员男女比例令人落泪",
-                "content":"2022年秋季学期Program Buddy活动即将举行，据内部人员了解，志愿者更希望自己用于女性同伴，优先选择男性同伴的志愿者竟只有五人。",
-                "picture_url":"https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg",
-                "news_url":"https://www.bilibili.com/video/BV1AK411g7xc/?spm_id_from=333.788.recommend_more_video.2&vd_source=5c99d5fcb99970c9ff78540c60815ff7",
-            }
-        ]
-        // 存储主页默认新闻内容
-        // 目前暂未与后端进行对接，故新闻内容直接写死
-        // 读取存储在localStorage中的token，从而得知初始化应当自动登录的用户
-        // 存储主页显示的用户名
-        function getNews() {
-            /**
-            * @description: 获取全局主页新闻
-            * @return {void}
-            */
-            API({
-                headers:{"Authorization": window.localStorage.getItem("token")},
-                url:'all_news/',
-                method:'get',
-            }).then((res)=>{
-                console.log(res);
-            });
+    NImage,
+} from 'naive-ui'
+// 按需引入naive-ui组件
+// 之后可能会把上述引入集中在一个固定的ts文件中
+const state = reactive({all_news: new Array() ,category_index: new Map(), category_word: []})
+API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
+    url:'all_news',
+    method:'get',
+}).then((res)=>{
+    console.log(res);
+    for(let single_new of res.data.data) {
+        if(state.category_index.has(single_new.category) == false) {
+            state.category_index.set(single_new.category,state.all_news.length)
+            state.category_word[state.all_news.length] = single_new.category
+            state.all_news.push(new Array())
         }
-        function search() {
-            API({
-                headers:{"Authorization": window.localStorage.getItem("token")},
-                url:'search/',
-                method:'get',
-            }).then((res)=>{
-                console.log(res);
-            });
-        }
-        return {
-            getNews,
-            all_news,
-            search,
-        }
-    },
-})
+        state.all_news[state.category_index.get(single_new.category)].push({
+            picture_url:single_new.picture_url,
+            priority:single_new.priority,
+            title:single_new.title,
+            url: single_new.url, 
+        })
+    }
+    console.log(state.all_news)
+}).catch((error) => {
+    console.log(error);
+}) ;
+
 </script>
   
 <template>
@@ -101,20 +58,20 @@ export default defineComponent({
             <div style="margin-left:25%">
                 <search-box style="width: 40vw;" />
             </div>
-
         </n-card>
         <!-- 展示主页新闻内容 -->
-        <n-card class="news_bordered">  
+    
+        <n-card v-for="(category_news, index) in state.all_news" :key="index" class="news_bordered"> 
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">
                     <n-h2 prefix="bar">
                         <n-text type="primary">
-                            热点新闻
+                            {{state.category_word[index]}}
                         </n-text>
                     </n-h2>
-                    <div v-for="(news, index) in all_news" :key = index style="margin-top:5px">
+                    <div v-for="(news, index) in category_news" :key = index style="margin-top:5px">
                         <n-h3 prefix="bar" type="info">
-                            <a :href="news.news_url" target="_blank">
+                            <a :href="news.url" target="_blank">
                                 {{news.title}}
                             </a>
                         </n-h3>
@@ -126,45 +83,13 @@ export default defineComponent({
                             图片新闻
                         </n-text>
                     </n-h2>
-                    <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
-                        <n-carousel-item v-for="(news, index) in all_news" :key = index>
+                    <n-carousel autoplay dot-type="line" dot-placement="right">
+                        <n-carousel-item v-for="(news, index) in category_news" :key = index>
                             <div class="pic_item">
-                                <img class="small" :src="news.picture_url" />
-                                <h3>{{news.title}}</h3>
-                            </div>
-                        </n-carousel-item>
-                    </n-carousel>
-                </n-grid-item>
-            </n-grid>
-        </n-card>
-
-        <n-card class="news_bordered">  
-            <n-grid cols="2" item-responsive>
-                <n-grid-item style="text-align:left">
-                    <n-h2 prefix="bar" type="warning">
-                        <n-text type="warning">
-                            军事
-                        </n-text>
-                    </n-h2>
-                    <div v-for="(news, index) in all_news" :key = index style="margin-top:5px">
-                        <n-h3 prefix="bar" type="info">
-                            <a :href="news.news_url" target="_blank">
-                                {{news.title}}
-                            </a>
-                        </n-h3>
-                    </div>
-                </n-grid-item>
-                <n-grid-item style="text-align:left">
-                    <n-h2 prefix="bar" type="info">
-                        <n-text type="info">
-                            图片新闻
-                        </n-text>
-                    </n-h2>
-                    <n-carousel autoplay style="height:80%" dot-type="line" dot-placement="right">
-                        <n-carousel-item v-for="(news, index) in all_news" :key = index>
-                            <div class="pic_item">
-                                <img class="small" :src="news.picture_url" />
-                                <h3>{{news.title}}</h3>
+                                <a :href="news.url" target="_blank">
+                                    <n-image class="small" :src="news.picture_url"  width=650 height=400 object-fit="cover" preview-disabled />
+                                </a>
+                                <h2>{{news.title}}</h2>
                             </div>
                         </n-carousel-item>
                     </n-carousel>
@@ -212,23 +137,14 @@ export default defineComponent({
     0px 0.5px 5px #808080;    /*下边阴影  */
 }
 
-.pic_item {
-  position: relative;
-  height: 100%;
-}
 .pic_item:hover{
   cursor: pointer;
 }
 
-.pic_item img {
-  width: 100%;
-  height: 100%;
-}
-
-.pic_item h3 {
+.pic_item h2 {
   position: absolute;
   left: 1rem;
-  bottom: -0.5rem;
+  bottom: 4rem;
   color: white;
 }
 </style>
