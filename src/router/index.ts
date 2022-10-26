@@ -6,7 +6,7 @@
  * @LastEditTime: 2022-10-13 9:38
 */
 
-import {createRouter, createWebHistory,RouteRecordRaw} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NewsHome from "../views/content/NewsHome.vue";
 import UserHome from "../views/content/UserHome.vue";
 import SearchPage from "../views/content/SearchPage.vue";
@@ -27,14 +27,6 @@ const routes: Array<RouteRecordRaw> = [
             component:NewsHome,
             meta:{
                 title:"新闻展示"
-            }
-        },
-        {
-            path:"/search",
-            name:"Search",
-            component: SearchPage,
-            meta:{
-                title:"搜索页"
             }
         },
         {
@@ -81,7 +73,15 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: "注册",
         },
-    }
+    },
+    {
+        path: "/search",
+        name: "Search",
+        component: SearchPage,
+        meta: {
+            title: "搜索",
+        },
+    },
 ];
 // 注册页面路由
 
