@@ -9,18 +9,35 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-
+import API from './store/axiosInstance';
 // 将页面标题与路由对应
 const app = createApp(App);
 
 app.use(router);
 app.mount("#app");
 
-function judgeToken() :(string | boolean) {
+function judgeToken() {
+  API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
+    url:'checklogin/',
+    method:'post',
+  }).then((res) => {
+    console.log(res)
+  }).catch((error) => {
+    console.log(error)
+    console.log("错啦")
+    localStorage.removeItem("token")
+  })
+}
+
+function decodeToken() :(string | boolean) {
   /**
   * @description: 判断当前token是否有效
   * @return {string | boolean} 若token有效则返回对应用户名，否则返回false
   */    
+  if(localStorage.getItem("token")!= null) {
+    judgeToken()
+  }
   try{
       const tokenString:string = localStorage.getItem("token");
       const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))
@@ -57,7 +74,7 @@ router.beforeEach((to, _, next) => {
     next()
   }
   else if (window.localStorage.getItem("token")) {
-    const flag = judgeToken()
+    const flag = decodeToken()
     if( typeof(flag) == "boolean" ) {
       alert("请先登录或者注册")
     }
@@ -74,4 +91,4 @@ router.beforeEach((to, _, next) => {
   }
 })
 
-export {judgeToken}
+export {decodeToken}

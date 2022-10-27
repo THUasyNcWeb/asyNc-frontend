@@ -61,7 +61,7 @@
 <script lang="ts">
 import themeOverrides from "../components/MenuTheme"
 import { h,defineComponent, Ref, ref } from 'vue'
-import {judgeToken} from "@/main"
+import {decodeToken} from "@/main"
 import {RouterLink,useRouter,} from 'vue-router'
 import {  
     NLayout,
@@ -73,6 +73,7 @@ import {
     NGradientText,
     useDialog
     } from 'naive-ui'
+import API from "@/store/axiosInstance"
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
 export default defineComponent({
@@ -97,7 +98,7 @@ export default defineComponent({
     setup(){
         const username:Ref<string> = ref("")
         // 当前页面的用户名（若已登录）
-        let flag = judgeToken()
+        let flag = decodeToken()
 
         if(typeof(flag) == "boolean") {
             username.value = ""
@@ -166,6 +167,16 @@ export default defineComponent({
                     positiveText: '确认',
                     negativeText: '取消',
                     onPositiveClick: () => {
+                        API({
+                            headers:{"Authorization": window.localStorage.getItem("token")},
+                            // 携带token字段
+                            url:'logout/',
+                            method:'post'}).then((res) => {
+                                console.log(res)
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                        })
                         window.localStorage.removeItem('token')
                         sessionStorage.removeItem('username')
                         username.value = ""
