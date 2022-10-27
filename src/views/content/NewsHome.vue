@@ -57,6 +57,7 @@ API({
         if(single_new.picture_url!='') {
             state.all_news[state.category_index.get(now_category)].picture_new.push({
                 picture_url:single_new.picture_url,
+                url: single_new.url,
                 title:single_new.title,
             })
         }
@@ -104,9 +105,11 @@ API({
                         <n-carousel-item v-for="(news, pic_index) in category_news.picture_new" :key = pic_index>
                             <div class="pic_item">
                                 <a :href="news.url" target="_blank">
-                                    <n-image class="small" :src="news.picture_url"  width=650 height=400 object-fit="cover" preview-disabled />
+                                    <n-image width=650 height=400 object-fit="cover"
+                                        :src="news.picture_url" preview-disabled
+                                        style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
                                 </a>
-                                <h2>{{news.title}}</h2>
+                                <h2 style="color:black">{{news.title}}</h2>
                             </div>
                         </n-carousel-item>
                     </n-carousel>
@@ -161,7 +164,7 @@ API({
 .pic_item h2 {
   position: absolute;
   left: 1rem;
-  bottom: 3rem;
+  bottom: 1rem;
   color: white;
 }
 </style>
