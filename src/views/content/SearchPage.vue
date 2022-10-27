@@ -195,9 +195,6 @@ function init(to: RouteLocationNormalized) {
       query: state.word,
       page: state.page,
     },
-    headers: {
-      Authorization: window.localStorage.getItem('token'),
-    },
   }).then(response => {
     state.loading = false;
 
