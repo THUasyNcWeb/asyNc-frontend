@@ -14,15 +14,6 @@
                         Welcome to asyNc!
                     </n-gradient-text>
                 </n-grid-item>
-                <n-grid-item v-if="title=='注册'">
-                    <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
-                        <n-gradient-text type="info" size=20 >
-                            昵称
-                        </n-gradient-text>
-                    </div>
-                    <n-input size="large" round placeholder="请输入昵称" style="width:60%;">
-                    </n-input> 
-                </n-grid-item>
                 <n-grid-item>
                     <div style="width: 30%; margin-right: 5%; text-align: right; display: inline-block;">
                         <n-gradient-text type="info" size=20 >
