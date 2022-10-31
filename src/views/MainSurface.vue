@@ -37,14 +37,3 @@ import {
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
 </script>
-
-<style scoped>
-.guide_button {
-    margin-top: 5px;
-    margin-right: 10px !important;
-    /* 不同按钮之间须有一定间隔 */
-    display: inline-block !important;
-    /* 不同按钮需在同一行 */
-}
-
-</style>
