@@ -36,6 +36,9 @@ const props = defineProps({
 const text = ref(props.text ?? '');
 
 function search() {
+  // Change current route slightly
+  // to force update the router view
+  router.currentRoute.value.hash = '0';
   router.push(`/search?q=${text.value}`);
 }
 </script>

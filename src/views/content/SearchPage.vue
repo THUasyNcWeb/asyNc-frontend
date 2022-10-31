@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { inject, reactive } from 'vue';
-import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
   NEmpty,
   NList,
@@ -64,7 +64,9 @@ const state = reactive({
 const contentRef: any = inject('contentRef');
 
 // Refresh when router changed
+// router.beforeEach(to => init(to));
 onBeforeRouteUpdate(to => init(to));
+// router.beforeResolve
 
 init(router.currentRoute.value);
 
@@ -75,6 +77,7 @@ const message = useMessage();
 function error() {
   message.error('搜索时出现错误😢');
 }
+
 // Jump to specified page
 function jump(page: number) {
   router.push(`search?q=${state.word}&page=${page}`);
