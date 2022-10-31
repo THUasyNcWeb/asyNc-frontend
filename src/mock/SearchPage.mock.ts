@@ -97,7 +97,7 @@ Mock.mock(/search/, 'post', rqst => {
       url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
       pub_time: '2022-10-24T19:02:16.305Z',
       content: '萨满祭司是暴雪娱乐公司出品的卡牌游戏《炉石传说》中的一个职业。萨满祭司是原始元素的大师，能操纵自然的力量降下治疗之雨、倾泻熔岩洪流，或是召唤灵魂盟友助战。萨满祭司的能力反映出了自然之力的平衡：全面而强大的随从、法术、增益和伤害。',
-      picture_url: 'http://n.sinaimg.cn/sinacn07/576/w825h551/20180703/27fe-hevauxi3280692.png',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
       title_keywords: [[0, 4], [11, 15]],
       keywords: [
           [0, 4],
@@ -117,32 +117,89 @@ Mock.mock(/search/, 'post', rqst => {
 });
 
 
-Mock.mock(/all_news/, 'get', _ => {
+Mock.mock(/all_news/, 'get', resq => {
+  
   const data = [];
   data.push(
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
-      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '原神',
+      category:"首页",
+      news:[
+      {
+        title: "首页新闻应该有首页的样子",
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ]
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
-      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '原神',
+      category:"原神",
+      news:[
+        {
+          title: '3.2的纳西妲我必定拿下',
+          picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+          media:"mihoyo",
+          pub_time:"2022-11-02"
+        },
+        {
+            title: '搜到了好东西',
+            picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+            url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+            media: "mihomo",
+            pub_time:"1926-08-17",
+        }
+      ]
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
-      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '清华',
+      category:"清华",
+      news:[{
+        title: '非常好的新闻',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      {
+        title: '非常好的带图新闻',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ]
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
-      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '清华',
+      category:"家乡",
+      news:[{
+        title: '汕头出现疫情，我被偷家了',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      {
+        title: '汕头出现疫情，我被偷家了',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ]
+    },
+    
+    {
+      category:"科技",
+      news:[
+      {
+        title: "刘铠铭的数据库到底能不能稳定运行一天",
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ]
     },
   );
   return {
