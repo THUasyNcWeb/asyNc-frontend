@@ -59,15 +59,7 @@ import { Component, h, reactive } from 'vue';
 
 // Query parameters
 const state = reactive({
-  query: null,
   word: '',
-  page: 0,
-
-  loading: true,
-
-  news: [],
-  page_count: 0,
-
   username: decodeToken() || '',
 })
 
