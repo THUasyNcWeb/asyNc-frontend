@@ -117,8 +117,7 @@ Mock.mock(/search/, 'post', rqst => {
 });
 
 
-Mock.mock(/all_news/, 'get', rqst => {
-  const body = JSON.parse(rqst.body);
+Mock.mock(/all_news/, 'get', _ => {
   const data = [];
   data.push(
     {
@@ -126,28 +125,24 @@ Mock.mock(/all_news/, 'get', rqst => {
       picture_url: 'http://43.143.201.186:8080/images/test.jpg',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       category: '原神',
-      priority:1,
     },
     {
       title: '测试新闻',
       picture_url: 'http://43.143.201.186:8080/images/test.jpg',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       category: '原神',
-      priority:1,
     },
     {
       title: '测试新闻',
       picture_url: 'http://43.143.201.186:8080/images/test.jpg',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       category: '清华',
-      priority:1,
     },
     {
       title: '测试新闻',
       picture_url: 'http://43.143.201.186:8080/images/test.jpg',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       category: '清华',
-      priority:1,
     },
   );
   return {

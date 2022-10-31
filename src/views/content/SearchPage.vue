@@ -18,7 +18,7 @@
           <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
         </template>
       </template>
-      <template v-else v-for="_ in 10" :key="_">
+      <template v-for="_ in 10" :key="_">
         <n-skeleton text size="medium" style="width: 30%" />
         <n-skeleton text :repeat="3" />
         <n-skeleton text style="width: 20%" />

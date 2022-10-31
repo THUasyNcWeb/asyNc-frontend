@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 导航栏组件
+ * @Author: 郑友捷
+ * @Date: 2022-10-31 9:21
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-10-31 12:22
+-->
 <template>
     <n-space align="center" justify="space-between">
     <n-space>
