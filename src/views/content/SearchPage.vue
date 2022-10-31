@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-26 19:22
+ * @LastEditTime: 2022-10-31 19:46
 -->
 <template>
     <n-space vertical style="padding: 18px 96px">
@@ -18,7 +18,7 @@
           <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
         </template>
       </template>
-      <template v-for="_ in 10" :key="_">
+      <template v-else v-for="_ in 10" :key="_">
         <n-skeleton text size="medium" style="width: 30%" />
         <n-skeleton text :repeat="3" />
         <n-skeleton text style="width: 20%" />
