@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 19:46
+ * @LastEditTime: 2022-10-31 20:14
 -->
 <template>
     <n-space vertical style="padding: 18px 96px">
@@ -27,10 +27,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { inject, reactive } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
-  LayoutInst,
   NEmpty,
   NList,
   NListItem,
@@ -47,11 +46,8 @@ import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
-// Query parameters
-
-
-
 const state = reactive({
+  // Query parameters
   query: null,
   word: '',
   page: 0,
@@ -65,7 +61,7 @@ const state = reactive({
 })
 
 // Reference to the layout content, for scrolling
-const contentRef = ref<LayoutInst | null>(null);
+const contentRef: any = inject('contentRef');
 
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
@@ -97,9 +93,14 @@ function init(to: RouteLocationNormalized) {
 
   state.loading = true;
 
+  // Scroll to top
+  contentRef.value?.scrollTo({ top: 0 });
+
   // Fetch news and page count
   API({
-    headers:{"Authorization": window.localStorage.getItem("token")},
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
     url: 'search',
     method: 'post',
     data: {
@@ -118,9 +119,6 @@ function init(to: RouteLocationNormalized) {
         pub_time: new Date(entry.pub_time),
       });
     }
-
-    // Scroll to top
-    contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
   }).catch(() => {
     error();
   });

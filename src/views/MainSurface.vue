@@ -2,8 +2,8 @@
  * @FileDescription: 新闻主要界面布局vue
  * @Author: 郑友捷
  * @Date: 2022-10-18 19:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-18 19:00  
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-10-31 20:26
  -->
 
 <template>
@@ -11,19 +11,26 @@
         <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px;position:fixed;" >
             <Navigation/>
         </n-layout-header>
-        <n-layout-content style="top: 74px;" position="absolute">
+        <n-layout-content ref="contentRef" style="top: 74px;" position="absolute">
             <router-view></router-view>
         </n-layout-content>
     </n-layout>
 </template>
 
 <script setup lang="ts">
+import { provide, ref } from 'vue';
 import Navigation from "../components/NavigationBar.vue"
 import {  
     NLayout,
     NLayoutHeader, 
     NLayoutContent,
-    } from 'naive-ui'
+    LayoutInst,
+} from 'naive-ui'
+import { RouterView } from 'vue-router';
     // 按需引入naive-ui组件
     // 之后可能会把上述引入集中在一个固定的ts文件中
+
+// Provide content ref for scrolling in search page
+const contentRef = ref<LayoutInst | null>(null);
+provide('contentRef', contentRef);
 </script>
