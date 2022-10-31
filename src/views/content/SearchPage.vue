@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { inject, reactive } from 'vue';
-import { onBeforeRouteLeave, onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
   NEmpty,
   NList,
