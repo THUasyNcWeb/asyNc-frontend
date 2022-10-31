@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-26 19:22
+ * @LastEditTime: 2022-10-31 20:14
 -->
 <template>
     <n-space vertical style="padding: 18px 96px">
@@ -18,7 +18,7 @@
           <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
         </template>
       </template>
-      <template v-for="_ in 10" :key="_">
+      <template v-else v-for="_ in 10" :key="_">
         <n-skeleton text size="medium" style="width: 30%" />
         <n-skeleton text :repeat="3" />
         <n-skeleton text style="width: 20%" />
@@ -27,10 +27,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { inject, reactive } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
-  LayoutInst,
   NEmpty,
   NList,
   NListItem,
@@ -47,11 +46,8 @@ import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
-// Query parameters
-
-
-
 const state = reactive({
+  // Query parameters
   query: null,
   word: '',
   page: 0,
@@ -65,10 +61,12 @@ const state = reactive({
 })
 
 // Reference to the layout content, for scrolling
-const contentRef = ref<LayoutInst | null>(null);
+const contentRef: any = inject('contentRef');
 
 // Refresh when router changed
+// router.beforeEach(to => init(to));
 onBeforeRouteUpdate(to => init(to));
+// router.beforeResolve
 
 init(router.currentRoute.value);
 
@@ -79,6 +77,7 @@ const message = useMessage();
 function error() {
   message.error('搜索时出现错误😢');
 }
+
 // Jump to specified page
 function jump(page: number) {
   router.push(`search?q=${state.word}&page=${page}`);
@@ -97,9 +96,14 @@ function init(to: RouteLocationNormalized) {
 
   state.loading = true;
 
+  // Scroll to top
+  contentRef.value?.scrollTo({ top: 0 });
+
   // Fetch news and page count
   API({
-    headers:{"Authorization": window.localStorage.getItem("token")},
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
     url: 'search',
     method: 'post',
     data: {
@@ -118,9 +122,6 @@ function init(to: RouteLocationNormalized) {
         pub_time: new Date(entry.pub_time),
       });
     }
-
-    // Scroll to top
-    contentRef.value?.scrollTo({ top: 0, behavior: 'smooth' });
   }).catch(() => {
     error();
   });

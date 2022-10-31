@@ -25,7 +25,7 @@
 import { defineProps, ref } from 'vue';
 import { NButton, NIcon, NInput } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -35,7 +35,15 @@ const props = defineProps({
 
 const text = ref(props.text ?? '');
 
+// Update keywords when route updates, e.g. routing back and forth
+onBeforeRouteUpdate((to) => {
+  text.value = to.query.q as string;
+});
+
 function search() {
-  router.push(`search?q=${text.value}`);
+  // Change current route slightly
+  // to force update the router view
+  router.currentRoute.value.hash = '0';
+  router.push(`/search?q=${text.value}`);
 }
 </script>
