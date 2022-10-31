@@ -7,21 +7,26 @@
  -->
 
 <template>
-    <body>
-    <n-layout position="absolute">
-        <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px; position: fixed">
+    <n-layout style="min-height: 100%;" >
+        <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px;">
             <Navigation/>
         </n-layout-header>
-        <n-layout-content ref="contentRef" position="absolute" style="top: 74px;">
+        <n-layout-content >
             <router-view></router-view>
         </n-layout-content>
+        <n-layout-footer
+            bordered
+            style="bottom: 0;background-color:#87CEFA;color:white;text-align: center;padding: 6px;"
+        >
+            <n-gradient-text type="success" size=24>
+                copyright by asyNc
+            </n-gradient-text>
+        </n-layout-footer>
     </n-layout>
-    </body>
 </template>
 
 <script lang="ts">
 import Navigation from "../components/NavigationBar.vue"
-import themeOverrides from "../components/MenuTheme"
 import { h,defineComponent, Ref, ref } from 'vue'
 import {decodeToken} from "@/main"
 import {RouterLink,useRouter,} from 'vue-router'
@@ -29,6 +34,8 @@ import {
     NLayout,
     NLayoutHeader, 
     NLayoutContent,
+    NLayoutFooter,
+    NGradientText,
     useDialog
     } from 'naive-ui'
 import API from "@/store/axiosInstance"
@@ -40,6 +47,8 @@ export default defineComponent({
         NLayoutHeader,
         Navigation,
         NLayoutContent,
+        NLayoutFooter,
+        NGradientText,
     },
     created(){
         let path = this.$route.path
@@ -153,7 +162,6 @@ export default defineComponent({
             login_register,
             userOptions,
             menuOptions,
-            themeOverrides,
         }
     }
 })
