@@ -35,12 +35,13 @@ import {
   NGradientText,
   NIcon,
   NSpace,
+  useDialog,
 } from 'naive-ui';
 import {
   PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon
 } from '@vicons/ionicons5';
-
+import SearchBox from './SearchBox.vue'
 import { decodeToken } from '@/main';
 // import router from '@/router';
 import router from '@/router';
@@ -84,26 +85,38 @@ const options = [
 ]
 
 // Handle select event of the user menu
+
+const exitDialog = useDialog()
 function handleSelect(key: 'profile' | 'logout') {
   switch (key) {
     case 'profile':
       router.push('/user/userInformation');
       break;
     case 'logout':
-      API({
-          headers:{"Authorization": window.localStorage.getItem("token")},
-          // 携带token字段
-          url:'logout/',
-          method:'post'}).then((res) => {
-              console.log(res)
-          })
-          .catch((error) => {
-              console.log(error)
-      })
-      window.localStorage.removeItem('token');
-      sessionStorage.removeItem('username');
-      state.username = '';
-      break;
+      exitDialog.warning({
+        title: '退出登录确认',
+        content: '你确定退出登录吗QWQ？',
+        positiveText: '确认',
+        negativeText: '取消',
+        onPositiveClick: () => {
+            API({
+                headers:{"Authorization": window.localStorage.getItem("token")},
+                // 携带token字段
+                url:'logout/',
+                method:'post'}).then((res) => {
+                    console.log(res)
+                    window.localStorage.removeItem('token')
+                    state.username = ""
+                    router.push("/")
+                })
+                .catch((error) => {
+                    console.log(error)
+            })
+        },
+        onNegativeClick: () => {
+        }
+    // 若是退出登录界面，则关闭弹窗
+    })
   }
 }
 

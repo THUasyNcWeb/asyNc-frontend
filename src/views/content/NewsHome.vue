@@ -10,7 +10,6 @@
 import { reactive } from 'vue';
 // import '@/mock/SearchPage.mock';
 import API from "../../store/axiosInstance"
-import SearchBox from '@/components/SearchBox.vue'
 import { 
     NCard,
     NH2,
@@ -71,14 +70,6 @@ API({
   
 <template>
     <body class="background_image">
-        <n-card class="news_bordered" style="background-color: rgba(255, 255, 255);">
-            <!-- 布置搜索框组件，包括图片、搜索框与帮助按钮 -->
-            <div style="margin-left:25%">
-                <search-box style="width: 40vw;" />
-            </div>
-        </n-card>
-        <!-- 展示主页新闻内容 -->
-    
         <n-card v-for="(category_news, index) in state.all_news" :key="index" class="news_bordered"> 
             <n-grid cols="2" item-responsive>
                 <n-grid-item style="text-align:left">

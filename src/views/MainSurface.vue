@@ -8,57 +8,19 @@
 
 <template>
     <body>
-    <n-layout position="absolute" style="top: 0px;bottom: 0px;">
-        <n-layout-header bordered style="width:100%;top: 0;left: 0; position: fixed; z-index: 999999; text-align:center;">
-            <!-- 布置顶部导航栏 -->
-            <!-- 每一个按钮对应着相同的跳转网址 -->
-            <tr>
-            <!-- 以表格组件来布局顶部导航栏，方便控制不同组件的间隔 -->
-            <th style="height:50px">
-                <router-link to="/">
-                <n-gradient-text type="success" size=24 style="margin-left: 10px;">
-                    asyNc
-                </n-gradient-text>
-                </router-link>
-                <!-- 点击图片会进行跳转，跳转到主页 -->
-            </th>
-            <n-divider :vertical=true />
-            <th style="width:90%;text-align:left">
-                <n-menu mode="horizontal" :options="menuOptions" :theme-overrides="themeOverrides" :default-value="now_url" />
-            </th>
-            <!-- 跳转到主页的搜索主页按钮 -->
-            <n-divider :vertical=true />
-            <th style="width:50%">
-                <div class="guide_button">
-                    <div v-if="username != ''">
-                        <n-dropdown trigger = "hover" :options="userOptions" @select="handleSelect">
-                            <div class="guide_button">{{username}}</div>
-                        </n-dropdown>
-                    </div>
-                    <!-- 若当前已登录，则显示登录的用户名并布置下拉菜单 -->
-                    <div v-else>
-                        <n-button @click="login_register('login')" :bordered="false">
-                            登录
-                        </n-button>
-                        <n-button @click="login_register('register')" :bordered="false">
-                            注册
-                        </n-button>
-                    </div>
-                    <!-- 若当前未登录，则布置登录按钮 -->
-                </div>
-            </th>
-            <!-- 布局下拉菜单，显示用户选项 -->
-            <!-- 支持切换账号和退出登录 -->
-            </tr>
+    <n-layout position="absolute">
+        <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px; position: fixed">
+            <Navigation/>
         </n-layout-header>
-        <n-layout position="absolute" style="top: 51px;bottom: 0px;">
+        <n-layout-content ref="contentRef" position="absolute" style="top: 74px;">
             <router-view></router-view>
-        </n-layout>
+        </n-layout-content>
     </n-layout>
     </body>
 </template>
 
 <script lang="ts">
+import Navigation from "../components/NavigationBar.vue"
 import themeOverrides from "../components/MenuTheme"
 import { h,defineComponent, Ref, ref } from 'vue'
 import {decodeToken} from "@/main"
@@ -66,11 +28,7 @@ import {RouterLink,useRouter,} from 'vue-router'
 import {  
     NLayout,
     NLayoutHeader, 
-    NButton, 
-    NDivider,
-    NDropdown,
-    NMenu,
-    NGradientText,
+    NLayoutContent,
     useDialog
     } from 'naive-ui'
 import API from "@/store/axiosInstance"
@@ -80,11 +38,8 @@ export default defineComponent({
     components: {
         NLayout,
         NLayoutHeader,
-        NButton,
-        NMenu,
-        NDivider,
-        NDropdown,
-        NGradientText,
+        Navigation,
+        NLayoutContent,
     },
     created(){
         let path = this.$route.path
@@ -178,7 +133,6 @@ export default defineComponent({
                                 console.log(error)
                         })
                         window.localStorage.removeItem('token')
-                        sessionStorage.removeItem('username')
                         username.value = ""
                         router.push("/")
                     },
