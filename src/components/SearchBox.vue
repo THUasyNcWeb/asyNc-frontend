@@ -36,6 +36,6 @@ const props = defineProps({
 const text = ref(props.text ?? '');
 
 function search() {
-  router.push(`search?q=${text.value}`);
+  router.push(`/search?q=${text.value}`);
 }
 </script>
