@@ -7,11 +7,11 @@
  -->
 
 <template>
-    <n-layout style="min-height: 100%;" >
+    <n-layout >
         <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px;">
             <Navigation/>
         </n-layout-header>
-        <n-layout-content >
+        <n-layout-content style="min-height:83.3vh;">
             <router-view></router-view>
         </n-layout-content>
         <n-layout-footer
