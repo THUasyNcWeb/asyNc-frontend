@@ -3,13 +3,17 @@
  * @Author: 王博文
  * @Date: 2022-10-24 00:36
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-25 10:31
+ * @LastEditTime: 2022-11-01 11:46
  */
 import Mock from 'better-mock';
 
+import config from '../../config/config.json'
+
 Mock.setup({ timeout: '200-400' });
 
-Mock.mock(/search/, 'post', rqst => {
+const URL = `${config.url}:${config.port}`;
+
+Mock.mock(`${URL}/search`, 'post', rqst => {
   const body = JSON.parse(rqst.body);
   const word = body.query;
   const page = body.page;
@@ -116,6 +120,28 @@ Mock.mock(/search/, 'post', rqst => {
   }
 });
 
+Mock.mock(`${URL}/search/suggest`, 'post', rqst => {
+  const body = JSON.parse(rqst.body);
+  const query = body.query;
+  const suggestions = [
+    `${query}建议1`,
+    `${query}建议2`,
+    `${query}建议3`,
+  ];
+  if (new Date().getMilliseconds() % 2 == 0) {
+    suggestions.push(`${query}建议4`);
+  };
+  if (new Date().getMilliseconds() % 5 == 0) {
+    suggestions.push(`${query}建议5`);
+  };
+  return {
+    code: 0,
+    message: 'SUCCESS',
+    data: {
+      suggestions
+    }
+  };
+});
 
 Mock.mock(/all_news/, 'get', _ => {
   const data = [];
