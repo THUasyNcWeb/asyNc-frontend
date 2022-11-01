@@ -144,7 +144,7 @@ Mock.mock(/all_news/, 'get', resq => {
           pub_time:"2022-11-02"
         },
         {
-            title: '搜到了好东西',
+            title: '你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。',
             picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
             url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
             media: "mihomo",
@@ -155,8 +155,8 @@ Mock.mock(/all_news/, 'get', resq => {
     {
       category:"清华",
       news:[{
-        title: '非常好的新闻',
-        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+        picture_url: '',
         url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
         media: "mihomo",
         pub_time:"1926-08-17",

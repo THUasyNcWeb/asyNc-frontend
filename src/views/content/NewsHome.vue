@@ -17,13 +17,12 @@ import {
 } from 'naive-ui'
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
-const state = reactive({all_news: new Array()})
+const state = reactive({all_news: new Array(),window_width:document.body.clientWidth * 0.4})
 API({
     headers:{"Authorization": window.localStorage.getItem("token")},
     url:'all_news/',
     method:'get',
 }).then((res)=>{
-    // console.log(res);
     state.all_news = res.data.data
     console.log(res)
     console.log(state.all_news)
@@ -31,13 +30,14 @@ API({
     console.log(error);
 }) ;
 
+
 </script>
   
 <template>
     <body>
-        <n-tabs type="line" animated  :tabs-padding=600 pane-style="margin-left:20%;"  size="large" default-value="首页">
+        <n-tabs type="line" animated  :tabs-padding=state.window_width pane-style="margin-left:20%;"  size="large" default-value="原神">
             <n-tab-pane v-for="item in state.all_news" :key="item" :name=item.category :tab=item.category>
-                <NewsCategory :news="item.news"></NewsCategory>
+                <NewsCategory :news="item.news"/>
             </n-tab-pane>
         </n-tabs>
     </body>
