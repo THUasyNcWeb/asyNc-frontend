@@ -3,16 +3,12 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-01 12:49
+ * @LastEditTime: 2022-11-01 13:07
 -->
 
 <template>
   <n-auto-complete v-model:value="text" placeholder="搜索" size="large" clearable
-    :options="options" @keyup.enter="search" @update:value="update">
-    <!-- For some margin -->
-    <template #prefix>
-      <div/>
-    </template>
+    :options="options" @keyup.enter="search" @select="select" @update:value="update">
     <template #suffix>
       <n-button @click="search" large circle quaternary type="primary">
         <n-icon size="large" :component="Search"/>
@@ -78,6 +74,12 @@ function update() {
       });
     });
   });
+}
+
+// Handle select event, update query keyword and perform search
+function select(keyword: string) {
+  text.value = keyword;
+  search();
 }
 
 function search() {
