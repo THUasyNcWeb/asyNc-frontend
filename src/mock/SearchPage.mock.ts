@@ -12,6 +12,8 @@ Mock.setup({ timeout: '200-400' });
 Mock.mock(/search/, 'post', rqst => {
   const body = JSON.parse(rqst.body);
   const word = body.query;
+  console.log("测试一下请求")
+  console.log(rqst.url)
   const page = body.page;
   const news = [];
   if (word == '敏感词') {
@@ -119,11 +121,17 @@ Mock.mock(/search/, 'post', rqst => {
 
 Mock.mock(/all_news/, 'get', resq => {
   
-  const data = [];
-  data.push(
-    {
-      category:"首页",
-      news:[
+  let data = [];
+  const url = resq.url
+  let params = ''
+  if (url.indexOf("?") != -1) {    //判断是否有参数
+    const str = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+    const strs = str.split("=");   //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+    params = strs[1];          //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
+  }
+  if(params == 'home') {
+    console.log("首页")
+    data = [
       {
         title: "首页新闻应该有首页的样子",
         picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
@@ -132,76 +140,43 @@ Mock.mock(/all_news/, 'get', resq => {
         pub_time:"1926-08-17",
       },
       ]
-    },
-    {
-      category:"原神",
-      news:[
-        {
-          title: '3.2的纳西妲我必定拿下',
+  }
+  else if (params == 'genshin'){
+    console.log("原神")
+    data = [
+      {
+        title: '3.2的纳西妲我必定拿下',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media:"mihoyo",
+        pub_time:"2022-11-02"
+      },
+      {
+          title: '你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。',
           picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
           url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-          media:"mihoyo",
-          pub_time:"2022-11-02"
-        },
-        {
-            title: '你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。',
-            picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-            url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-            media: "mihomo",
-            pub_time:"1926-08-17",
-        }
-      ]
+          media: "mihomo",
+          pub_time:"1926-08-17",
+      }
+    ]
+  }
+  else if(params == 'tsinghua') {
+    data = [{
+      title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
     {
-      category:"清华",
-      news:[{
-        title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
-        picture_url: '',
-        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-        media: "mihomo",
-        pub_time:"1926-08-17",
-      },
-      {
-        title: '非常好的带图新闻',
-        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-        media: "mihomo",
-        pub_time:"1926-08-17",
-      },
-      ]
+      title: '非常好的带图新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
-    {
-      category:"家乡",
-      news:[{
-        title: '汕头出现疫情，我被偷家了',
-        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-        media: "mihomo",
-        pub_time:"1926-08-17",
-      },
-      {
-        title: '汕头出现疫情，我被偷家了',
-        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-        media: "mihomo",
-        pub_time:"1926-08-17",
-      },
-      ]
-    },
-    
-    {
-      category:"科技",
-      news:[
-      {
-        title: "刘铠铭的数据库到底能不能稳定运行一天",
-        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-        media: "mihomo",
-        pub_time:"1926-08-17",
-      },
-      ]
-    },
-  );
+    ]
+  }
   return {
     data
   }

@@ -46,10 +46,13 @@
                     :src="item.picture_url" preview-disabled
                     style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"/>      
               </n-space>
-              
             </n-list-item>
           </n-list>
+          <n-text>
+            已经到底啦
+          </n-text>
         </template>
+
     </n-space>
 </template>
 
