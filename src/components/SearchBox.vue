@@ -3,12 +3,12 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 00:25
+ * @LastEditTime: 2022-11-01 12:49
 -->
 
 <template>
-  <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
-    @keyup.enter="search">
+  <n-auto-complete v-model:value="text" placeholder="搜索" size="large" clearable
+    :options="options" @keyup.enter="search" @update:value="update">
     <!-- For some margin -->
     <template #prefix>
       <div/>
@@ -18,14 +18,17 @@
         <n-icon size="large" :component="Search"/>
       </n-button>
     </template>
-  </n-input>
+  </n-auto-complete>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
-import { NButton, NIcon, NInput } from 'naive-ui';
+import { defineProps, reactive, ref } from 'vue';
+import { NAutoComplete, NButton, NIcon } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+import API from '@/store/axiosInstance';
+
+import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
 const router = useRouter();
 
@@ -39,6 +42,43 @@ const text = ref(props.text ?? '');
 onBeforeRouteUpdate((to) => {
   text.value = to.query.q as string;
 });
+
+// Search suggestions
+const options: AutoCompleteOptions = reactive([]);
+let timestamp = 0;
+
+// Fetch search suggestions
+function update() {
+  // Use timestamp to avoid jam
+  const current_timestamp = ++timestamp;
+
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'search/suggest',
+    method: 'post',
+    data: {
+      query: text.value,
+    },
+  }).then(response => {
+    // Expired
+    if (current_timestamp < timestamp) {
+      return;
+    }
+
+    // Clear current suggestions
+    options.length = 0;
+
+    const suggestions = response.data.data.suggestions as string[];
+    suggestions.forEach(value => {
+      options.push({
+        label: value,
+        value,
+      });
+    });
+  });
+}
 
 function search() {
   // Change current route slightly

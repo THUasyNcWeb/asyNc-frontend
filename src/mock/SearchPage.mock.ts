@@ -130,10 +130,10 @@ Mock.mock(`${URL}/search/suggest`, 'post', rqst => {
   ];
   if (new Date().getMilliseconds() % 2 == 0) {
     suggestions.push(`${query}建议4`);
-  };
+  }
   if (new Date().getMilliseconds() % 5 == 0) {
     suggestions.push(`${query}建议5`);
-  };
+  }
   return {
     code: 0,
     message: 'SUCCESS',
