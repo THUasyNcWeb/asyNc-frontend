@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 20:36
+ * @LastEditTime: 2022-11-02 22:52
 -->
 
 <template>
@@ -149,6 +149,9 @@ function update() {
   // Use timestamp to avoid jam
   const current_timestamp = ++timestamp;
 
+  // Clear current suggestions
+  suggestions.length = 0;
+
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),
@@ -165,9 +168,6 @@ function update() {
     }
 
     const suggestions_s = response.data.data.suggestions as string[];
-
-    // Clear current suggestions
-    suggestions.length = 0;
 
     suggestions_s.forEach(value => {
       suggestions.push({
@@ -189,5 +189,9 @@ function search() {
   // to force update the router view
   router.currentRoute.value.hash = '0';
   router.push(`/search?q=${text.value}`);
+
+  // Update suggestion timestamp
+  // to stop receiving suggestion
+  timestamp++;
 }
 </script>
