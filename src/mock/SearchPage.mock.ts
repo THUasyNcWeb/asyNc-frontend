@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-24 00:36
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-01 11:46
+ * @LastEditTime: 2022-11-02 18:52
  */
 import Mock from 'better-mock';
 
@@ -15,10 +15,9 @@ const URL = `${config.url}:${config.port}`;
 
 Mock.mock(`${URL}/search`, 'post', rqst => {
   const body = JSON.parse(rqst.body);
-  const word = body.query;
-  const page = body.page;
+  const { query, page, include, exclude } = body;
   const news = [];
-  if (word == '敏感词') {
+  if (query == '敏感词') {
     return {
       code: 0,
       message: 'SUCCESS',
@@ -28,17 +27,39 @@ Mock.mock(`${URL}/search`, 'post', rqst => {
       }
     }
   }
-  if (word == '危险言论') {
+  if (query == '危险言论') {
     return;
   }
-  if (word) {
+  if (query) {
     news.push({
       title: `搜到了好东西：第 ${page} 页`,
       media: '见得风就是雨',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       pub_time: new Date().toJSON(),
-      content: `你说的对，但是「${word}」是由用户自主输入的一款全新搜索词。搜索发生在一个被称作「Git」的版本控制系统，在这里被「甲方」选中的小组将被授予「需求」，引导 DDL 之力。你将扮演一位名为「乙方」的神秘角色，在自由的开发中邂逅性格各异、能力独特的组员们，和他们一起击败「大作业」——同时发掘「软件开发」的真相。`,
+      content: `你说的对，但是「${query}」是由用户自主输入的一款全新搜索词。搜索发生在一个被称作「Git」的版本控制系统，在这里被「甲方」选中的小组将被授予「需求」，引导 DDL 之力。你将扮演一位名为「乙方」的神秘角色，在自由的开发中邂逅性格各异、能力独特的组员们，和他们一起击败「大作业」——同时发掘「软件开发」的真相。`,
       title_keywords: [[0, 6]],
+      keywords: [],
+    })
+  }
+  if (include.length) {
+    news.push({
+      title: `➕ Inclusion Keywords Detected`,
+      media: 'Mock',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      pub_time: new Date().toJSON(),
+      content: include.join(),
+      title_keywords: [[0, 9]],
+      keywords: [],
+    })
+  }
+  if (exclude.length) {
+    news.push({
+      title: `➖ Exclusion Keywords Detected`,
+      media: 'Mock',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      pub_time: new Date().toJSON(),
+      content: exclude.join(),
+      title_keywords: [[0, 9]],
       keywords: [],
     })
   }
