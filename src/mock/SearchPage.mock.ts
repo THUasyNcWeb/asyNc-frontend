@@ -48,7 +48,7 @@ Mock.mock(`${URL}/search`, 'post', rqst => {
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       pub_time: new Date().toJSON(),
       content: include.join(),
-      title_keywords: [[0, 9]],
+      title_keywords: [[1, 11]],
       keywords: [],
     })
   }
@@ -59,7 +59,7 @@ Mock.mock(`${URL}/search`, 'post', rqst => {
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       pub_time: new Date().toJSON(),
       content: exclude.join(),
-      title_keywords: [[0, 9]],
+      title_keywords: [[1, 11]],
       keywords: [],
     })
   }

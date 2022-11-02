@@ -45,6 +45,7 @@ import API from '@/store/axiosInstance';
 import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
+import { Tag } from '../MainSurface.vue';
 
 const state = reactive({
   // Query parameters
@@ -63,6 +64,11 @@ const state = reactive({
 // Reference to the layout content, for scrolling
 const contentRef: any = inject('contentRef');
 
+// Inclusion/exclusion tags
+const tags: Tag[] = inject('inclusionExclusionTags');
+
+console.log(tags);
+
 // Refresh when router changed
 // router.beforeEach(to => init(to));
 onBeforeRouteUpdate(to => init(to));
@@ -72,7 +78,6 @@ init(router.currentRoute.value);
 
 // Message box
 const message = useMessage();
-
 
 function error() {
   message.error('搜索时出现错误😢');
@@ -109,6 +114,12 @@ function init(to: RouteLocationNormalized) {
     data: {
       query: state.word,
       page: state.page,
+      include: tags
+        .filter(value => value.type === 'include')
+        .map(tag => tag.value),
+      exclude: tags
+        .filter(value => value.type === 'exclude')
+        .map(tag => tag.value),
     },
   }).then(response => {
     state.loading = false;

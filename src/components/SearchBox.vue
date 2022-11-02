@@ -31,8 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, h, nextTick, reactive, Ref, ref, watch } from 'vue';
-import { NAutoComplete, NButton, NDropdown, NDynamicTags, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { computed, defineProps, h, inject, nextTick, reactive, Ref, ref, watch } from 'vue';
+import { NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import AddCircle from '@vicons/ionicons5/AddCircleOutline';
@@ -41,14 +41,9 @@ import API from '@/store/axiosInstance';
 
 import { AutoCompleteInst, AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
-type TagType = 'include' | 'exclude' | null;
+import { Tag, TagType } from '@/views/MainSurface.vue';
 
-class Tag {
-  type: TagType;
-  value: string;
-}
-
-const tags: Tag[] = reactive([]);
+const tags: Tag[] = inject('inclusionExclusionTags');
 
 const show = ref(false);
 
