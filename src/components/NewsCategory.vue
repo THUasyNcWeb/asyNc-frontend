@@ -48,9 +48,6 @@
               </n-space>
             </n-list-item>
           </n-list>
-          <n-text>
-            已经到底啦
-          </n-text>
         </template>
 
     </n-space>

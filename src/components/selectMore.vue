@@ -7,14 +7,14 @@
                         热门导航
                     </n-text>
                 </n-h2>
-                <n-space>
+                <n-space :size=30>
                     <n-button size="large" type="info" ghost @click="jump(category)" v-for="category in state.mainCategory" :key ="category.label"> 
                         <n-space>
                             <n-icon>
                                 <StorefrontOutline v-if="category.label == '首页'"/>
                                 <BicycleOutline v-else-if="category.label == '体育'"/>
                                 <FastFoodOutline v-else-if="category.label == '娱乐'"/>
-                                <EarOutline v-else-if="category.label == '政治'"/>
+                                <EarthOutline v-else-if="category.label == '政治'"/>
                                 <BulbOutline v-else-if="category.label=='科技'"/>
                             </n-icon>
                             {{category.label}}
@@ -28,7 +28,7 @@
                         更多导航
                     </n-text>
                 </n-h2>
-                <n-space >
+                <n-space :size=30>
                     <n-button size="large" type="success" ghost @click="jump(category)" v-for="category in state.moreCategory" :key ="category.label"> 
                         <n-space>
                             <n-icon>
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import {NCard, NSpace, NH2 ,NText, NButton,NIcon,} from 'naive-ui'
 import { defineProps,reactive,defineEmits } from 'vue';
-import { StorefrontOutline,CarSportOutline,GameControllerOutline, EarOutline, BulbOutline, PeopleCircleOutline, StatsChartOutline, BicycleOutline, DiamondOutline, HeartOutline, LibraryOutline, FastFoodOutline, SchoolOutline } from '@vicons/ionicons5';
+import { StorefrontOutline,CarSportOutline,GameControllerOutline, BulbOutline, PeopleCircleOutline, StatsChartOutline, BicycleOutline, DiamondOutline, HeartOutline, LibraryOutline, FastFoodOutline, SchoolOutline, EarthOutline } from '@vicons/ionicons5';
 import API from "../store/axiosInstance"
 export interface Category {
     key: string,
