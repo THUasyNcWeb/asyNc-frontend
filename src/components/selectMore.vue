@@ -76,7 +76,7 @@ function jump(category: Category){
     display: flex; 
     border-radius:15px;
     margin: auto; 
-    margin-left: 50%;
+    /* margin-left: 50%; */
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     background-color: rgba(255, 255, 255, 0.8);

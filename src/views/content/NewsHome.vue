@@ -16,7 +16,6 @@ import selectMore from '@/components/selectMore.vue';
 import { 
     NTabs,
     NTabPane,
-    NSpace,
 } from 'naive-ui'
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -109,15 +108,15 @@ function selectNews(news, category:string, label:string){
         <n-tabs :value="state.now_category" 
         @update:value="state.now_category=$event;get_news(state.now_category)" 
         type="line" animated :tabs-padding=state.window_width 
-        pane-style="margin-left:20%;"
+        pane-style="margin-left:20%;margin-right:20%"
         size="large" default-value="home">
             <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=main_news(item.label)>
                 <NewsCategory :news="state.all_news"/>
             </n-tab-pane>
             <n-tab-pane :name="state.more_key" :tab=more_news>
-                <n-space v-if="state.more_label=='更多'" style="max-width:70%">
+                <div v-if="state.more_label=='更多'" style="width:60%">
                     <selectMore :mainCategory="state.all_category" @updateCategory="selectNews"/>
-                </n-space>
+                </div>
                 <NewsCategory v-else :news="state.all_news"/>
             </n-tab-pane>
          </n-tabs>
