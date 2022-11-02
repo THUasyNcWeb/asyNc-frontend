@@ -25,9 +25,13 @@ import {
 const state = reactive({all_news: new Array(),
     window_width:window.innerWidth * 0.35, 
     all_category:new Array(), 
-    now_category:"home", 
-    more_content:'更多'})
-// let router = useRouter()
+    // 所有的分类
+    now_category:"home",
+    // 当前分类的key 
+    more_label:'更多',
+    more_key:'more',
+    // 更多栏的显示标签与对应的键值
+})
 
 // change the offset dynamically
 window.onresize = () => {
@@ -44,8 +48,6 @@ state.all_category.push(
 get_news("home")
 
 function get_news(category:string) {
-    console.log("参数列表")
-    console.log(category)
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
         url:'all_news',
@@ -64,15 +66,27 @@ function get_news(category:string) {
 
 }
 
+function main_news(content:string){
+    return h('div', {
+        onClick:() => {
+            state.more_label = '更多'
+            state.more_key = 'more'
+        },
+        innerHTML: content
+    })
+    // 点击其他栏目时，自动恢复回“更多”的字样
+}
+
 function more_news(){
     return h(moreTooltip, {
-        more_content:state.more_content,
+        more_content:state.more_label,
     })
 }
 
 function selectNews(news, category:string, label:string){
     state.all_news = news
     var whether_main:boolean = false
+    // 检查是否点击了主栏目还是扩展栏目
     for(var x of state.all_category) {
         if(category == x.key) {
             whether_main = true
@@ -80,9 +94,12 @@ function selectNews(news, category:string, label:string){
         }
     }
     if(whether_main == false) {
-        state.more_content = label
+        // 若点击了扩展栏目，则修改更多栏目的显示为该扩展栏目的类别
+        state.more_label = label
+        state.more_key = category
     }
-    state.now_category = label
+    state.now_category = category
+    // 更新当前的类别
 }
 
 </script>
@@ -94,11 +111,11 @@ function selectNews(news, category:string, label:string){
         type="line" animated :tabs-padding=state.window_width 
         pane-style="margin-left:20%;"
         size="large" default-value="home">
-            <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=item.label>
+            <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=main_news(item.label)>
                 <NewsCategory :news="state.all_news"/>
             </n-tab-pane>
-            <n-tab-pane :name="state.more_content" :tab=more_news>
-                <n-space v-if="state.more_content=='更多'" style="max-width:70%">
+            <n-tab-pane :name="state.more_key" :tab=more_news>
+                <n-space v-if="state.more_label=='更多'" style="max-width:70%">
                     <selectMore :mainCategory="state.all_category" @updateCategory="selectNews"/>
                 </n-space>
                 <NewsCategory v-else :news="state.all_news"/>
