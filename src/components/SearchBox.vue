@@ -10,25 +10,17 @@
   <n-auto-complete v-model:value="text" placeholder="搜索" size="large" clearable :options="suggestions"
     @keyup.enter="search" @select="select" @update:value="update" @compositionend.prevent>
     <template #prefix>
-      <n-space>
-        <n-tag v-for="tag in tags" type="info" closable>
-          {{ tag }}
+      <n-space align="center">
+        <n-tag v-for="tag, index in tags" :key="index" :type="tagType(tag.type)" closable>
+          {{ tag.value }}
         </n-tag>
-        <n-input v-if="show" v-model:value="inputValue" size="small" :options="options"
-          placeholder="邮箱" :clear-after-select="true" @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
+        <!-- Use v-show here to avoid layout change -->
+        <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px" :options="options" :placeholder="tagPlaceholder"
+          @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
           @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="nohello" @input.stop @keyup.enter.stop="submit" />
       </n-space>
     </template>
     <template #suffix>
-      <!-- <n-button size="small" type="primary" dashed @click="hello">
-        <template #icon>
-          <n-icon>
-            <Add />
-          </n-icon>
-        </template>
-        添加
-      </n-button> -->
-
       <n-dropdown :options="options" @select="dropdownSelect">
         <n-button @click="search" large circle quaternary type="primary">
           <n-icon size="large" :component="Search" />
@@ -39,42 +31,67 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, h, nextTick, reactive, ref, watch } from 'vue';
+import { computed, defineProps, h, nextTick, reactive, Ref, ref, watch } from 'vue';
 import { NAutoComplete, NButton, NDropdown, NDynamicTags, NIcon, NInput, NSpace, NTag } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
-import Add from '@vicons/ionicons5/Add'
 import AddCircle from '@vicons/ionicons5/AddCircleOutline';
 import RemoveCircle from '@vicons/ionicons5/RemoveCircleOutline';
 import API from '@/store/axiosInstance';
 
 import { AutoCompleteInst, AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
-const tags = ref([]);
+type TagType = 'include' | 'exclude' | null;
+
+class Tag {
+  type: TagType;
+  value: string;
+}
+
+const tags: Tag[] = reactive([]);
 
 const show = ref(false);
 
+const wordType: Ref<TagType> = ref(null);
+
+const tagPlaceholder = computed(() => {
+  switch (wordType.value) {
+    case 'include':
+      return '包含';
+    case 'exclude':
+      return '排除';
+  }
+})
+
+const tagType = computed(() => (tagKey: TagType) => {
+  switch (tagKey) {
+    case 'include':
+      return 'info';
+    case 'exclude':
+      return 'error';
+  }
+})
+
 function no() {
   alert('Nop!!');
-}
-
-function hello() {
-  show.value = true;
 }
 
 function nohello() {
   show.value = false;
 }
 
-function dropdownSelect(key: string) {
-  // alert(key);
-  hello();
+function dropdownSelect(key: TagType) {
+  show.value = true;
+  wordType.value = key;
 }
 
 function submit() {
-  tags.value.push(inputValue.value);
+  tags.push({
+    type: wordType.value,
+    value: inputValue.value,
+  });
   show.value = false;
-  this.inputValue = false;
+  inputValue.value = '';
   // alert(e);
 }
 
