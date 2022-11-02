@@ -17,7 +17,9 @@
       <n-space>
         <n-image v-if="news.picture_url" width=160 height=120 object-fit="cover"
           :src="news.picture_url" preview-disabled
-          style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
+          style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"
+          :fallback-src="default_logo"
+          />
         <n-ellipsis :class="{ narrow: news.picture_url, wide: !news.picture_url }" id="content"
           line-clamp=3 :tooltip="false">
           <span v-for="span, id in contentSpans" :key="id" :class="{ em: span.em }">
@@ -87,6 +89,8 @@ function spans(text: string, keywords: [number, number][]): Span[] {
 
 const titleSpans = computed(() => spans(props.news.title, props.news.title_keywords));
 const contentSpans = computed(() => spans(props.news.content, props.news.keywords));
+const default_logo = require("../assets/asyNc.png")
+// 加载失败时的默认图片
 </script>
 
 <style scoped>
