@@ -136,8 +136,11 @@ const props = defineProps({
 const text = ref(props.text ?? '');
 
 // Update keywords when route updates, e.g. routing back and forth
-onBeforeRouteUpdate((to) => {
-  text.value = to.query.q as string;
+onBeforeRouteUpdate(to => {
+  // Update only when the query keyword is specified in the query parameters
+  if (to.query.q) {
+    text.value = to.query.q as string;
+  }
 });
 
 // Search suggestions
