@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 22:52
+ * @LastEditTime: 2022-11-02 23:08
 -->
 
 <template>
@@ -167,9 +167,20 @@ function update() {
       return;
     }
 
-    const suggestions_s = response.data.data.suggestions as string[];
+    const suggestion_list = response.data.data.suggestions as string[];
 
-    suggestions_s.forEach(value => {
+    // No suggestions
+    if (suggestion_list.length === 0) {
+      return;
+    }
+
+    // Insert default suggestion (the query keyword)
+    suggestions.push({
+      label: text.value,
+      value: text.value,
+    });
+
+    suggestion_list.forEach(value => {
       suggestions.push({
         label: value,
         value,
