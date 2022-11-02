@@ -123,6 +123,7 @@ Mock.mock(/all_news/, 'get', resq => {
   
   let data = [];
   const url = resq.url
+  console.log(url)
   let params = ''
   if (url.indexOf("?") != -1) {    //判断是否有参数
     const str = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
@@ -193,6 +194,23 @@ Mock.mock(/all_news/, 'get', resq => {
         pub_time:"1926-08-17",
       },
       ] 
+  }
+  else if (params == 'tech') {
+    data = [{
+      title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    {
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    ] 
   }
   return {
     data

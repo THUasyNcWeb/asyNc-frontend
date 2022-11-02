@@ -11,11 +11,11 @@ import { reactive,h } from 'vue';
 import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
-import moreTooltip from '@/components/moreTooltip.vue';
+import moreTooltip from '@/components/moreTooltip.vue'
+import selectMore from '@/components/selectMore.vue';
 import { 
     NTabs,
     NTabPane,
-    NButton,
     NSpace,
 } from 'naive-ui'
 // 按需引入naive-ui组件
@@ -23,22 +23,28 @@ import {
 
 
 const state = reactive({all_news: new Array(),
-    window_width:document.body.clientWidth * 0.4, 
+    window_width:window.innerWidth * 0.35, 
     all_category:new Array(), 
     now_category:"home", 
     more_content:'更多'})
 // let router = useRouter()
+
+// change the offset dynamically
+window.onresize = () => {
+    state.window_width = window.innerWidth * 0.35
+}
 
 state.all_category.push(
     {key:'home', label:'首页'},
     {key:'genshin', label:'原神'},
     {key:'tsinghua', label:'清华'},
     {key:'hometown', label:'家乡'},
-    {key:'tech', label:'科技'},
     {key:'life', label:'生活'},
 )
+get_news("home")
 
 function get_news(category:string) {
+    console.log("参数列表")
     console.log(category)
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
@@ -63,6 +69,22 @@ function more_news(){
         more_content:state.more_content,
     })
 }
+
+function selectNews(news, category:string, label:string){
+    state.all_news = news
+    var whether_main:boolean = false
+    for(var x of state.all_category) {
+        if(category == x.key) {
+            whether_main = true
+            break
+        }
+    }
+    if(whether_main == false) {
+        state.more_content = label
+    }
+    state.now_category = label
+}
+
 </script>
   
 <template>
@@ -75,17 +97,9 @@ function more_news(){
             <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=item.label>
                 <NewsCategory :news="state.all_news"/>
             </n-tab-pane>
-            <n-tab-pane name="更多" :tab=more_news>
+            <n-tab-pane :name="state.more_content" :tab=more_news>
                 <n-space v-if="state.more_content=='更多'" style="max-width:70%">
-                    <n-button>
-                        时尚
-                    </n-button>
-                    <n-button>
-                        政治
-                    </n-button>
-                    <n-button>
-                        体育
-                    </n-button>
+                    <selectMore :mainCategory="state.all_category" @updateCategory="selectNews"/>
                 </n-space>
                 <NewsCategory v-else :news="state.all_news"/>
             </n-tab-pane>
