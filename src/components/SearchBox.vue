@@ -3,27 +3,41 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 23:08
+ * @LastEditTime: 2022-11-03 00:52
 -->
 
 <template>
-  <n-auto-complete v-model:value="text" placeholder="搜索" size="large" clearable :options="suggestions"
-    @keyup.enter="search" @select="select" @update:value="update" @compositionend.prevent>
+  <n-auto-complete
+    clearable
+    size="large"
+    placeholder="搜索"
+    v-model:value="text"
+    :options="suggestions"
+    @keyup.enter="search"
+    @select="suggestionSelect"
+    @update:value="suggestionUpdate">
     <template #prefix>
-      <n-space align="center">
-        <n-tag v-for="tag, index in tags" :key="index" :type="tagType(tag.type)" closable @close="tagClose(index)">
+      <n-space>
+        <n-tag v-for="tag, index in tags" :key="index"
+          closable :type="tagType(tag.type)" @close="tagClose(index)">
           {{ tag.value }}
         </n-tag>
         <!-- Use v-show here to avoid layout change -->
-        <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px"
-          ref="tagInputRef" :options="options" :placeholder="tagPlaceholder"
-          @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
-          @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="tagInputBlur" @input.stop @keyup.enter.stop="submit" />
+        <n-input
+          ref="tagInputRef"
+          size="small"
+          style="width: 64px"
+          v-show="tagInputVisible"
+          v-model:value="tagInputValue"
+          :placeholder="tagInputPlaceholder"
+          :options="tagMenuOptions"
+          @blur="tagInputBlur"
+          @keyup.enter.stop="tagInputSubmit" />
       </n-space>
     </template>
     <template #suffix>
-      <n-dropdown :options="options" @select="dropdownSelect">
-        <n-button @click="search" large circle quaternary type="primary">
+      <n-dropdown :options="tagMenuOptions" @select="tagMenuSelect">
+        <n-button large circle quaternary type="primary" @click="search">
           <n-icon size="large" :component="Search" />
         </n-button>
       </n-dropdown>
@@ -32,34 +46,59 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, h, inject, nextTick, reactive, Ref, ref, watch } from 'vue';
-import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
-import { Search } from '@vicons/ionicons5/';
+import { computed, defineProps, h, inject, nextTick, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
-import AddCircle from '@vicons/ionicons5/AddCircleOutline';
-import RemoveCircle from '@vicons/ionicons5/RemoveCircleOutline';
-import API from '@/store/axiosInstance';
 
-import { AutoCompleteInst, AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
+import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
+
+import { Search, AddCircle, RemoveCircle } from '@vicons/ionicons5/';
 
 import { Tag, TagType } from '@/views/MainSurface.vue';
 
-const tags: Tag[] = inject('inclusionExclusionTags');
+import API from '@/store/axiosInstance';
 
-const show = ref(false);
+// Props & data
+const props = defineProps({
+  text: String,
+});
 
-const wordType: Ref<TagType> = ref(null);
+const text = ref(props.text ?? '');
 
+// Tag input
 const tagInputRef = ref<InputInst | null>(null);
+const tagInputVisible = ref(false);
+const tagInputType = ref<TagType | null>(null);
+const tagInputValue = ref('');
 
-const tagPlaceholder = computed(() => {
-  switch (wordType.value) {
+const tagInputPlaceholder = computed(() => {
+  switch (tagInputType.value) {
     case 'include':
       return '包含';
     case 'exclude':
       return '排除';
   }
-})
+  return '';
+});
+
+// Clear input value when tag input blurs
+function tagInputBlur() {
+  tagInputVisible.value = false;
+  tagInputValue.value = '';
+}
+
+// Append a new tag
+function tagInputSubmit() {
+  tags.push({
+    type: tagInputType.value,
+    value: tagInputValue.value,
+  });
+  tagInputVisible.value = false;
+  tagInputValue.value = '';
+}
+
+// Tags
+const tags: Tag[] = inject('inclusionExclusionTags');
 
 const tagType = computed(() => (tagKey: TagType) => {
   switch (tagKey) {
@@ -68,53 +107,15 @@ const tagType = computed(() => (tagKey: TagType) => {
     case 'exclude':
       return 'error';
   }
-})
+});
 
 // Close a tag
 function tagClose(index: number) {
   tags.splice(index, 1);
 }
 
-function no() {
-  alert('Nop!!');
-}
-
-function dropdownSelect(key: TagType) {
-  show.value = true;
-  // Delay focus to next tick to ensure its execution
-  nextTick(() => tagInputRef.value.focus());
-  wordType.value = key;
-}
-
-function tagInputBlur() {
-  show.value = false;
-  inputValue.value = '';
-}
-
-function submit() {
-  tags.push({
-    type: wordType.value,
-    value: inputValue.value,
-  });
-  show.value = false;
-  inputValue.value = '';
-  // alert(e);
-}
-
-function renderIcon(icon) {
-  return () => {
-    return h(NIcon, null, {
-      default: () => h(icon)
-    });
-  };
-}
-
-const autoCompleteInstRef = ref<AutoCompleteInst | null>(null)
-watch(autoCompleteInstRef, (value) => {
-  if (value) nextTick(() => value.focus())
-})
-const inputValue = ref('');
-const options = [
+// Tag menu
+const tagMenuOptions = [
   {
     label: '添加必含词',
     key: 'include',
@@ -127,30 +128,31 @@ const options = [
   },
 ]
 
-const router = useRouter();
+// Render function for icons
+function renderIcon(icon) {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon)
+    });
+  };
+}
 
-const props = defineProps({
-  text: String,
-});
-
-const text = ref(props.text ?? '');
-
-// Update keywords when route updates, e.g. routing back and forth
-onBeforeRouteUpdate(to => {
-  // Update only when the query keyword is specified in the query parameters
-  if (to.query.q) {
-    text.value = to.query.q as string;
-  }
-});
+// Activate the tag input
+function tagMenuSelect(key: TagType) {
+  tagInputVisible.value = true;
+  tagInputType.value = key;
+  // Delay focus to next tick to ensure its execution
+  nextTick(() => tagInputRef.value.focus());
+}
 
 // Search suggestions
 const suggestions: AutoCompleteOptions = reactive([]);
-let timestamp = 0;
+let suggestionTimestamp = 0;
 
 // Fetch search suggestions
-function update() {
+function suggestionUpdate() {
   // Use timestamp to avoid jam
-  const current_timestamp = ++timestamp;
+  const currentTimestamp = ++suggestionTimestamp;
 
   // Clear current suggestions
   suggestions.length = 0;
@@ -166,7 +168,7 @@ function update() {
     },
   }).then(response => {
     // Expired
-    if (current_timestamp < timestamp) {
+    if (currentTimestamp < suggestionTimestamp) {
       return;
     }
 
@@ -193,11 +195,23 @@ function update() {
 }
 
 // Handle select event, update query keyword and perform search
-function select(keyword: string) {
+function suggestionSelect(keyword: string) {
   text.value = keyword;
   search();
 }
 
+// Routing
+const router = useRouter();
+
+// Update keywords when route updates, e.g. routing back and forth
+onBeforeRouteUpdate(to => {
+  // Update only when the query keyword is specified in the query parameters
+  if (to.query.q) {
+    text.value = to.query.q as string;
+  }
+});
+
+// Perform search
 function search() {
   // Change current route slightly
   // to force update the router view
@@ -206,6 +220,6 @@ function search() {
 
   // Update suggestion timestamp
   // to stop receiving suggestion
-  timestamp++;
+  suggestionTimestamp++;
 }
 </script>
