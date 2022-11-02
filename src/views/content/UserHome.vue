@@ -32,7 +32,7 @@
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;">
-          <router-view :username="state.user.user_name"></router-view>
+          <router-view :user="state.user"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
