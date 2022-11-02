@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-03 00:52
+ * @LastEditTime: 2022-11-03 01:10
 -->
 
 <template>
@@ -23,6 +23,8 @@
           {{ tag.value }}
         </n-tag>
         <!-- Use v-show here to avoid layout change -->
+        <!-- Use composition*.stop here to stop Chinese input
+          from being captured by parent input box -->
         <n-input
           ref="tagInputRef"
           size="small"
@@ -31,6 +33,8 @@
           v-model:value="tagInputValue"
           :placeholder="tagInputPlaceholder"
           :options="tagMenuOptions"
+          @compositionstart.stop
+          @compositionend.stop
           @blur="tagInputBlur"
           @keyup.enter.stop="tagInputSubmit" />
       </n-space>
