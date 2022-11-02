@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { reactive,h } from 'vue';
-import '@/mock/SearchPage.mock'
+// import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
 import selectMore from '@/components/selectMore.vue';
@@ -76,7 +76,14 @@ function main_news(content:string){
 }
 
 function more_news(){
-    return h('div', state.more_label)   
+    return h('div', {
+        innerHTML: state.more_label,
+        onclick: () => {
+            if(state.more_label != '更多') {
+                state.more_label = '更多'
+            }
+        }
+    })   
 }
 
 function selectNews(news, category:string, label:string){
