@@ -12,7 +12,7 @@
                 用户名
             </th>
             <th style="width:80%">
-                {{username}}
+                {{props.username}}
                 <!-- 用户名为动态，等待后端请求 -->
             </th>
         </tr>
@@ -37,57 +37,28 @@
     </n-table>
 </template>
 
-<script lang="ts">
-import { reactive } from 'vue'
+<script setup lang="ts">
+import { reactive,defineProps } from 'vue'
 import {NTable,NTag} from 'naive-ui'
 import API from "../../store/axiosInstance"
-export default {
-    components: {
-        NTable,
-        NTag,
-    },
-	props: {
-		username: {
-			type: String,
-			default: () => ""
-		},
-	},
-    created(){
-        API({
-            headers:{"Authorization": window.localStorage.getItem("token")},
-            url:'user_info/',
-            method:'get',
-        }).then((res) => {
-            console.log(res)
-            this.tags = res.data.data.tags
-            this.sign = res.data.data.signature
-            console.log(this.sign)
-        }).catch((error) => {
-            console.log(error)
-        })
-    },
-    setup() {
+const props = defineProps({
+    username:String
+})
 
-        const state = reactive({tags:[], color_tags: ['#00FFFF','#ADFF2F','#F0E68C'], sign:""})
-        API({
-            headers:{"Authorization": window.localStorage.getItem("token")},
-            url:'user_info/',
-            method:'get',
-        }).then((res) => {
-            console.log(res)
-            state.tags = res.data.data.tags
-            state.sign = res.data.data.signature
-            console.log(state.sign)
-        }).catch((error) => {
-            console.log(error)
-        })
-        // 标签的颜色数组
-        return {
-            state
-            // 个性签名
-        }
-    }
-}
+const state = reactive({tags:[], color_tags: ['#00FFFF','#ADFF2F','#F0E68C'], sign:""})
+API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
+    url:'user_info/',
+    method:'get',
+}).then((res) => {
+    console.log(res)
+    state.tags = res.data.data.tags
+    state.sign = res.data.data.signature
+    console.log(state.sign)
+}).catch((error) => {
+    console.log(error)
+})
+// 获取用户信息 
 </script>
 
 <style>

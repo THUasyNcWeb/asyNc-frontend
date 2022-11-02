@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { reactive,h } from 'vue';
-import '@/mock/SearchPage.mock'
+// import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
 import selectMore from '@/components/selectMore.vue';
