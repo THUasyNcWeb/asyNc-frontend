@@ -18,7 +18,7 @@
         <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px"
           ref="tagInputRef" :options="options" :placeholder="tagPlaceholder"
           @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
-          @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="nohello" @input.stop @keyup.enter.stop="submit" />
+          @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="tagInputBlur" @input.stop @keyup.enter.stop="submit" />
       </n-space>
     </template>
     <template #suffix>
@@ -84,6 +84,11 @@ function dropdownSelect(key: TagType) {
   // Delay focus to next tick to ensure its execution
   nextTick(() => tagInputRef.value.focus());
   wordType.value = key;
+}
+
+function tagInputBlur() {
+  show.value = false;
+  inputValue.value = '';
 }
 
 function submit() {
