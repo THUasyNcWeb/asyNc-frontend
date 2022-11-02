@@ -8,21 +8,43 @@
                     </n-text>
                 </n-h2>
                 <n-space>
-                    <n-button @click="jump(category)" v-for="category in state.mainCategory" :key ="category.label"> 
-                        {{category.label}}
+                    <n-button size="large" type="info" ghost @click="jump(category)" v-for="category in state.mainCategory" :key ="category.label"> 
+                        <n-space>
+                            <n-icon>
+                                <StorefrontOutline v-if="category.label == '首页'"/>
+                                <BicycleOutline v-else-if="category.label == '体育'"/>
+                                <FastFoodOutline v-else-if="category.label == '娱乐'"/>
+                                <EarOutline v-else-if="category.label == '政治'"/>
+                                <BulbOutline v-else-if="category.label=='科技'"/>
+                            </n-icon>
+                            {{category.label}}
+                        </n-space>
                     </n-button>
                 </n-space>
             </n-space>
             <n-space vertical>
-                <n-h2 prefix="bar">
+                <n-h2 type="info" prefix="bar">
                     <n-text type="info">
                         更多导航
                     </n-text>
                 </n-h2>
-                <n-space>
-                    <n-button @click="jump(category)" v-for="category in state.moreCategory" :key ="category.label"> 
-                        {{category.label}}
+                <n-space >
+                    <n-button size="large" type="success" ghost @click="jump(category)" v-for="category in state.moreCategory" :key ="category.label"> 
+                        <n-space>
+                            <n-icon>
+                                <PeopleCircleOutline v-if="category.label=='社会'"/>
+                                <StatsChartOutline v-else-if="category.label == '金融'"/>
+                                <CarSportOutline v-else-if="category.label == '汽车'"/>
+                                <GameControllerOutline v-else-if="category.label == '游戏'"/>
+                                <DiamondOutline v-else-if="category.label == '时尚'"/>
+                                <HeartOutline v-else-if="category.label == '健康'"/>
+                                <SchoolOutline v-else-if="category.label == '教育'"/>
+                                <LibraryOutline v-else-if="category.label == '历史'"/>
+                            </n-icon>
+                            {{category.label}}
+                        </n-space>
                     </n-button>
+                    
                 </n-space>
             </n-space>
         </n-space>
@@ -30,8 +52,9 @@
 </template>
 
 <script setup lang="ts">
-import {NCard, NSpace, NH2 ,NText, NButton} from 'naive-ui'
+import {NCard, NSpace, NH2 ,NText, NButton,NIcon,} from 'naive-ui'
 import { defineProps,reactive,defineEmits } from 'vue';
+import { StorefrontOutline,CarSportOutline,GameControllerOutline, EarOutline, BulbOutline, PeopleCircleOutline, StatsChartOutline, BicycleOutline, DiamondOutline, HeartOutline, LibraryOutline, FastFoodOutline, SchoolOutline } from '@vicons/ionicons5';
 import API from "../store/axiosInstance"
 export interface Category {
     key: string,
@@ -47,9 +70,14 @@ for (var x of props.mainCategory) {
 }
 
 state.moreCategory.push(
-    {key:'tech', label:'科技'},
+    {key:'social', label:'社会'},
+    {key:'finance', label:'金融'},
+    {key:'auto', label:'汽车'},
+    {key:'game', label:'游戏'},
     {key:'fashion', label:'时尚'},
-    {key:'sport', label:'体育'},
+    {key:'health', label:'健康'},
+    {key:'edu', label:'教育'},
+    {key:'history', label:'历史'},
 )
 function jump(category: Category){
     console.log("请求后端给我点新闻")

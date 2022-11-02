@@ -11,7 +11,6 @@ import { reactive,h } from 'vue';
 import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
-import moreTooltip from '@/components/moreTooltip.vue'
 import selectMore from '@/components/selectMore.vue';
 import { 
     NTabs,
@@ -39,10 +38,10 @@ window.onresize = () => {
 
 state.all_category.push(
     {key:'home', label:'首页'},
-    {key:'genshin', label:'原神'},
-    {key:'tsinghua', label:'清华'},
-    {key:'hometown', label:'家乡'},
-    {key:'life', label:'生活'},
+    {key:'ent', label:'娱乐'},
+    {key:'sports', label:'体育'},
+    {key:'politics', label:'政治'},
+    {key:'tech', label:'科技'},
 )
 get_news("home")
 
@@ -77,9 +76,7 @@ function main_news(content:string){
 }
 
 function more_news(){
-    return h(moreTooltip, {
-        more_content:state.more_label,
-    })
+    return h('div', state.more_label)   
 }
 
 function selectNews(news, category:string, label:string){
