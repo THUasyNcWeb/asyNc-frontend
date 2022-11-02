@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 19:45
+ * @LastEditTime: 2022-11-02 20:36
 -->
 
 <template>
@@ -16,7 +16,7 @@
         </n-tag>
         <!-- Use v-show here to avoid layout change -->
         <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px"
-          :options="options" :placeholder="tagPlaceholder"
+          ref="tagInputRef" :options="options" :placeholder="tagPlaceholder"
           @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
           @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="nohello" @input.stop @keyup.enter.stop="submit" />
       </n-space>
@@ -50,6 +50,8 @@ const show = ref(false);
 
 const wordType: Ref<TagType> = ref(null);
 
+const tagInputRef = ref<InputInst | null>(null);
+
 const tagPlaceholder = computed(() => {
   switch (wordType.value) {
     case 'include':
@@ -77,12 +79,10 @@ function no() {
   alert('Nop!!');
 }
 
-function nohello() {
-  show.value = false;
-}
-
 function dropdownSelect(key: TagType) {
   show.value = true;
+  // Delay focus to next tick to ensure its execution
+  nextTick(() => tagInputRef.value.focus());
   wordType.value = key;
 }
 
