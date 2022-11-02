@@ -8,8 +8,8 @@
 
 <template>
     <n-layout position="absolute">
-        <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px;position:fixed;" >
-            <Navigation/>
+        <n-layout-header bordered embedded style="height: 74px; position:fixed;" >
+            <Navigation style="padding: 18px 96px;"/>
         </n-layout-header>
         <n-layout-content ref="contentRef" style="top: 74px;" position="absolute">
             <router-view></router-view>
