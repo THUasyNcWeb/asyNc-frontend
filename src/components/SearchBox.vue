@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 17:52
+ * @LastEditTime: 2022-11-02 19:45
 -->
 
 <template>
@@ -11,11 +11,12 @@
     @keyup.enter="search" @select="select" @update:value="update" @compositionend.prevent>
     <template #prefix>
       <n-space align="center">
-        <n-tag v-for="tag, index in tags" :key="index" :type="tagType(tag.type)" closable>
+        <n-tag v-for="tag, index in tags" :key="index" :type="tagType(tag.type)" closable @close="tagClose(index)">
           {{ tag.value }}
         </n-tag>
         <!-- Use v-show here to avoid layout change -->
-        <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px" :options="options" :placeholder="tagPlaceholder"
+        <n-input v-show="show" v-model:value="inputValue" size="small" style="width: 64px"
+          :options="options" :placeholder="tagPlaceholder"
           @load.stop @update.stop @compositionstart.stop @compositionend.stop.prevent="no" @compositionupdate.stop
           @keydown.space.stop @keyup.space.stop @update:value.stop @change.stop @keyup.stop @blur="nohello" @input.stop @keyup.enter.stop="submit" />
       </n-space>
@@ -32,7 +33,7 @@
 
 <script setup lang="ts">
 import { computed, defineProps, h, inject, nextTick, reactive, Ref, ref, watch } from 'vue';
-import { NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
 import { Search } from '@vicons/ionicons5/';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import AddCircle from '@vicons/ionicons5/AddCircleOutline';
@@ -66,6 +67,11 @@ const tagType = computed(() => (tagKey: TagType) => {
       return 'error';
   }
 })
+
+// Close a tag
+function tagClose(index: number) {
+  tags.splice(index, 1);
+}
 
 function no() {
   alert('Nop!!');
