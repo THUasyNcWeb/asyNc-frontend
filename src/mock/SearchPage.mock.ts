@@ -228,6 +228,38 @@ Mock.mock(/all_news/, 'get', resq => {
       pub_time:"1926-08-17",
     },
   ]}
+  else if (params == 'health') {
+    data = [{
+      title: '人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    {
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+  ]}
+  else if (params == 'game') {
+    data = [{
+      title: 'zyj十连三黄，80发3个五星，同学直呼狗托',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    {
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+  ]}
 
   return {
     data
