@@ -70,13 +70,16 @@ router.beforeEach((to, _, next) => {
   if (to.meta.title) {
     document.title = to.meta.title as string
   }
+  console.log(to.path)
   if (to.path.indexOf("/user") != 0) {
+    console.log(to.path)
     next()
   }
   else if (window.localStorage.getItem("token")) {
     const flag = decodeToken()
     if( typeof(flag) == "boolean" ) {
       alert("请先登录或者注册")
+      next("/login")
     }
     else if (typeof(flag) == "string") {
       next()
@@ -87,7 +90,7 @@ router.beforeEach((to, _, next) => {
   }
   else {
     alert("请先登录或者注册")
-    next("/")
+    next("/login")
   }
 })
 

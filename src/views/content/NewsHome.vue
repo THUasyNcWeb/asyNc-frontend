@@ -48,10 +48,10 @@ get_news("home")
 function get_news(category:string) {
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
-        url:'all_news',
+        url:'allnews',
         params:{
             category: category
-        },
+        },  
         method:'get',
         // 根据不同类别，把类别放在了对应的请求参数中
     }).then((res)=>{
@@ -128,4 +128,11 @@ function selectNews(news, category:string, label:string){
 </template>
   
 <style scoped>
+.pane_border{
+    position: absolute;
+    margin: auto;
+    display: flex; 
+    width: 80%;
+}
+
 </style>

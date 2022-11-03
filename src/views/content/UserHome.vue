@@ -42,9 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import {h,Component, reactive} from "vue"
+import {h,Component, reactive,defineEmits} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
-import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText  } from 'naive-ui'
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog  } from 'naive-ui'
 import {decodeToken} from "@/main"
 import API from "@/store/axiosInstance"
 import {
@@ -83,11 +83,13 @@ API({
 }).catch((error) => {
     console.log(error);
 });
-
+const emits = defineEmits(['reload']);
 const default_logo = require("@/assets/asyNc_avatar.png")
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
+const exitDialog = useDialog()
+
 const menuOptions = [
   {
     label: () =>
@@ -156,9 +158,32 @@ const menuOptions = [
         {
           innerHTML:'退出登录',
           onclick:() => {
-            alert("啊我重伤倒地")
-          }
+            exitDialog.warning({
+            title: '退出登录确认',
+            content: '你确定退出登录吗QWQ？',
+            positiveText: '确认',
+            negativeText: '取消',
+            onPositiveClick: () => {
+                API({
+                    headers:{"Authorization": window.localStorage.getItem("token")},
+                    // 携带token字段
+                    url:'logout/',
+                    method:'post'}).then((res) => {
+                        console.log(res)
+                        window.localStorage.removeItem('token')
+                        state.user = {} as UserInfo
+                        router.push("/")
+                        emits('reload')
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                })
+            },
+            onNegativeClick: () => {
+            }
+          })
         },
+      }
       ),
     key: 'logout',
     path: '/user/logout',

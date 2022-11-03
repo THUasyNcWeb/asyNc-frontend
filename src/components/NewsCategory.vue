@@ -43,11 +43,8 @@
                     </n-space>
                   </n-space>
                     <n-image  v-if="item.picture_url" width=180 height=140 object-fit="cover"
-                    :src="item.picture_url"
-                    preview-disabled
-                    style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
-                    :fallback-src="default_logo"
-                    />      
+                    :src="item.picture_url" preview-disabled
+                    style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"/>      
               </n-space>
             </n-list-item>
           </n-list>
@@ -77,8 +74,5 @@ const props = defineProps<{
 function favorites(){
   alert("我先占个位置，代表收藏了")
 }
-
-const default_logo = require("../assets/asyNc.png")
-// 设置图片加载失败时的默认图片
 
 </script>
