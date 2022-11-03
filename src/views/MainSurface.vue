@@ -3,16 +3,16 @@
  * @Author: 郑友捷
  * @Date: 2022-10-18 19:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-02 19:30
+ * @LastEditTime: 2022-11-03 13:49
  -->
 
 <template>
-    <n-layout position="absolute">
-        <n-layout-header bordered embedded style="height: 74px; padding: 18px 96px;position:fixed;" >
-            <Navigation/>
+    <n-layout position="absolute" :key="state.random_key">
+        <n-layout-header bordered embedded style="height: 74px; position:fixed;"  >
+            <Navigation  style="padding: 18px 96px;"/>
         </n-layout-header>
         <n-layout-content ref="contentRef" style="top: 74px;" position="absolute">
-            <router-view></router-view>
+            <router-view @reload="reload"></router-view>
         </n-layout-content>
     </n-layout>
 </template>
@@ -33,6 +33,12 @@ export type TagType = 'include' | 'exclude' | null;
 export interface Tag {
   type: TagType;
   value: string;
+}
+
+const state = reactive({random_key:Math.random()})
+function reload(){
+    state.random_key  = Math.random()
+    // 重新加载导航栏
 }
 
 // Provide content ref for scrolling in search page
