@@ -132,7 +132,7 @@ export default defineComponent({
             * @return {void}
             */
             API({
-                url: 'login/',
+                url: 'login',
                 method:'post',
                 data:{
                     "user_name": username.value,
@@ -170,7 +170,7 @@ export default defineComponent({
            console.log(username.value)
            console.log(password.value)
             API({
-                url: 'register/',
+                url: 'register',
                 method:'post',
                 data:{
                     "user_name": username.value,

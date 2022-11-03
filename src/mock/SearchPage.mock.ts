@@ -119,7 +119,7 @@ Mock.mock(/search/, 'post', rqst => {
 });
 
 
-Mock.mock(/all_news/, 'get', resq => {
+Mock.mock(/allnews/, 'get', resq => {
   
   let data = [];
   const url = resq.url

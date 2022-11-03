@@ -84,7 +84,7 @@ function jump(category: Category){
     console.log(category.key)
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
-        url:'all_news',
+        url:'allnews',
         params:{
             category: category.key
         },

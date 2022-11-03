@@ -63,6 +63,7 @@ const state = reactive({
   username: decodeToken() || '',
 })
 
+
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, {
     default: () => h(icon),
@@ -101,7 +102,7 @@ function handleSelect(key: 'profile' | 'logout') {
             API({
                 headers:{"Authorization": window.localStorage.getItem("token")},
                 // 携带token字段
-                url:'logout/',
+                url:'logout',
                 method:'post'}).then((res) => {
                     console.log(res)
                     window.localStorage.removeItem('token')

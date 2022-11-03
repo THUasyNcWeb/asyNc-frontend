@@ -5,7 +5,7 @@
           <n-list hoverable clickable>
             <n-list-item v-for="item,id in props.news" :key="id">
               <n-space justify="space-between" stlye="display:inline-block">
-                  <n-space vertical justify="space-between" :style="{'max-width': item.picture_url ? '650px' : '900px','min-height':'140px' }">
+                  <n-space vertical justify="space-between" :style="{'max-width': item.picture_url ? '550px' : '900px','min-height':'140px' }">
                     <n-h2 stlye="width:200%" prefix="bar">
                       <n-a :href="item.url" style="text-decoration: none;">
                         <n-ellipsis :line-clamp="2" :tooltip=false>
@@ -39,12 +39,14 @@
                         <n-text @click="favorites" size="20"> 
                           收藏
                         </n-text> 
-                      </n-space>             
+                      </n-space>     
                     </n-space>
                   </n-space>
-                    <n-image  v-if="item.picture_url" width=180 height=140 object-fit="cover"
-                    :src="item.picture_url" preview-disabled
-                    style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"/>      
+                  <n-a :href="item.url" style="text-decoration: none;">
+                      <n-image  v-if="item.picture_url" width=160 height=140 object-fit="cover"
+                      :src="item.picture_url" preview-disabled
+                      style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"/>                  
+                    </n-a>
               </n-space>
             </n-list-item>
           </n-list>
