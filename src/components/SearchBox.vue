@@ -3,39 +3,227 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-24 00:25
+ * @LastEditTime: 2022-11-03 01:10
 -->
 
 <template>
-  <n-input v-model:value="text" placeholder="搜索" size="large" round clearable
-    @keyup.enter="search">
-    <!-- For some margin -->
+  <n-auto-complete
+    clearable
+    size="large"
+    placeholder="搜索"
+    v-model:value="text"
+    :options="suggestions"
+    @keyup.enter="search"
+    @select="suggestionSelect"
+    @update:value="suggestionUpdate">
     <template #prefix>
-      <div/>
+      <n-space>
+        <n-tag v-for="tag, index in tags" :key="index"
+          closable :type="tagType(tag.type)" @close="tagClose(index)">
+          {{ tag.value }}
+        </n-tag>
+        <!-- Use v-show here to avoid layout change -->
+        <!-- Use composition*.stop here to stop Chinese input
+          from being captured by parent input box -->
+        <n-input
+          ref="tagInputRef"
+          size="small"
+          style="width: 64px"
+          v-show="tagInputVisible"
+          v-model:value="tagInputValue"
+          :placeholder="tagInputPlaceholder"
+          :options="tagMenuOptions"
+          @compositionstart.stop
+          @compositionend.stop
+          @blur="tagInputBlur"
+          @keyup.enter.stop="tagInputSubmit" />
+      </n-space>
     </template>
     <template #suffix>
-      <n-button @click="search" large circle quaternary type="primary">
-        <n-icon size="large" :component="Search"/>
-      </n-button>
+      <n-dropdown :options="tagMenuOptions" @select="tagMenuSelect">
+        <n-button large circle quaternary type="primary" @click="search">
+          <n-icon size="large" :component="Search" />
+        </n-button>
+      </n-dropdown>
     </template>
-  </n-input>
+  </n-auto-complete>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
-import { NButton, NIcon, NInput } from 'naive-ui';
-import { Search } from '@vicons/ionicons5/';
-import { useRouter } from 'vue-router';
+import { computed, defineProps, h, inject, nextTick, reactive, ref } from 'vue';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-const router = useRouter();
+import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
+import { Search, AddCircle, RemoveCircle } from '@vicons/ionicons5/';
+
+import { Tag, TagType } from '@/views/MainSurface.vue';
+
+import API from '@/store/axiosInstance';
+
+// Props & data
 const props = defineProps({
   text: String,
 });
 
 const text = ref(props.text ?? '');
 
+// Tag input
+const tagInputRef = ref<InputInst | null>(null);
+const tagInputVisible = ref(false);
+const tagInputType = ref<TagType | null>(null);
+const tagInputValue = ref('');
+
+const tagInputPlaceholder = computed(() => {
+  switch (tagInputType.value) {
+    case 'include':
+      return '包含';
+    case 'exclude':
+      return '排除';
+  }
+  return '';
+});
+
+// Clear input value when tag input blurs
+function tagInputBlur() {
+  tagInputVisible.value = false;
+  tagInputValue.value = '';
+}
+
+// Append a new tag
+function tagInputSubmit() {
+  tags.push({
+    type: tagInputType.value,
+    value: tagInputValue.value,
+  });
+  tagInputVisible.value = false;
+  tagInputValue.value = '';
+}
+
+// Tags
+const tags: Tag[] = inject('inclusionExclusionTags');
+
+const tagType = computed(() => (tagKey: TagType) => {
+  switch (tagKey) {
+    case 'include':
+      return 'info';
+    case 'exclude':
+      return 'error';
+  }
+});
+
+// Close a tag
+function tagClose(index: number) {
+  tags.splice(index, 1);
+}
+
+// Tag menu
+const tagMenuOptions = [
+  {
+    label: '添加必含词',
+    key: 'include',
+    icon: renderIcon(AddCircle),
+  },
+  {
+    label: '添加排除词',
+    key: 'exclude',
+    icon: renderIcon(RemoveCircle),
+  },
+]
+
+// Render function for icons
+function renderIcon(icon) {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon)
+    });
+  };
+}
+
+// Activate the tag input
+function tagMenuSelect(key: TagType) {
+  tagInputVisible.value = true;
+  tagInputType.value = key;
+  // Delay focus to next tick to ensure its execution
+  nextTick(() => tagInputRef.value.focus());
+}
+
+// Search suggestions
+const suggestions: AutoCompleteOptions = reactive([]);
+let suggestionTimestamp = 0;
+
+// Fetch search suggestions
+function suggestionUpdate() {
+  // Use timestamp to avoid jam
+  const currentTimestamp = ++suggestionTimestamp;
+
+  // Clear current suggestions
+  suggestions.length = 0;
+
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'search/suggest',
+    method: 'post',
+    data: {
+      query: text.value,
+    },
+  }).then(response => {
+    // Expired
+    if (currentTimestamp < suggestionTimestamp) {
+      return;
+    }
+
+    const suggestion_list = response.data.data.suggestions as string[];
+
+    // No suggestions
+    if (suggestion_list.length === 0) {
+      return;
+    }
+
+    // Insert default suggestion (the query keyword)
+    suggestions.push({
+      label: text.value,
+      value: text.value,
+    });
+
+    suggestion_list.forEach(value => {
+      suggestions.push({
+        label: value,
+        value,
+      });
+    });
+  });
+}
+
+// Handle select event, update query keyword and perform search
+function suggestionSelect(keyword: string) {
+  text.value = keyword;
+  search();
+}
+
+// Routing
+const router = useRouter();
+
+// Update keywords when route updates, e.g. routing back and forth
+onBeforeRouteUpdate(to => {
+  // Update only when the query keyword is specified in the query parameters
+  if (to.query.q) {
+    text.value = to.query.q as string;
+  }
+});
+
+// Perform search
 function search() {
-  router.push(`search?q=${text.value}`);
+  // Change current route slightly
+  // to force update the router view
+  router.currentRoute.value.hash = '0';
+  router.push(`/search?q=${text.value}`);
+
+  // Update suggestion timestamp
+  // to stop receiving suggestion
+  suggestionTimestamp++;
 }
 </script>

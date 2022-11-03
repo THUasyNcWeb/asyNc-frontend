@@ -3,18 +3,21 @@
  * @Author: 王博文
  * @Date: 2022-10-24 00:36
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-25 10:31
+ * @LastEditTime: 2022-11-02 18:52
  */
 import Mock from 'better-mock';
 
+import config from '../../config/config.json'
+
 Mock.setup({ timeout: '200-400' });
 
-Mock.mock(/search/, 'post', rqst => {
+const URL = `${config.url}:${config.port}`;
+
+Mock.mock(`${URL}/search`, 'post', rqst => {
   const body = JSON.parse(rqst.body);
-  const word = body.query;
-  const page = body.page;
+  const { query, page, include, exclude } = body;
   const news = [];
-  if (word == '敏感词') {
+  if (query == '敏感词') {
     return {
       code: 0,
       message: 'SUCCESS',
@@ -24,17 +27,39 @@ Mock.mock(/search/, 'post', rqst => {
       }
     }
   }
-  if (word == '危险言论') {
+  if (query == '危险言论') {
     return;
   }
-  if (word) {
+  if (query) {
     news.push({
       title: `搜到了好东西：第 ${page} 页`,
       media: '见得风就是雨',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
       pub_time: new Date().toJSON(),
-      content: `你说的对，但是「${word}」是由用户自主输入的一款全新搜索词。搜索发生在一个被称作「Git」的版本控制系统，在这里被「甲方」选中的小组将被授予「需求」，引导 DDL 之力。你将扮演一位名为「乙方」的神秘角色，在自由的开发中邂逅性格各异、能力独特的组员们，和他们一起击败「大作业」——同时发掘「软件开发」的真相。`,
+      content: `你说的对，但是「${query}」是由用户自主输入的一款全新搜索词。搜索发生在一个被称作「Git」的版本控制系统，在这里被「甲方」选中的小组将被授予「需求」，引导 DDL 之力。你将扮演一位名为「乙方」的神秘角色，在自由的开发中邂逅性格各异、能力独特的组员们，和他们一起击败「大作业」——同时发掘「软件开发」的真相。`,
       title_keywords: [[0, 6]],
+      keywords: [],
+    })
+  }
+  if (include.length) {
+    news.push({
+      title: `➕ Inclusion Keywords Detected`,
+      media: 'Mock',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      pub_time: new Date().toJSON(),
+      content: include.join(),
+      title_keywords: [[1, 11]],
+      keywords: [],
+    })
+  }
+  if (exclude.length) {
+    news.push({
+      title: `➖ Exclusion Keywords Detected`,
+      media: 'Mock',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      pub_time: new Date().toJSON(),
+      content: exclude.join(),
+      title_keywords: [[1, 11]],
       keywords: [],
     })
   }
@@ -97,7 +122,7 @@ Mock.mock(/search/, 'post', rqst => {
       url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
       pub_time: '2022-10-24T19:02:16.305Z',
       content: '萨满祭司是暴雪娱乐公司出品的卡牌游戏《炉石传说》中的一个职业。萨满祭司是原始元素的大师，能操纵自然的力量降下治疗之雨、倾泻熔岩洪流，或是召唤灵魂盟友助战。萨满祭司的能力反映出了自然之力的平衡：全面而强大的随从、法术、增益和伤害。',
-      picture_url: 'http://n.sinaimg.cn/sinacn07/576/w825h551/20180703/27fe-hevauxi3280692.png',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
       title_keywords: [[0, 4], [11, 15]],
       keywords: [
           [0, 4],
@@ -116,40 +141,171 @@ Mock.mock(/search/, 'post', rqst => {
   }
 });
 
-
-Mock.mock(/all_news/, 'get', rqst => {
+Mock.mock(`${URL}/search/suggest`, 'post', rqst => {
   const body = JSON.parse(rqst.body);
-  const data = [];
-  data.push(
-    {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
+  const query = body.query;
+  const suggestions = [
+    `${query}建议1`,
+    `${query}建议2`,
+    `${query}建议3`,
+  ];
+  if (new Date().getMilliseconds() % 2 == 0) {
+    suggestions.push(`${query}建议4`);
+  }
+  if (new Date().getMilliseconds() % 5 == 0) {
+    suggestions.push(`${query}建议5`);
+  }
+  return {
+    code: 0,
+    message: 'SUCCESS',
+    data: {
+      suggestions
+    }
+  };
+});
+
+Mock.mock(/allnews/, 'get', resq => {
+  
+  let data = [];
+  const url = resq.url
+  console.log(url)
+  let params = ''
+  if (url.indexOf("?") != -1) {    //判断是否有参数
+    const str = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+    const strs = str.split("=");   //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+    params = strs[1];          //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
+  }
+  if(params == 'home') {
+    console.log("首页")
+    data = [
+      {
+        title: "首页新闻应该有首页的样子",
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ]
+  }
+  else if (params == 'ent'){
+    console.log('娱乐')
+    data = [
+      {
+        title: '3.2的纳西妲我必定拿下',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media:"mihoyo",
+        pub_time:"2022-11-02"
+      },
+      {
+          title: '你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「提瓦特」的幻想世界，在这里，被神选中的人将被授予「神之眼」，导引元素之力。你将扮演一位名为「旅行者」的神秘角色，在自由的旅行中邂逅性格各异、能力独特的同伴们，和他们一起击败强敌，找回失散的亲人——同时，逐步发掘「原神」的真相。',
+          picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+          media: "mihomo",
+          pub_time:"1926-08-17",
+      }
+    ]
+  }
+  else if(params == 'sports') {
+    data = [{
+      title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+      picture_url: '',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '原神',
-      priority:1,
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
+      title: '非常好的带图新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '原神',
-      priority:1,
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    ]
+  }
+  else if (params == 'politics') {
+      data = [{
+        title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+        picture_url: '',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      {
+        title: '非常好的带图新闻',
+        picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+        url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+        media: "mihomo",
+        pub_time:"1926-08-17",
+      },
+      ] 
+  }
+  else if (params == 'tech') {
+    data = [{
+      title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '清华',
-      priority:1,
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    ] 
+  }
+  else if (params == 'fashion') {
+    data = [{
+      title: '你说的对，但是《计算机系统概论》是由清华大学计算机系自主研发的一款全新开放世界冒险游戏。游戏发生在一个被称作「C语言」的幻想世界，在这里，被助教选中的人将被授予「协程大作业」，导引代码之力。你将扮演一位名为「大二学生」的神秘角色，在和栈帧的博弈中邂逅性格各异、能力独特的寄存器们，和他们一起读写数据，恢复进程的状态——同时，逐步发掘「协程」的真相。',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
     {
-      title: '测试新闻',
-      picture_url: 'http://43.143.201.186:8080/images/test.jpg',
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
       url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-      category: '清华',
-      priority:1,
+      media: "mihomo",
+      pub_time:"1926-08-17",
     },
-  );
+  ]}
+  else if (params == 'health') {
+    data = [{
+      title: '人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？硬撑罢了！人上大学哪有不疯的？',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    {
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+  ]}
+  else if (params == 'game') {
+    data = [{
+      title: 'zyj十连三黄，80发3个五星，同学直呼狗托',
+      picture_url: '',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+    {
+      title: '非常好的带图科技新闻',
+      picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+      url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+      media: "mihomo",
+      pub_time:"1926-08-17",
+    },
+  ]}
+
   return {
     data
   }

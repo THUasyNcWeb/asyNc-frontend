@@ -19,7 +19,7 @@ app.mount("#app");
 function judgeToken() {
   API({
     headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'checklogin/',
+    url:'checklogin',
     method:'post',
   }).then((res) => {
     console.log(res)
@@ -77,6 +77,7 @@ router.beforeEach((to, _, next) => {
     const flag = decodeToken()
     if( typeof(flag) == "boolean" ) {
       alert("请先登录或者注册")
+      next("/login")
     }
     else if (typeof(flag) == "string") {
       next()
@@ -87,7 +88,7 @@ router.beforeEach((to, _, next) => {
   }
   else {
     alert("请先登录或者注册")
-    next("/")
+    next("/login")
   }
 })
 

@@ -6,90 +6,121 @@
  * @LastEditTime: 2022-10-13 10:31
  -->
 <template>
-    <n-table>
-        <tr>
-            <th style="width:20%">
-                用户名
-            </th>
-            <th style="width:80%">
-                {{username}}
-                <!-- 用户名为动态，等待后端请求 -->
-            </th>
-        </tr>
-        <tr>
-            <th style="width:20%">
-                个性签名
-            </th>
-            <th style="width:80%">
-                {{state.sign}}
-                <!-- 个性签名为动态，等待后端请求 -->
-            </th>
-        </tr>
-        <tr>
-            <th style="width:20%">
-                最近浏览的新闻标签
-            </th>
-            <th style="width:80%">
-                <n-tag :color="{ color: state.color_tags[index % 3], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in state.tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag>
-            </th>
-            <!-- 浏览的新闻标签以tag组件进行展示，有着不同的颜色 -->
-        </tr>
-    </n-table>
+    <n-card class="card_bordered">
+        <n-grid y-gap="20" :cols=1>
+            <n-grid-item>
+                <n-grid cols="3" item-responsive>
+                    <n-grid-item style="text-align:center;">
+                        <n-h3 style="padding-top:5%">
+                            <n-text type="warning">
+                                头像
+                            </n-text>
+                        </n-h3>
+                    </n-grid-item>
+                    <n-grid-item style="text-align:left"  span="1 300:2">
+                        <n-image  width=120 height=120 object-fit="cover"
+                        :src="props.user.avatar"
+                        preview-disabled
+                        style=" border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
+                        :fallback-src="default_logo"
+                        />
+                    </n-grid-item>
+                </n-grid>
+            </n-grid-item>
+            <n-grid-item >
+                <n-grid cols="3" item-responsive>
+                    <n-grid-item style="text-align:center">
+                        <n-h3>
+                            <n-text type="info">
+                                用户名
+                            </n-text>
+                        </n-h3>
+                    </n-grid-item>
+                    <n-grid-item style="text-align:left"  span="1 300:2">
+                        <n-h3>
+                            <n-text>
+                                {{props.user.user_name}}
+                            </n-text>
+                        </n-h3>
+
+                    </n-grid-item>
+                </n-grid>
+            </n-grid-item>
+            <n-grid-item>
+                <n-grid cols="3" item-responsive>
+                    <n-grid-item style="text-align:center">
+                        <n-h3> 
+                            <n-text  type="error">
+                                个性签名
+                            </n-text>
+                        </n-h3>
+                    </n-grid-item>
+                    <n-grid-item style="text-align:left"  span="1 300:2">
+                        <n-h3> 
+                        <n-text>
+                            {{props.user.signature}}
+                        </n-text>
+                        </n-h3>
+                    </n-grid-item>
+                </n-grid>
+            </n-grid-item>
+            <n-grid-item>
+
+                <n-grid cols="3" item-responsive>
+                    <n-grid-item style="text-align:center">
+                        <n-h3>
+                            <n-text type="success">
+                                近期浏览
+                            </n-text>
+                        </n-h3>
+                    </n-grid-item>
+                    <n-grid-item style="text-align:left"  span="1 300:2">
+                        <n-space>    
+                            <n-tag :color="{ color: color_tags[index % 3], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in props.user.tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag>
+                        </n-space>
+                    </n-grid-item>
+                </n-grid>
+            </n-grid-item>
+        </n-grid>
+    </n-card>
+    
 </template>
 
-<script lang="ts">
-import { reactive } from 'vue'
-import {NTable,NTag} from 'naive-ui'
-import API from "../../store/axiosInstance"
-export default {
-    components: {
-        NTable,
-        NTag,
-    },
-	props: {
-		username: {
-			type: String,
-			default: () => ""
-		},
-	},
-    created(){
-        API({
-            headers:{"Authorization": window.localStorage.getItem("token")},
-            url:'user_info/',
-            method:'get',
-        }).then((res) => {
-            console.log(res)
-            this.tags = res.data.data.tags
-            this.sign = res.data.data.signature
-            console.log(this.sign)
-        }).catch((error) => {
-            console.log(error)
-        })
-    },
-    setup() {
+<script setup lang="ts">
+import { defineProps } from 'vue'
+import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NImage} from 'naive-ui'
 
-        const state = reactive({tags:[], color_tags: ['#00FFFF','#ADFF2F','#F0E68C'], sign:""})
-        API({
-            headers:{"Authorization": window.localStorage.getItem("token")},
-            url:'user_info/',
-            method:'get',
-        }).then((res) => {
-            console.log(res)
-            state.tags = res.data.data.tags
-            state.sign = res.data.data.signature
-            console.log(state.sign)
-        }).catch((error) => {
-            console.log(error)
-        })
-        // 标签的颜色数组
-        return {
-            state
-            // 个性签名
-        }
-    }
+export interface UserInfo {
+  id: string,
+  user_name: string,
+  signature: string,
+  tags: string[],
+  mails: string,
+  avatar: string,
 }
+
+const default_logo = require("@/assets/asyNc_avatar.png")
+const props = defineProps<{
+  user:UserInfo,
+}>();
+
+const color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
+// 获取用户信息 
 </script>
 
-<style>
-
+<style scoped>
+.card_bordered {
+    display: flex; 
+    border-radius:15px;
+    margin: auto; 
+    /* margin-left: 50%; */
+    width:70%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
+    -0.5px 0px 5px #808080,   /*左边阴影 */
+    0.5px 0px 5px #808080,    /*右边阴影 */
+    0px 0.5px 5px #808080;    /*下边阴影  */
+}
 </style>
