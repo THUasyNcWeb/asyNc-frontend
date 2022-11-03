@@ -15,7 +15,7 @@
           <n-space vertical style="margin-top: 10%;">
             <n-space vertical style="text-align: center;">
               <n-image  width=80 height=80 object-fit="cover"
-              :src="default_logo"
+              :src="state.user.avatar"
               preview-disabled
               style=" border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
               :fallback-src="default_logo"
@@ -48,10 +48,11 @@ import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,
 import {decodeToken} from "@/main"
 import API from "@/store/axiosInstance"
 import {
-  BookOutline as BookIcon,
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
-  StarOutline as FavoriteIcon
+  StarOutline as FavoriteIcon,
+  LockClosedOutline as PasswordIcon,
+  LogOutOutline as LogoutIcon,
 } from '@vicons/ionicons5'
 export interface UserInfo {
   id: string,
@@ -100,7 +101,7 @@ const menuOptions = [
         },
       ),
     key: 'info',  
-    path: '/user/userInformation/',
+    path: '/user/userInformation',
     icon: renderIcon(PersonIcon),
   },
   {
@@ -115,8 +116,8 @@ const menuOptions = [
         },
       ),
     key: 'modify',
-    path: '/user/modifyPassword/',
-    icon: renderIcon(BookIcon),
+    path: '/user/modifyPassword',
+    icon: renderIcon(PasswordIcon),
   },
   {
     label: () =>
@@ -130,7 +131,7 @@ const menuOptions = [
         },
       ),
     key: 'history',
-    path: '/user/modifyPassword/',
+    path: '/user/modifyPassword',
     icon: renderIcon(HistoryIcon),
   },
   {
@@ -145,8 +146,23 @@ const menuOptions = [
         },
       ),
     key: 'favorites',
-    path: '/user/modifyPassword/',
+    path: '/user/modifyPassword',
     icon: renderIcon(FavoriteIcon),
+  },
+  {
+    label: () =>
+      h(
+        'div',
+        {
+          innerHTML:'退出登录',
+          onclick:() => {
+            alert("啊我重伤倒地")
+          }
+        },
+      ),
+    key: 'logout',
+    path: '/user/logout',
+    icon: renderIcon(LogoutIcon),
   },
 ]
 const menuThemeOverrides = {

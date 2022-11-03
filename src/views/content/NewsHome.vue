@@ -128,11 +128,4 @@ function selectNews(news, category:string, label:string){
 </template>
   
 <style scoped>
-.pane_border{
-    position: absolute;
-    margin: auto;
-    display: flex; 
-    width: 80%;
-}
-
 </style>
