@@ -63,7 +63,7 @@ const state = reactive({
   username: decodeToken() || '',
 })
 
-console.log("说话！")
+
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, {
     default: () => h(icon),

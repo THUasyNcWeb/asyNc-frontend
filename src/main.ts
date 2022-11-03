@@ -19,7 +19,7 @@ app.mount("#app");
 function judgeToken() {
   API({
     headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'checklogin/',
+    url:'checklogin',
     method:'post',
   }).then((res) => {
     console.log(res)
@@ -70,9 +70,7 @@ router.beforeEach((to, _, next) => {
   if (to.meta.title) {
     document.title = to.meta.title as string
   }
-  console.log(to.path)
   if (to.path.indexOf("/user") != 0) {
-    console.log(to.path)
     next()
   }
   else if (window.localStorage.getItem("token")) {

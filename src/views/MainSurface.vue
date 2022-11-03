@@ -7,9 +7,9 @@
  -->
 
 <template>
-    <n-layout position="absolute">
+    <n-layout position="absolute" :key="state.random_key">
         <n-layout-header bordered embedded style="height: 74px; position:fixed;"  >
-            <Navigation  style="padding: 18px 96px;"  :key="state.random_key"/>
+            <Navigation  style="padding: 18px 96px;"/>
         </n-layout-header>
         <n-layout-content ref="contentRef" style="top: 74px;" position="absolute">
             <router-view @reload="reload"></router-view>

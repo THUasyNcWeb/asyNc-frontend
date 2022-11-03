@@ -44,8 +44,7 @@
 <script setup lang="ts">
 import {h,Component, reactive,defineEmits} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
-import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog  } from 'naive-ui'
-import {decodeToken} from "@/main"
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog, NA  } from 'naive-ui'
 import API from "@/store/axiosInstance"
 import {
   PersonOutline as PersonIcon,
@@ -64,25 +63,22 @@ export interface UserInfo {
 }
 const state = reactive({user: {} as UserInfo})
 // 设置组件
-let flag = decodeToken()
 let router = useRouter()
 let path = router.currentRoute.value.path
-if(typeof(flag) == "boolean") {
-    alert("请先登录或者注册")
-    router.push("/")
+if(window.localStorage.getItem("token") != null) {
+  API({
+      headers:{"Authorization": window.localStorage.getItem("token")},
+      url:'userinfo',
+      method:'get',
+      // 根据不同类别，把类别放在了对应的请求参数中
+  }).then((res)=>{
+      state.user = res.data.data
+      console.log(res)
+  }).catch((error) => {
+      console.log(error);
+  });
 }
 
-API({
-    headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'userinfo',
-    method:'get',
-    // 根据不同类别，把类别放在了对应的请求参数中
-}).then((res)=>{
-    state.user = res.data.data
-    console.log(res)
-}).catch((error) => {
-    console.log(error);
-});
 const emits = defineEmits(['reload']);
 const default_logo = require("@/assets/asyNc_avatar.png")
 function renderIcon (icon: Component) {
@@ -154,7 +150,7 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'div',
+        NA,
         {
           innerHTML:'退出登录',
           onclick:() => {
