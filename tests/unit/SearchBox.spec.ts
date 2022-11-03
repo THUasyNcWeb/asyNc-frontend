@@ -7,6 +7,8 @@ describe('SearchBox.vue', () => {
     const wrapper = mount(SearchBox, {
       props: { text }
     });
-    expect(wrapper.find('input').element.value).toMatch(text);
+    expect((wrapper.find('.n-auto-complete > .n-input > .n-input-wrapper > \
+      .n-input__input input').element as HTMLInputElement).value)
+      .toMatch(text);
   });
 });

@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-18 19:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 20:26
+ * @LastEditTime: 2022-11-03 13:49
  -->
 
 <template>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, ref,reactive } from 'vue';
+import { provide, reactive, ref } from 'vue';
 import Navigation from "../components/NavigationBar.vue"
 import {  
     NLayout,
@@ -27,8 +27,14 @@ import {
     LayoutInst,
 } from 'naive-ui'
 import { RouterView } from 'vue-router';
-    // 按需引入naive-ui组件
-    // 之后可能会把上述引入集中在一个固定的ts文件中
+
+export type TagType = 'include' | 'exclude' | null;
+
+export interface Tag {
+  type: TagType;
+  value: string;
+}
+
 const state = reactive({random_key:Math.random()})
 function reload(){
     state.random_key  = Math.random()
@@ -38,4 +44,8 @@ function reload(){
 // Provide content ref for scrolling in search page
 const contentRef = ref<LayoutInst | null>(null);
 provide('contentRef', contentRef);
+
+// Provide inclusion/exclusion tags for search page
+const tags: Tag[] = reactive([]);
+provide('inclusionExclusionTags', tags);
 </script>
