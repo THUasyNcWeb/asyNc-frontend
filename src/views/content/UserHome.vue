@@ -74,7 +74,7 @@ if(typeof(flag) == "boolean") {
 
 API({
     headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'user_info',
+    url:'userinfo',
     method:'get',
     // 根据不同类别，把类别放在了对应的请求参数中
 }).then((res)=>{
@@ -167,7 +167,7 @@ const menuOptions = [
                 API({
                     headers:{"Authorization": window.localStorage.getItem("token")},
                     // 携带token字段
-                    url:'logout/',
+                    url:'logout',
                     method:'post'}).then((res) => {
                         console.log(res)
                         window.localStorage.removeItem('token')

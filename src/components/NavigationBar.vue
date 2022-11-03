@@ -102,7 +102,7 @@ function handleSelect(key: 'profile' | 'logout') {
             API({
                 headers:{"Authorization": window.localStorage.getItem("token")},
                 // 携带token字段
-                url:'logout/',
+                url:'logout',
                 method:'post'}).then((res) => {
                     console.log(res)
                     window.localStorage.removeItem('token')
