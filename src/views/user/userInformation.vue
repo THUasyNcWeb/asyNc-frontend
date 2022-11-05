@@ -18,7 +18,7 @@
                         </n-h3>
                     </n-grid-item>
                     <n-grid-item style="text-align:left"  span="1 300:2">
-                        <div class="img_div">
+                        <!-- <div class="img_div" style="width: 120;height: 120;">
                             <div class="mask">
                                 <div style="text-align:center;margin-top: 30%;">
                                     <n-upload
@@ -28,8 +28,7 @@
                                         }"
                                         :data="{
                                         'naive-data': 'cool! naive!'
-                                        }"
-                                    >
+                                        }">
                                         <n-h2 style="color:aliceblue;">
                                             上传头像
                                         </n-h2>
@@ -42,7 +41,8 @@
                             style="z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
                             :fallback-src="default_logo"
                             />
-                        </div>
+                        </div> -->
+                        <UserAvatar :width="120" :height="120" :image_code="props.user.avatar"></UserAvatar>
                     </n-grid-item>
                 </n-grid>
             </n-grid-item>
@@ -105,8 +105,8 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NImage,NUpload,NH2} from 'naive-ui'
-
+import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem} from 'naive-ui'
+import UserAvatar from '@/components/UserAvatar.vue';
 export interface UserInfo {
   id: string,
   user_name: string,
@@ -115,8 +115,6 @@ export interface UserInfo {
   mails: string,
   avatar: string,
 }
-
-const default_logo = require("@/assets/asyNc_avatar.png")
 const props = defineProps<{
   user:UserInfo,
 }>();
@@ -142,8 +140,6 @@ const color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
     0px 0.5px 5px #808080;    /*下边阴影  */
 }
 .img_div {
-    width: 120px;
-    height: 120px;
     display: block;
     position: relative;
     border-radius:50%; 

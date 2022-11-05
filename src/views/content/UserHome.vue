@@ -14,12 +14,7 @@
         <n-layout-sider bordered :width="250">
           <n-space vertical style="margin-top: 10%;">
             <n-space vertical style="text-align: center;">
-              <n-image  width=80 height=80 object-fit="cover"
-              :src="state.user.avatar"
-              preview-disabled
-              style=" border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
-              :fallback-src="default_logo"
-              /> 
+              <UserAvatar style="margin-left:34%" :width="80" :height="80" :image_code="state.user.avatar" :key="state.user.avatar"/>
               <n-text>
                 {{state.user.user_name}}
               </n-text>
@@ -44,8 +39,9 @@
 <script setup lang="ts">
 import {h,Component, reactive,defineEmits} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
-import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog, NA  } from 'naive-ui'
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NText,useDialog, NA  } from 'naive-ui'
 import API from "@/store/axiosInstance"
+import UserAvatar from "@/components/UserAvatar.vue"
 import {
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
@@ -61,7 +57,7 @@ export interface UserInfo {
   mails: string,
   avatar: string,
 }
-const state = reactive({user: {} as UserInfo})
+const state = reactive({user: {avatar:''} as UserInfo})
 // 设置组件
 let router = useRouter()
 let path = router.currentRoute.value.path
@@ -79,8 +75,7 @@ if(window.localStorage.getItem("token") != null) {
   });
 }
 
-const emits = defineEmits(['reload']);
-const default_logo = require("@/assets/asyNc_avatar.png")
+const emits = defineEmits(['reload']);  
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
