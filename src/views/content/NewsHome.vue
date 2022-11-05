@@ -16,7 +16,10 @@ import {
     NTabs,
     NTabPane,
     NSpin,
+    NIcon,
+    NH2
 } from 'naive-ui'
+import { FastFoodOutline } from '@vicons/ionicons5';
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
@@ -120,7 +123,17 @@ function selectNews(news, category:string, label:string){
                 <n-spin :show="state.loading" size="large" style="margin-top:10%">
                     <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-10%" />
                     <template #description>
-                        少女祈祷中QWQ
+                        <n-h2 style="text-align: center;">
+                            少女祈祷中QWQ
+                            <br/>
+                            有这个时间等待不如V我50
+                        </n-h2>
+
+                    </template>
+                    <template #icon>
+                        <n-icon>
+                            <FastFoodOutline/>
+                        </n-icon>
                     </template>
                 </n-spin>
 
