@@ -18,12 +18,31 @@
                         </n-h3>
                     </n-grid-item>
                     <n-grid-item style="text-align:left"  span="1 300:2">
-                        <n-image  width=120 height=120 object-fit="cover"
-                        :src="props.user.avatar"
-                        preview-disabled
-                        style=" border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
-                        :fallback-src="default_logo"
-                        />
+                        <div class="img_div">
+                            <div class="mask">
+                                <div style="text-align:center;margin-top: 30%;">
+                                    <n-upload
+                                        action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+                                        :headers="{
+                                        'naive-info': 'hello!'
+                                        }"
+                                        :data="{
+                                        'naive-data': 'cool! naive!'
+                                        }"
+                                    >
+                                        <n-h2 style="color:aliceblue;">
+                                            上传头像
+                                        </n-h2>
+                                    </n-upload>
+                                </div>
+                            </div>
+                            <n-image  width=120 height=120 object-fit="cover"
+                            :src="props.user.avatar"
+                            preview-disabled
+                            style="z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
+                            :fallback-src="default_logo"
+                            />
+                        </div>
                     </n-grid-item>
                 </n-grid>
             </n-grid-item>
@@ -42,7 +61,6 @@
                                 {{props.user.user_name}}
                             </n-text>
                         </n-h3>
-
                     </n-grid-item>
                 </n-grid>
             </n-grid-item>
@@ -65,7 +83,6 @@
                 </n-grid>
             </n-grid-item>
             <n-grid-item>
-
                 <n-grid cols="3" item-responsive>
                     <n-grid-item style="text-align:center">
                         <n-h3>
@@ -88,7 +105,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NImage} from 'naive-ui'
+import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NImage,NUpload,NH2} from 'naive-ui'
 
 export interface UserInfo {
   id: string,
@@ -106,6 +123,7 @@ const props = defineProps<{
 
 const color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
 // 获取用户信息 
+
 </script>
 
 <style scoped>
@@ -123,4 +141,27 @@ const color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
     0.5px 0px 5px #808080,    /*右边阴影 */
     0px 0.5px 5px #808080;    /*下边阴影  */
 }
+.img_div {
+    width: 120px;
+    height: 120px;
+    display: block;
+    position: relative;
+    border-radius:50%; 
+}
+.mask {
+position: absolute;
+background: rgba(101, 101, 101, 0.6);
+color: #ffffff;
+opacity: 0;
+top: 0;
+right: 0;
+width: 100%;
+height: 100%;
+border-radius: 150%;
+
+}
+.img_div:hover .mask {
+opacity: 1;
+}
+
 </style>
