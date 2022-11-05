@@ -11,7 +11,7 @@ import { reactive,h } from 'vue';
 // import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
-import selectMore from '@/components/selectMore.vue';
+import SelectMore from '@/components/SelectMore.vue';
 import { 
     NTabs,
     NTabPane,
@@ -50,6 +50,9 @@ state.all_category.push(
 )
 get_news("home")
 function get_news(category:string) {
+    if(category == 'more') {
+        return 
+    }
     state.loading = true
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
@@ -60,10 +63,8 @@ function get_news(category:string) {
         method:'get',
         // 根据不同类别，把类别放在了对应的请求参数中
     }).then((res)=>{
-        console.log(res)
         state.loading = false
         state.all_news = res.data.data
-        console.log(state.loading)
     }).catch((error) => {
         console.log(error);
     });
@@ -91,8 +92,7 @@ function more_news(){
     })   
 }
 
-function selectNews(news, category:string, label:string){
-    state.all_news = news
+function colChange(category:string, label:string) {
     var whether_main:boolean = false
     // 检查是否点击了主栏目还是扩展栏目
     for(var x of state.all_category) {
@@ -106,12 +106,14 @@ function selectNews(news, category:string, label:string){
         state.more_label = label
         state.more_key = category
     }
-    state.now_category = category
     // 更新当前的类别
+    state.now_category = category
+    get_news(category)
+
 }
 
+
 </script>
-  
 <template>
     <body>
         <n-tabs :value="state.now_category" 
@@ -120,15 +122,15 @@ function selectNews(news, category:string, label:string){
         pane-style="margin-left:20%;width:60%;min-height:500px;"
         size="large" default-value="home">
             <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=main_news(item.label)>
-                <n-spin :show="state.loading" size="large" style="margin-top:10%">
-                    <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-10%" />
+                <n-spin :show="state.loading" size="large" style="margin-top:20%">
+                    <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-20%" />
                     <template #description>
                         <n-h2 style="text-align: center;">
                             少女祈祷中QWQ
                             <br/>
+                            <br/>
                             有这个时间等待不如V我50
                         </n-h2>
-
                     </template>
                     <template #icon>
                         <n-icon>
@@ -136,15 +138,24 @@ function selectNews(news, category:string, label:string){
                         </n-icon>
                     </template>
                 </n-spin>
-
-                <!-- <NewsCategory v-if="state.loading == false" :news="state.all_news" /> -->
             </n-tab-pane>
             <n-tab-pane :name="state.more_key" :tab=more_news>
-                <div v-if="state.more_label=='更多'" style="width:60%">
-                    <selectMore :mainCategory="state.all_category" @updateCategory="selectNews"/>
-                </div>
-                <n-spin v-else :show="state.loading" style="margin-top:10%">
-                    <NewsCategory :news="state.all_news"  style="margin-top:-10%"/>
+                <SelectMore v-if="state.more_label=='更多'" :mainCategory="state.all_category" @update="colChange"/>
+                <n-spin v-else :show="state.loading" size="large" style="margin-top:20%">
+                    <NewsCategory v-if="state.loading == false" :news="state.all_news"  style="margin-top:-20%"/>
+                    <template #description>
+                        <n-h2 style="text-align: center;">
+                            少女祈祷中QWQ
+                            <br/>
+                            <br/>
+                            有这个时间等待不如V我50
+                        </n-h2>
+                    </template>
+                    <template #icon>
+                        <n-icon>
+                            <FastFoodOutline/>
+                        </n-icon>
+                    </template>
                 </n-spin>
             </n-tab-pane>
          </n-tabs>
