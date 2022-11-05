@@ -108,10 +108,6 @@ function jump(category: Category){
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     background-color: rgba(255, 255, 255, 0.8);
-    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
-    -0.5px 0px 5px #808080,   /*左边阴影 */
-    0.5px 0px 5px #808080,    /*右边阴影 */
-    0px 0.5px 5px #808080;    /*下边阴影  */
 }
 
 </style>

@@ -15,6 +15,7 @@ import selectMore from '@/components/selectMore.vue';
 import { 
     NTabs,
     NTabPane,
+    NSpin,
 } from 'naive-ui'
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -28,6 +29,7 @@ const state = reactive({all_news: new Array(),
     // 当前分类的key 
     more_label:'更多',
     more_key:'more',
+    loading:false,
     // 更多栏的显示标签与对应的键值
 })
 
@@ -44,8 +46,8 @@ state.all_category.push(
     {key:'tech', label:'科技'},
 )
 get_news("home")
-
 function get_news(category:string) {
+    state.loading = true
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
         url:'allnews',
@@ -55,13 +57,13 @@ function get_news(category:string) {
         method:'get',
         // 根据不同类别，把类别放在了对应的请求参数中
     }).then((res)=>{
-        state.all_news = res.data.data
         console.log(res)
-        console.log(state.all_news)
+        state.loading = false
+        state.all_news = res.data.data
+        console.log(state.loading)
     }).catch((error) => {
         console.log(error);
     });
-
 }
 
 function main_news(content:string){
@@ -112,27 +114,29 @@ function selectNews(news, category:string, label:string){
         <n-tabs :value="state.now_category" 
         @update:value="state.now_category=$event;get_news(state.now_category)" 
         type="line" animated :tabs-padding=state.window_width 
-        pane-style="margin-left:20%;margin-right:20%"
+        pane-style="margin-left:20%;width:60%;min-height:500px;"
         size="large" default-value="home">
             <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=main_news(item.label)>
-                <NewsCategory :news="state.all_news"/>
+                <n-spin :show="state.loading" size="large" style="margin-top:10%">
+                    <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-10%" />
+                    <template #description>
+                        少女祈祷中QWQ
+                    </template>
+                </n-spin>
+
+                <!-- <NewsCategory v-if="state.loading == false" :news="state.all_news" /> -->
             </n-tab-pane>
             <n-tab-pane :name="state.more_key" :tab=more_news>
                 <div v-if="state.more_label=='更多'" style="width:60%">
                     <selectMore :mainCategory="state.all_category" @updateCategory="selectNews"/>
                 </div>
-                <NewsCategory v-else :news="state.all_news"/>
+                <n-spin v-else :show="state.loading" style="margin-top:10%">
+                    <NewsCategory :news="state.all_news"  style="margin-top:-10%"/>
+                </n-spin>
             </n-tab-pane>
          </n-tabs>
     </body>
 </template>
   
 <style scoped>
-.pane_border{
-    position: absolute;
-    margin: auto;
-    display: flex; 
-    width: 80%;
-}
-
 </style>
