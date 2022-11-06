@@ -54,7 +54,7 @@ export interface UserInfo {
   user_name: string,
   signature: string,
   tags: string[],
-  mails: string,
+  mail: string,
   avatar: string,
 }
 const state = reactive({user: {avatar:''} as UserInfo, random: Math.random()})

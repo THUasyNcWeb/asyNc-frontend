@@ -15,12 +15,12 @@
                     :on-change="update"
                     :show-file-list=false
                     >
-                    <n-h2 v-if="props.width == 120" style="color:aliceblue">
+                    <n-a v-if="props.width == 120" style="color:aliceblue;font-size: 30px;">
                         上传头像
-                    </n-h2>
-                    <n-h4 v-else style="color:aliceblue">
+                    </n-a>
+                    <n-a v-else style="color:aliceblue;font-size: 20px;">
                         上传头像
-                    </n-h4>
+                    </n-a>
                 </n-upload>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { defineProps,defineEmits } from 'vue'
-import {NImage,NUpload,NH2,NH4} from 'naive-ui'
+import {NImage,NUpload,NA} from 'naive-ui'
 import API from "../store/axiosInstance"
 const props = defineProps<{
   width:number,
@@ -83,7 +83,6 @@ right: 0;
 width: 100%;
 height: 100%;
 border-radius: 150%;
-
 }
 .img_div:hover .mask {
 opacity: 1;

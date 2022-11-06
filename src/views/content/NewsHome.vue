@@ -125,10 +125,11 @@ function colChange(category:string, label:string) {
                 <n-spin :show="state.loading" size="large" style="margin-top:20%">
                     <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-20%" />
                     <template #description>
-                        <n-h2 style="text-align: center;">
+                        <br/>
+                        <n-h2 style="text-align: center;color: deeppink;" >
                             少女祈祷中QWQ
-                            <br/>
-                            <br/>
+                        </n-h2>
+                        <n-h2 style="text-align: center;" >
                             有这个时间等待不如V我50
                         </n-h2>
                     </template>
