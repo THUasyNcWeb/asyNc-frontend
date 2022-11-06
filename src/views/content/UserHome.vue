@@ -14,7 +14,7 @@
         <n-layout-sider bordered :width="250">
           <n-space vertical style="margin-top: 10%;">
             <n-space vertical style="text-align: center;">
-              <UserAvatar style="margin-left:34%" :width="80" :height="80" :image_code="state.user.avatar" :key="state.user.avatar"/>
+              <UserAvatar style="margin-left:34%" :width="80" :height="80" :image_code="state.user.avatar" :key="state.user.avatar" @change-avatar="update_avatar" />
               <n-text>
                 {{state.user.user_name}}
               </n-text>
@@ -27,7 +27,7 @@
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;">
-          <router-view :user="state.user"></router-view>
+          <router-view :user="state.user" :key="state.random"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
@@ -57,7 +57,7 @@ export interface UserInfo {
   mails: string,
   avatar: string,
 }
-const state = reactive({user: {avatar:''} as UserInfo})
+const state = reactive({user: {avatar:''} as UserInfo, random: Math.random()})
 // 设置组件
 let router = useRouter()
 let path = router.currentRoute.value.path
@@ -202,7 +202,11 @@ for(let x of menuOptions) {
 }
 // 获取初始的选项，与路由对应
 
-
+function update_avatar(img_code:string) {
+  state.user.avatar = img_code
+  state.random = Math.random()
+  // 更新主页面
+}
 
 </script>
 

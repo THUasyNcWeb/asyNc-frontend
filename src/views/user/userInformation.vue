@@ -18,30 +18,6 @@
                         </n-h3>
                     </n-grid-item>
                     <n-grid-item style="text-align:left"  span="1 300:2">
-                        <!-- <div class="img_div" style="width: 120;height: 120;">
-                            <div class="mask">
-                                <div style="text-align:center;margin-top: 30%;">
-                                    <n-upload
-                                        action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-                                        :headers="{
-                                        'naive-info': 'hello!'
-                                        }"
-                                        :data="{
-                                        'naive-data': 'cool! naive!'
-                                        }">
-                                        <n-h2 style="color:aliceblue;">
-                                            上传头像
-                                        </n-h2>
-                                    </n-upload>
-                                </div>
-                            </div>
-                            <n-image  width=120 height=120 object-fit="cover"
-                            :src="props.user.avatar"
-                            preview-disabled
-                            style="z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
-                            :fallback-src="default_logo"
-                            />
-                        </div> -->
                         <UserAvatar :width="120" :height="120" :image_code="props.user.avatar"></UserAvatar>
                     </n-grid-item>
                 </n-grid>

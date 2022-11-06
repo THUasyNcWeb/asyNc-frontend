@@ -3,13 +3,18 @@
         <div class="mask">
             <div style="text-align:center;margin-top: 30%;">
                 <n-upload
-                    action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+                    response-type="json"
+                    action="http://127.0.0.1:8000/modifyavatar"
                     :headers="{
-                    'naive-info': 'hello!'
+                    'Authorization': get_token()
                     }"
                     :data="{
-                    'naive-data': 'cool! naive!'
-                    }">
+                    'test': 'cool! naive!'
+                    }" 
+                    name="avatar"
+                    :on-change="update"
+                    :show-file-list=false
+                    >
                     <n-h2 v-if="props.width == 120" style="color:aliceblue">
                         上传头像
                     </n-h2>
@@ -30,16 +35,35 @@
 
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps,defineEmits } from 'vue'
 import {NImage,NUpload,NH2,NH4} from 'naive-ui'
+import API from "../store/axiosInstance"
 const props = defineProps<{
   width:number,
   height:number,
   image_code:string,
 }>();
-
+const emits = defineEmits(['change-avatar']);
 const default_logo = require("@/assets/asyNc.png")
 
+function get_token(){
+    return window.localStorage.getItem('token')
+}
+
+function update() {
+    API({
+      headers:{"Authorization": window.localStorage.getItem("token")},
+      url:'userinfo',
+      method:'get',
+      // 根据不同类别，把类别放在了对应的请求参数中
+  }).then((res)=>{
+      var response = res.data.data
+      console.log(response)
+      emits("change-avatar", response.avatar)
+  }).catch((error) => {
+      console.log(error);
+  });
+}
 
 </script>
 
