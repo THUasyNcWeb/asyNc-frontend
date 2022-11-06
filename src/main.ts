@@ -18,7 +18,6 @@ app.mount("#app");
 
 // Record when the user clicks a news
 export function newsClick(id: number) {
-  alert('Ok');
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),

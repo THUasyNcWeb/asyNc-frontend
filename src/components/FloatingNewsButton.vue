@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 01:10
+ * @LastEditTime: 2022-11-07 03:30
 -->
 
 <template>
@@ -33,7 +33,7 @@
               <read-icon />
             </n-icon>
           </template>
-          <news-pane :news="state.readLater" more-path="user/readLater" @remove="removeReadLater"/>
+          <news-pane :news="state.readLater" more-path="user/readLater" @remove="removeReadLater" />
         </n-tab-pane>
         <n-tab-pane name="favorites">
           <template #tab>
@@ -41,7 +41,7 @@
               <favorites-icon />
             </n-icon>
           </template>
-          <news-pane :news="state.favorites" more-path="user/favorites" @remove="removeFavorites"/>
+          <news-pane :news="state.favorites" more-path="user/favorites" @remove="removeFavorites" />
         </n-tab-pane>
       </n-tabs>
     </n-popover>
@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue';
 import { NAffix, NButton, NIcon, NPopover, NTabPane, NTabs } from 'naive-ui';
 
 import {
@@ -57,9 +58,14 @@ import {
   StarOutline as FavoritesIcon,
   TimeOutline as HistoryIcon,
 } from '@vicons/ionicons5/';
-import { reactive } from 'vue';
+
 import { decodeToken } from '@/main';
 import NewsPane from './NewsPane.vue';
+import API from '@/store/axiosInstance';
+
+import '@/mock/Favorites.mock';
+
+const maxNewsCount = 5;
 
 const state = reactive({
   username: decodeToken(),
@@ -73,11 +79,34 @@ const loggedIn = new Boolean(state.username).valueOf();
 
 if (loggedIn) {
   // Fetch news
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'history',
+    method: 'get',
+    params: {
+      page: 1,
+    },
+  }).then(response => {
+    state.history = response.data.data.news.slice(0, maxNewsCount);
+  });
 }
 
 // Remove news from history
-function removeHistory(index: number) {
-  state.history.splice(index, 1);
+function removeHistory(id: number) {
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'history',
+    method: 'delete',
+    params: {
+      id
+    },
+  }).then(response => {
+    state.history = response.data.data.news.slice(0, maxNewsCount);
+  });
 }
 
 // Remove news from read later
