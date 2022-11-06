@@ -45,7 +45,7 @@ import router from '@/router';
 import API from '@/store/axiosInstance';
 import { decodeToken } from '@/main';
 
-import '@/mock/SearchPage.mock';
+// import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
 import FloatingNewsButton from '@/components/FloatingNewsButton.vue';
 

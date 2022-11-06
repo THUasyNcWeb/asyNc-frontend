@@ -14,60 +14,91 @@ Mock.setup({ timeout: '200-400' });
 
 const URL = `${config.url}:${config.port}`;
 
+let favList = [
+  {
+    id: 1,
+    title: '测试新闻',
+    media: '腾讯新闻',
+    url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+    pub_time: new Date().toJSON(),
+  },
+  {
+    id: 2,
+    title: '非常好新闻',
+    media: '亦可赛艇新闻',
+    url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+    pub_time: new Date(1926, 7, 17).toJSON(),
+  },
+  {
+    id: 3,
+    title: '有图片的非常好新闻',
+    media: '亦可赛艇新闻',
+    url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+    pub_time: new Date(1926, 7, 17).toJSON(),
+    picture_url: 'https://app.moegirl.org.cn/萌百娘表情包/萌百娘表情包2/钻地.png',
+  },
+  {
+    id: 4,
+    title: '有图片的很长的非常好新闻',
+    media: '有仙则名新闻',
+    url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
+    picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
+    pub_time: new Date(9876, 4, 43).toJSON(),
+  },
+  {
+    id: 5,
+    title: 'Breaking News',
+    media: 'Foobar News',
+    url: 'https://breaking.news',
+    picture_url: 'https://breaking.news/picture.png',
+    pub_time: '2022-10-21T19:02:16.305Z',
+  },
+  {
+    id: 6,
+    title: '萨满祭司 (卡牌游戏《炉石传说》中的职业)',
+    media: '百度百科',
+    url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
+    picture_url: 'https://bkimg.cdn.bcebos.com/pic/3801213fb80e7beccf8ad6f12b2eb9389b506b4a?x-bce-process=image/resize,m_lfit,w_128,limit_1',
+    pub_time: '2022-10-24T19:02:16.305Z',
+  }
+];
+
 Mock.mock(/history|readlater|favorites/, 'get', _ => {
   return {
     code: 0,
     message: 'SUCCESS',
     data: {
       page_count: 5,
-      news: [
-        {
-          id: 1,
-          title: '测试新闻',
-          media: '腾讯新闻',
-          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-          pub_time: new Date().toJSON(),
-        },
-        {
-          id: 2,
-          title: '非常好新闻',
-          media: '亦可赛艇新闻',
-          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-          pub_time: new Date(1926, 7, 17).toJSON(),
-        },
-        {
-          id: 3,
-          title: '有图片的非常好新闻',
-          media: '亦可赛艇新闻',
-          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-          pub_time: new Date(1926, 7, 17).toJSON(),
-          picture_url: 'https://app.moegirl.org.cn/萌百娘表情包/萌百娘表情包2/钻地.png',
-        },
-        {
-          id: 4,
-          title: '有图片的很长的非常好新闻',
-          media: '有仙则名新闻',
-          url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
-          picture_url: 'https://www.desmos.com/assets/img/homepage-student.png',
-          pub_time: new Date(9876, 4, 43).toJSON(),
-        },
-        {
-          id: 5,
-          title: 'Breaking News',
-          media: 'Foobar News',
-          url: 'https://breaking.news',
-          picture_url: 'https://breaking.news/picture.png',
-          pub_time: '2022-10-21T19:02:16.305Z',
-        },
-        {
-          id: 6,
-          title: '萨满祭司 (卡牌游戏《炉石传说》中的职业)',
-          media: '百度百科',
-          url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
-          picture_url: 'https://bkimg.cdn.bcebos.com/pic/3801213fb80e7beccf8ad6f12b2eb9389b506b4a?x-bce-process=image/resize,m_lfit,w_128,limit_1',
-          pub_time: '2022-10-24T19:02:16.305Z',
-        }
-      ]
+      news: favList.slice(-5).reverse(),
+    }
+  }
+})
+
+Mock.mock(/history|readlater|favorites/, 'post', rqst => {
+  const id = rqst.url.match(/id=(.*)/)[1];
+  favList.push({
+    id,
+    media: 'Test Media',
+    title: `News ${id}`,
+    url: `https://baidu.com`,
+    pub_time: new Date().toJSON(),
+  });
+  return {
+    code: 0,
+    message: 'SUCCESS',
+    data: {}
+  }
+})
+
+Mock.mock(/history|readlater|favorites/, 'delete', rqst => {
+  const id = rqst.url.match(/id=(.*)/)[1];
+  favList = favList.filter(t => t.id != id);
+  return {
+    code: 0,
+    message: 'SUCCESS',
+    data: {
+      page_count: 5,
+      news: favList.slice(-5).reverse(),
     }
   }
 })
