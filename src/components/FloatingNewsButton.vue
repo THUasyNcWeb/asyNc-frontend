@@ -25,7 +25,7 @@
               <history-icon />
             </n-icon>
           </template>
-          <news-pane :news="news" more-path="user/history" />
+          <news-pane :news="state.history" more-path="user/history" @remove="removeHistory" />
         </n-tab-pane>
         <n-tab-pane name="readlater">
           <template #tab>
@@ -33,7 +33,7 @@
               <read-icon />
             </n-icon>
           </template>
-          <news-pane :news="[]" more-path="user/readLater" />
+          <news-pane :news="state.readLater" more-path="user/readLater" @remove="removeReadLater"/>
         </n-tab-pane>
         <n-tab-pane name="favorites">
           <template #tab>
@@ -41,7 +41,7 @@
               <favorites-icon />
             </n-icon>
           </template>
-          <news-pane :news="[]" more-path="user/favorites" />
+          <news-pane :news="state.favorites" more-path="user/favorites" @remove="removeFavorites"/>
         </n-tab-pane>
       </n-tabs>
     </n-popover>
@@ -63,25 +63,30 @@ import NewsPane from './NewsPane.vue';
 
 const state = reactive({
   username: decodeToken(),
+  history: [],
+  readLater: [],
+  favorites: [],
 });
 
 // Has the user logged in
 const loggedIn = new Boolean(state.username).valueOf();
 
-const news = [
-  {
-    id: 3,
-    title: 'Test',
-    media: 'Media',
-    url: 'baidu.com',
-    pub_time: new Date(),
-  },
-  {
-    id: 3,
-    title: 'Test2...........你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好',
-    media: 'Media',
-    url: 'baidu.com',
-    pub_time: new Date(),
-  },
-];
+if (loggedIn) {
+  // Fetch news
+}
+
+// Remove news from history
+function removeHistory(index: number) {
+  state.history.splice(index, 1);
+}
+
+// Remove news from read later
+function removeReadLater(index: number) {
+  state.readLater.splice(index, 1);
+}
+
+// Remove news from favorites
+function removeFavorites(index: number) {
+  state.favorites.splice(index, 1);
+}
 </script>

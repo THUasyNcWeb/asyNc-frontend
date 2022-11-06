@@ -15,6 +15,15 @@
           {{item.title}}
         </n-ellipsis>
       </n-a>
+      <template #suffix>
+        <n-button circle quaternary type="error" size="small" @click="$emit('remove', index)">
+          <template #icon>
+            <n-icon>
+              <delete-icon />
+            </n-icon>
+          </template>
+        </n-button>
+      </template>
     </n-list-item>
     <n-list-item v-if="news.length >= maxNewsCount">
       <router-link :to="morePath">
@@ -27,7 +36,17 @@
 </template>
 
 <script setup lang="ts">
-import { NA, NEllipsis, NEmpty, NIcon, NList, NListItem, NSpace, NText } from 'naive-ui';
+import {
+  NA,
+  NButton,
+  NEllipsis,
+  NEmpty,
+  NIcon,
+  NList,
+  NListItem,
+} from 'naive-ui';
+
+import { Close as DeleteIcon } from 'vicons/ionicons-v5';
 
 export interface News {
   id: number,
