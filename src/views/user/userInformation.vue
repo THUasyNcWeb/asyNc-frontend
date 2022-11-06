@@ -24,7 +24,7 @@
                         </n-h3>
                     </n-grid-item>
                     <n-grid-item style="text-align:left"  span="1 300:2">
-                        <UserAvatar :width="120" :height="120" :image_code="props.user.avatar"></UserAvatar>
+                        <UserAvatar :width="120" :height="120" :image_code="props.user.avatar" @changeavatar="update_avatar"></UserAvatar>
                     </n-grid-item>
                 </n-grid>
             </n-grid-item>
@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, reactive,ref } from 'vue'
+import { defineProps, reactive,ref,defineEmits } from 'vue'
 import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NButton,NInput} from 'naive-ui'
 import UserAvatar from '@/components/UserAvatar.vue';
 import API from '../../store/axiosInstance'
@@ -138,6 +138,7 @@ export interface UserInfo {
 const props = defineProps<{
   user:UserInfo,
 }>();
+const emits = defineEmits(['change-info','change-avatar']);
 
 const state = reactive({
     edit_status:false,
@@ -187,10 +188,9 @@ function changeStatus(){
     else {
         API({
             headers:{"Authorization": window.localStorage.getItem("token")},
-            url:'modifyinfo', 
+            url:'modifyuserinfo', 
             method:'post',
             data:{
-                old_user_name: props.user.user_name,
                 new_user_name: state.user.user_name,
                 signature: state.user.signature,
                 mail: state.user.mail,
@@ -200,6 +200,7 @@ function changeStatus(){
             console.log(res)
             state.edit_status = false
             state.button_text = '编辑信息'
+            emits("change-info", state.user.user_name, state.user.signature, state.user.mail)
             alert("修改成功")
         }).catch((error) => {
             console.log(error);
@@ -255,6 +256,11 @@ function checkSend(){
     else {
         state.send_valid = false
     }
+}
+
+function update_avatar(img_code:string) {
+  emits('change-avatar', img_code)
+  // 更新主页面
 }
 
 </script>

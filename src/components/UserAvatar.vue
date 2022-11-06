@@ -12,7 +12,7 @@
                     'test': 'cool! naive!'
                     }" 
                     name="avatar"
-                    :on-change="update"
+                    @finish="update"
                     :show-file-list=false
                     >
                     <n-a v-if="props.width == 120" style="color:aliceblue;font-size: 30px;">
@@ -43,7 +43,7 @@ const props = defineProps<{
   height:number,
   image_code:string,
 }>();
-const emits = defineEmits(['change-avatar']);
+const emits = defineEmits(['changeavatar']);
 const default_logo = require("@/assets/asyNc.png")
 
 function get_token(){
@@ -51,6 +51,7 @@ function get_token(){
 }
 
 function update() {
+    alert("上传完成")
     API({
       headers:{"Authorization": window.localStorage.getItem("token")},
       url:'userinfo',
@@ -58,8 +59,7 @@ function update() {
       // 根据不同类别，把类别放在了对应的请求参数中
   }).then((res)=>{
       var response = res.data.data
-      console.log(response)
-      emits("change-avatar", response.avatar)
+      emits("changeavatar", response.avatar)
   }).catch((error) => {
       console.log(error);
   });
