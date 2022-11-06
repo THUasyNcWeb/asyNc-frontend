@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 03:30
+ * @LastEditTime: 2022-11-07 05:14
 -->
 
 <template>
@@ -19,29 +19,12 @@
         </n-button>
       </template>
       <n-tabs animated default-value="readlater" justify-content="center">
-        <n-tab-pane name="history">
+        <n-tab-pane v-for="tab in tabs" :name="tab.name">
           <template #tab>
-            <n-icon size="large">
-              <history-icon />
-            </n-icon>
+            <n-icon size="large" :component="tab.icon" />
           </template>
-          <news-pane :news="state.history" more-path="user/history" @remove="removeHistory" />
-        </n-tab-pane>
-        <n-tab-pane name="readlater">
-          <template #tab>
-            <n-icon size="large">
-              <read-icon />
-            </n-icon>
-          </template>
-          <news-pane :news="state.readLater" more-path="user/readLater" @remove="removeReadLater" />
-        </n-tab-pane>
-        <n-tab-pane name="favorites">
-          <template #tab>
-            <n-icon size="large">
-              <favorites-icon />
-            </n-icon>
-          </template>
-          <news-pane :news="state.favorites" more-path="user/favorites" @remove="removeFavorites" />
+          <news-pane :news="state[tab.name]" :more-path="`user/${tab.name}`"
+            @remove="id => remove(tab.name, id)" />
         </n-tab-pane>
       </n-tabs>
     </n-popover>
@@ -70,52 +53,60 @@ const maxNewsCount = 5;
 const state = reactive({
   username: decodeToken(),
   history: [],
-  readLater: [],
+  readlater: [],
   favorites: [],
 });
+
+// Tabs, to avoid redundancy
+const tabs = [
+  {
+    name: 'history',
+    icon: HistoryIcon,
+  },
+  {
+    name: 'readlater',
+    icon: ReadIcon,
+  },
+  {
+    name: 'favorites',
+    icon: FavoritesIcon,
+  },
+];
 
 // Has the user logged in
 const loggedIn = new Boolean(state.username).valueOf();
 
 if (loggedIn) {
   // Fetch news
-  API({
-    headers: {
-      Authorization: window.localStorage.getItem('token'),
-    },
-    url: 'history',
-    method: 'get',
-    params: {
-      page: 1,
-    },
-  }).then(response => {
-    state.history = response.data.data.news.slice(0, maxNewsCount);
+  tabs.forEach(tab => {
+    API({
+      headers: {
+        Authorization: window.localStorage.getItem('token'),
+      },
+      url: tab.name,
+      method: 'get',
+      params: {
+        page: 1,
+      },
+    }).then(response => {
+      state[tab.name] = response.data.data.news.slice(0, maxNewsCount);
+    })
   });
 }
 
-// Remove news from history
-function removeHistory(id: number) {
+// Remove news from a list
+function remove(from: string, id: number) {
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),
     },
-    url: 'history',
+    url: from,
     method: 'delete',
     params: {
       id
     },
   }).then(response => {
-    state.history = response.data.data.news.slice(0, maxNewsCount);
+    state[from] = response.data.data.news.slice(0, maxNewsCount);
   });
-}
-
-// Remove news from read later
-function removeReadLater(index: number) {
-  state.readLater.splice(index, 1);
-}
-
-// Remove news from favorites
-function removeFavorites(index: number) {
-  state.favorites.splice(index, 1);
 }
 </script>

@@ -16,7 +16,7 @@
         </n-ellipsis>
       </n-a>
       <template #suffix>
-        <n-button circle quaternary type="error" size="small"
+        <n-button circle quaternary type="error" size="small" :focusable="false"
           @click="$emit('remove', item.id)">
           <template #icon>
             <n-icon>
