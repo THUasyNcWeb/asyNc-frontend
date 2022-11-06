@@ -3,35 +3,40 @@
  * @Author: 王博文
  * @Date: 2022-11-07 00:40
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 01:10
+ * @LastEditTime: 2022-11-07 02:13
 -->
 
 <template>
-  <n-empty v-if="news.length === 0" />
-  <n-list v-else hoverable clickable>
-    <n-thing v-for="item in news">
-      <template #header>
+  <n-empty v-if="!news.length" size="large" />
+  <n-list v-else hoverable>
+    <n-list-item v-for="item, index in news">
+      <n-a :href="item.url">
         <n-ellipsis line-clamp="1">
           {{item.title}}
         </n-ellipsis>
-      </template>
-    </n-thing>
-    <router-link :to="morePath">
-      更多...
-    </router-link>
+      </n-a>
+    </n-list-item>
+    <n-list-item v-if="news.length >= maxNewsCount">
+      <router-link :to="morePath">
+        <n-a>
+          更多...
+        </n-a>
+      </router-link>
+    </n-list-item>
   </n-list>
 </template>
 
 <script setup lang="ts">
-import { NEllipsis, NEmpty, NList, NThing } from 'naive-ui';
+import { NA, NEllipsis, NEmpty, NIcon, NList, NListItem, NSpace, NText } from 'naive-ui';
 
 export interface News {
   id: number,
   title: string,
-  media: string,
   url: string,
-  pub_time: Date,
 };
+
+// Max count of news shown in a panel
+const maxNewsCount = 5;
 
 const props = defineProps<{
   news: News[],
