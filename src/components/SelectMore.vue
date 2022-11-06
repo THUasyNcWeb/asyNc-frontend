@@ -55,12 +55,11 @@
 import {NCard, NSpace, NH2 ,NText, NButton,NIcon,} from 'naive-ui'
 import { defineProps,reactive,defineEmits } from 'vue';
 import { StorefrontOutline,CarSportOutline,GameControllerOutline, BulbOutline, PeopleCircleOutline, StatsChartOutline, BicycleOutline, DiamondOutline, HeartOutline, LibraryOutline, FastFoodOutline, SchoolOutline, EarthOutline } from '@vicons/ionicons5';
-import API from "../store/axiosInstance"
 export interface Category {
     key: string,
     label: string,
 }
-const emits = defineEmits(['updateCategory']);
+const emits = defineEmits(['update']);
 const props = defineProps<{
   mainCategory:Category[],
 }>();
@@ -80,21 +79,7 @@ state.moreCategory.push(
     {key:'history', label:'历史'},
 )
 function jump(category: Category){
-    console.log("请求后端给我点新闻")
-    console.log(category.key)
-    API({
-        headers:{"Authorization": window.localStorage.getItem("token")},
-        url:'allnews',
-        params:{
-            category: category.key
-        },
-        method:'get',
-        // 根据不同类别，把类别放在了对应的请求参数中
-    }).then((res)=>{
-        emits('updateCategory', res.data.data, category.key, category.label)
-    }).catch((error) => {
-        console.log(error);
-    });
+    emits('update', category.key, category.label)
 }
 
 </script>
@@ -108,10 +93,6 @@ function jump(category: Category){
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     background-color: rgba(255, 255, 255, 0.8);
-    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
-    -0.5px 0px 5px #808080,   /*左边阴影 */
-    0.5px 0px 5px #808080,    /*右边阴影 */
-    0px 0.5px 5px #808080;    /*下边阴影  */
 }
 
 </style>

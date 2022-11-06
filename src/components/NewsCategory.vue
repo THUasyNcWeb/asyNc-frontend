@@ -1,5 +1,5 @@
 <template>
-    <n-space vertical style="width:60%">
+    <n-space vertical>
         <n-empty v-if="!props.news.length" size="large" description="什么也没有找到" />
         <template v-else>
           <n-list hoverable clickable>
