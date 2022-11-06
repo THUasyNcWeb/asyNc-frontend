@@ -2,8 +2,8 @@
  * @FileDescription: 新闻搜索与展示主页
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 10:07  
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-07 00:00
  -->
 
 <script setup lang="ts">
@@ -16,6 +16,7 @@ import {
     NTabs,
     NTabPane,
 } from 'naive-ui'
+import FloatingNewsButton from '@/components/FloatingNewsButton.vue';
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
@@ -124,6 +125,7 @@ function selectNews(news, category:string, label:string){
                 <NewsCategory v-else :news="state.all_news"/>
             </n-tab-pane>
          </n-tabs>
+         <floating-news-button />
     </body>
 </template>
   

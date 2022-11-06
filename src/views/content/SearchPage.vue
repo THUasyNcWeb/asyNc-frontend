@@ -3,27 +3,28 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 20:14
+ * @LastEditTime: 2022-11-07 00:00
 -->
 <template>
-    <n-space vertical style="padding: 18px 96px">
-      <template v-if="!state.loading">
-        <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
-        <template v-else>
-          <n-list hoverable clickable>
-            <n-list-item v-for="entry, id in state.news" :key="id">
-              <news-entry :news="entry" />
-            </n-list-item>
-          </n-list>
-          <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
-        </template>
+  <n-space vertical style="padding: 18px 96px">
+    <template v-if="!state.loading">
+      <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
+      <template v-else>
+        <n-list hoverable clickable>
+          <n-list-item v-for="entry, id in state.news" :key="id">
+            <news-entry :news="entry" />
+          </n-list-item>
+        </n-list>
+        <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
       </template>
-      <template v-else v-for="_ in 10" :key="_">
-        <n-skeleton text size="medium" style="width: 30%" />
-        <n-skeleton text :repeat="3" />
-        <n-skeleton text style="width: 20%" />
-      </template>
-    </n-space>
+    </template>
+    <template v-else v-for="_ in 10" :key="_">
+      <n-skeleton text size="medium" style="width: 30%" />
+      <n-skeleton text :repeat="3" />
+      <n-skeleton text style="width: 20%" />
+    </template>
+  </n-space>
+  <floating-news-button />
 </template>
 
 <script setup lang="ts">
@@ -44,8 +45,9 @@ import router from '@/router';
 import API from '@/store/axiosInstance';
 import { decodeToken } from '@/main';
 
-// import '@/mock/SearchPage.mock';
+import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
+import FloatingNewsButton from '@/components/FloatingNewsButton.vue';
 
 const state = reactive({
   // Query parameters
