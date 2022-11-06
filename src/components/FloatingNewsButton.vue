@@ -3,14 +3,14 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 00:00
+ * @LastEditTime: 2022-11-07 00:38
 -->
 
 <template>
-  <n-affix style="position: fixed; right: 48px; bottom: 48px;">
+  <n-affix v-if="loggedIn" style="position: fixed; right: 48px; bottom: 48px;">
     <n-popover>
       <template #trigger>
-        <n-button circle size="large">
+        <n-button secondary circle size="large">
           <template #icon>
             <n-icon>
               <ellipsis-icon />
@@ -18,13 +18,52 @@
           </template>
         </n-button>
       </template>
-      Hello!
+      <n-tabs>
+        <n-tab-pane name="history">
+          <template #tab>
+            <n-icon size="large">
+              <history-icon />
+            </n-icon>
+          </template>
+          Tab1
+        </n-tab-pane>
+        <n-tab-pane name="readlater">
+          <template #tab>
+            <n-icon size="large">
+              <read-icon />
+            </n-icon>
+          </template>
+          Tab2
+        </n-tab-pane>
+        <n-tab-pane name="favorites">
+          <template #tab>
+            <n-icon size="large">
+              <favorites-icon />
+            </n-icon>
+          </template>
+          Tab3
+        </n-tab-pane>
+      </n-tabs>
     </n-popover>
   </n-affix>
 </template>
 
 <script setup lang="ts">
-import { NAffix, NButton, NIcon, NPopover } from 'naive-ui';
+import { NAffix, NButton, NIcon, NPopover, NTabPane, NTabs } from 'naive-ui';
 
-import { EllipsisVertical as EllipsisIcon } from '@vicons/ionicons5/';
+import {
+  BookmarkOutline as ReadIcon,
+  EllipsisVertical as EllipsisIcon,
+  StarOutline as FavoritesIcon,
+  TimeOutline as HistoryIcon,
+} from '@vicons/ionicons5/';
+import { reactive } from 'vue';
+import { decodeToken } from '@/main';
+
+const state = reactive({
+  username: decodeToken(),
+});
+
+// Has the user logged in
+const loggedIn = new Boolean(state.username).valueOf();
 </script>
