@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 05:14
+ * @LastEditTime: 2022-11-07 05:25
 -->
 
 <template>
@@ -23,8 +23,10 @@
           <template #tab>
             <n-icon size="large" :component="tab.icon" />
           </template>
-          <news-pane :news="state[tab.name]" :more-path="`user/${tab.name}`"
+          <n-spin :show="state[tab.name].loading">
+            <news-pane :news="state[tab.name].news" :more-path="`user/${tab.name}`"
             @remove="id => remove(tab.name, id)" />
+          </n-spin>
         </n-tab-pane>
       </n-tabs>
     </n-popover>
@@ -33,7 +35,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { NAffix, NButton, NIcon, NPopover, NTabPane, NTabs } from 'naive-ui';
+import { NAffix, NButton, NIcon, NPopover, NSpin, NTabPane, NTabs } from 'naive-ui';
 
 import {
   BookmarkOutline as ReadIcon,
@@ -52,9 +54,18 @@ const maxNewsCount = 5;
 
 const state = reactive({
   username: decodeToken(),
-  history: [],
-  readlater: [],
-  favorites: [],
+  history: {
+    loading: false,
+    news: [],
+  },
+  readlater: {
+    loading: false,
+    news: [],
+  },
+  favorites: {
+    loading: false,
+    news: [],
+  },
 });
 
 // Tabs, to avoid redundancy
@@ -89,13 +100,14 @@ if (loggedIn) {
         page: 1,
       },
     }).then(response => {
-      state[tab.name] = response.data.data.news.slice(0, maxNewsCount);
+      state[tab.name].news = response.data.data.news.slice(0, maxNewsCount);
     })
   });
 }
 
 // Remove news from a list
 function remove(from: string, id: number) {
+  state[from].loading = true;
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),
@@ -106,7 +118,8 @@ function remove(from: string, id: number) {
       id
     },
   }).then(response => {
-    state[from] = response.data.data.news.slice(0, maxNewsCount);
+    state[from].loading = false;
+    state[from].news = response.data.data.news.slice(0, maxNewsCount);
   });
 }
 </script>
