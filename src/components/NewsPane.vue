@@ -3,20 +3,21 @@
  * @Author: 王博文
  * @Date: 2022-11-07 00:40
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 02:13
+ * @LastEditTime: 2022-11-07 04:39
 -->
 
 <template>
   <n-empty v-if="!news.length" size="large" />
   <n-list v-else hoverable>
-    <n-list-item v-for="item, index in news">
-      <n-a :href="item.url">
+    <n-list-item v-for="item in news">
+      <n-a :href="item.url" @click="newsClick(item.id)">
         <n-ellipsis line-clamp="1">
           {{item.title}}
         </n-ellipsis>
       </n-a>
       <template #suffix>
-        <n-button circle quaternary type="error" size="small" @click="$emit('remove', index)">
+        <n-button circle quaternary type="error" size="small"
+          @click="$emit('remove', item.id)">
           <template #icon>
             <n-icon>
               <delete-icon />
@@ -48,6 +49,8 @@ import {
 
 import { Close as DeleteIcon } from 'vicons/ionicons-v5';
 
+import { newsClick } from '@/main';
+
 export interface News {
   id: number,
   title: string,
@@ -57,7 +60,7 @@ export interface News {
 // Max count of news shown in a panel
 const maxNewsCount = 5;
 
-const props = defineProps<{
+defineProps<{
   news: News[],
   morePath: string,
 }>();

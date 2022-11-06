@@ -3,11 +3,11 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-25 22:08
+ * @LastEditTime: 2022-11-07 04:44
 -->
 
 <template>
-  <n-a :href="news.url" style="text-decoration: none;">
+  <n-a :href="news.url" style="text-decoration: none;" @click="newsClick(news.id)">
     <n-thing>
       <n-h2 align-text prefix="bar">
         <span v-for="span, id in titleSpans" :key="id" :class="{ em: span.em }">
@@ -45,7 +45,10 @@
 import { computed, defineProps } from 'vue';
 import { NA, NEllipsis, NH2, NImage, NSpace, NText, NThing } from 'naive-ui';
 
+import { newsClick } from '@/main';
+
 export interface News {
+  id: number,
   title: string,
   url: string,
   media: string,

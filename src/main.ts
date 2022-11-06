@@ -2,8 +2,8 @@
  * @FileDescription: 主脚本，注册了全局应用app与路由守卫
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 9:38
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-07 04:39
 */
 
 import { createApp } from 'vue'
@@ -15,6 +15,21 @@ const app = createApp(App);
 
 app.use(router);
 app.mount("#app");
+
+// Record when the user clicks a news
+export function newsClick(id: number) {
+  alert('Ok');
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'history',
+    method: 'post',
+    params: {
+      id
+    },
+  });
+}
 
 function judgeToken() {
   API({

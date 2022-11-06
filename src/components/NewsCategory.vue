@@ -7,7 +7,7 @@
               <n-space justify="space-between" stlye="display:inline-block">
                   <n-space vertical justify="space-between" :style="{'max-width': item.picture_url ? '550px' : '900px','min-height':'140px' }">
                     <n-h2 stlye="width:200%" prefix="bar">
-                      <n-a :href="item.url" style="text-decoration: none;">
+                      <n-a :href="item.url" style="text-decoration: none;" @click="newsClick(item.id)">
                         <n-ellipsis :line-clamp="2" :tooltip=false>
                           <n-text type="primary">
                                 {{item.title}}
@@ -61,7 +61,10 @@ import {PeopleCircleOutline,CalendarNumberOutline,StarOutline} from "@vicons/ion
 
 import { NA, NH2,NIcon, NText, NSpace, NEmpty,NList,NListItem,NImage,NEllipsis, } from 'naive-ui';
 
+import { newsClick } from '@/main';
+
 export interface All_News {
+  id: number,
   title: string,
   url: string,
   media: string,
