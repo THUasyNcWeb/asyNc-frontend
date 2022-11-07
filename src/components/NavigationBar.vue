@@ -16,77 +16,103 @@
       <search-box :text="state.word" style="width: 40vw" />
     </n-space>
 
-    <n-dropdown v-if="state.username" :options="options" @select="handleSelect">
-      <n-button quaternary>
-        {{ state.username }}
-      </n-button>
-    </n-dropdown>
-
-    <n-popover v-else trigger="hover" placement="bottom" :show-arrow="false">
-      <template #trigger>
-        <router-link to="login" style="text-decoration: none">
-          <n-icon :size="25" color="#0e7a0d">
-            <PersonAddOutline />
-          </n-icon>
-        </router-link>
-      </template>
-      <template #header>
-        <n-text strong depth="1">
-          登录后你可以
-        </n-text>
-      </template>
-
-      <div>
-        <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%">
-          <AnalyticsOutline />
-        </n-icon>
-        <n-text>
-          畅享百万数据模型
-        </n-text>
-      </div>
-
-      <div>
-        <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%">
-          <TimeOutline />
-        </n-icon>
-        <n-text>
-          多端同步搜索记录
-        </n-text>
-      </div>
-
-      <div>
-        <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%">
-          <TargetArrow20Regular />
-        </n-icon>
-        <n-text>
-          私人定制搜索服务
-        </n-text>
-      </div>
-
-      <div>
-        <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%">
-          <SlideMultipleSearch20Regular />
-        </n-icon>
-        <n-text>
-          发现网站更多功能
-        </n-text>
-      </div>
-
-      <template #footer>
-        <div>
-          <router-link to="login" style="text-decoration: none">
-            <n-button quaternary>
-              立即进入知识的世界
-            </n-button>
-          </router-link>
-        </div>
-      </template>
-      <!-- <router-link to="register" style="text-decoration: none">
-        <n-button primary type="primary">
-            注册
+    <n-space justify="end">
+      <n-dropdown v-if="state.username" :options="options" @select="handleSelect">
+        <n-button quaternary>
+          {{ state.username }}
         </n-button>
-        </router-link> -->
-    </n-popover>
+      </n-dropdown>
+      <n-popover v-else trigger="hover" placement="bottom" :show-arrow="false"
+        style="width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <router-link to="login" style="text-decoration: none">
+            <n-icon :size="25" color="#0e7a0d">
+              <PersonAddOutline />
+            </n-icon>
+          </router-link>
+        </template>
+        <template #header style="margin-top: 5px;">
+          <n-space>
+            <n-h4 align-text="true" type="info" style="vertical-align: -10%; margin-left: 6px;">
+              登录后你可以：
+            </n-h4>
+          </n-space>
+        </template>
+        <n-space>
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <AnalyticsOutline />
+            </n-icon>
+            <n-text>
+              畅享百万数据模型
+            </n-text>
+          </div>
+
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <TimeOutline />
+            </n-icon>
+            <n-text>
+              多端同步搜索记录
+            </n-text>
+          </div>
+        </n-space>
+        <n-space>
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <TargetArrow20Regular />
+            </n-icon>
+            <n-text>
+              私人定制搜索服务
+            </n-text>
+          </div>
+
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <SlideMultipleSearch20Regular />
+            </n-icon>
+            <n-text>
+              发现网站更多功能
+            </n-text>
+          </div>
+        </n-space>
+        <template #footer>
+          <n-space>
+            <router-link to="login" style="text-decoration: none">
+              <n-button type="primary" size="large"
+                style="min-width: 315px; border-radius: 15px;margin-left: 4px;margin-top: 5px;">
+                进入知识的世界
+              </n-button>
+            </router-link>
+            <router-link to="register" style="text-decoration: none">
+              <n-button type="tertiary" size="medium"
+                style="min-width: 315px; border-radius: 15px;margin-left: 4px;margin-bottom: 5px;">
+                第一次来？点我注册
+              </n-button>
+            </router-link>
+          </n-space>
+        </template>
+      </n-popover>
+
+      <n-space vertical>
+        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
+          <PersonAddOutline />
+        </n-icon>
+      </n-space>
+
+      <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
+        <PersonAddOutline />
+      </n-icon>
+
+      <n-space vertical>
+        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
+          <SignOut20Regular />
+        </n-icon>
+        <n-text></n-text>
+      </n-space>
+
+    </n-space>
+
   </n-space>
 </template>
 
@@ -110,7 +136,8 @@ import {
 } from '@vicons/ionicons5';
 import {
   TargetArrow20Regular,
-  SlideMultipleSearch20Regular
+  SlideMultipleSearch20Regular,
+  SignOut20Regular
 } from '@vicons/fluent';
 
 import SearchBox from './SearchBox.vue'
