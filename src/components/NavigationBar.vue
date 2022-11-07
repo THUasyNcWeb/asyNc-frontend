@@ -94,11 +94,21 @@
         </template>
       </n-popover>
 
-      <n-space vertical>
-        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
-          <Collections20Regular />
-        </n-icon>
-      </n-space>
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
+            <StarLineHorizontal316Regular />
+          </n-icon>
+        </template>
+        <n-space v-if="state.username" vertical></n-space>
+        <n-space v-else vertical>
+          <router-link to="login" style="text-decoration: none">
+            <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
+              登录以查看收藏的宝藏知识
+            </n-button>
+          </router-link>
+        </n-space>
+      </n-popover>
 
       <n-space vertical>
         <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
@@ -141,7 +151,7 @@ import {
   SlideMultipleSearch20Regular,
   SignOut20Regular,
   History20Regular,
-  Collections20Regular
+  StarLineHorizontal316Regular
 } from '@vicons/fluent';
 
 import SearchBox from './SearchBox.vue'
