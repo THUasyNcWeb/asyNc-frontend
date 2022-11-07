@@ -31,7 +31,7 @@
             </n-icon>
           </router-link>
         </template>
-        <template #header style="margin-top: 5px;">
+        <template #header>
           <n-space>
             <n-h4 align-text="true" type="info" style="vertical-align: -10%; margin-left: 6px;">
               登录后你可以：
@@ -126,12 +126,23 @@
         </n-space>
       </n-popover>
 
-      <n-space vertical>
-        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
-          <SignOut20Regular />
-        </n-icon>
-        <n-text></n-text>
-      </n-space>
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 6px;">
+            <SignOut20Regular />
+          </n-icon>
+        </template>
+        <n-space v-if="state.username" vertical>
+          <n-button type="tertiary" size="large" style=" border-radius: 15px; margin: 5px;" @click="handleLogout">
+            封存记忆，离开知识的世界
+          </n-button>
+        </n-space>
+        <n-space v-else vertical>
+          <n-button disabled size="medium" style=" border-radius: 15px; margin: 5px;">
+            你还没有走入这个世界，求知者
+          </n-button>
+        </n-space>
+      </n-popover>
 
     </n-space>
 
@@ -147,7 +158,8 @@ import {
   NSpace,
   useDialog,
   NPopover,
-  NText
+  NText,
+  useMessage
 } from 'naive-ui';
 import {
   PersonCircleOutline as UserIcon,
@@ -203,38 +215,85 @@ const options = [
 // Handle select event of the user menu
 
 const exitDialog = useDialog()
+const message = useMessage()
 function handleSelect(key: 'profile' | 'logout') {
   switch (key) {
     case 'profile':
       router.push('/user/userInformation');
       break;
     case 'logout':
-      exitDialog.warning({
-        title: '退出登录确认',
-        content: '你确定退出登录吗QWQ？',
-        positiveText: '确认',
-        negativeText: '取消',
-        onPositiveClick: () => {
-          API({
-            headers: { "Authorization": window.localStorage.getItem("token") },
-            // 携带token字段
-            url: 'logout',
-            method: 'post'
-          }).then((res) => {
-            console.log(res)
-            window.localStorage.removeItem('token')
-            state.username = ""
-            router.push("/")
-          })
-            .catch((error) => {
-              console.log(error)
-            })
-        },
-        onNegativeClick: () => {
-        }
-        // 若是退出登录界面，则关闭弹窗
-      })
+    // exitDialog.warning({
+    //   title: '退出登录确认',
+    //   content: '你确定退出登录吗QWQ？',
+    //   positiveText: '确认',
+    //   negativeText: '取消',
+    //   onPositiveClick: () => {
+    //     API({
+    //       headers: { "Authorization": window.localStorage.getItem("token") },
+    //       // 携带token字段
+    //       url: 'logout',
+    //       method: 'post'
+    //     }).then((res) => {
+    //       console.log(res)
+    //       window.localStorage.removeItem('token')
+    //       state.username = ""
+    //       router.push("/")
+    //     })
+    //       .catch((error) => {
+    //         console.log(error)
+    //       })
+    //   },
+    //   onNegativeClick: () => {
+    //   }
+    //   // 若是退出登录界面，则关闭弹窗
+    // })
   }
+}
+
+function handleLogout() {
+  exitDialog.warning({
+    title: '退出登录确认',
+    content: '确认不再探索了么？',
+    positiveText: '确认',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      API({
+        headers: { "Authorization": window.localStorage.getItem("token") },
+        // 携带token字段
+        url: 'logout',
+        method: 'post'
+      }).then((res) => {
+        console.log(res)
+        window.localStorage.removeItem('token')
+        state.username = ""
+        router.push("/")
+      })
+        .catch((error) => {
+          console.log(error)
+        })
+      message.success(
+        "再见，求知者，期待你的归来",
+        { duration: 2000 }
+      )
+      return
+    },
+    onNegativeClick: () => {
+      message.success(
+        "欢迎回来",
+        { duration: 2000 }
+      )
+    },
+    onClose: () => {
+      message.success(
+        "欢迎回来",
+        { duration: 2000 }
+      )
+    },
+  })
+  message.warning(
+    "慎重考虑，求知者",
+    { duration: 2000 }
+  )
 }
 
 </script>
