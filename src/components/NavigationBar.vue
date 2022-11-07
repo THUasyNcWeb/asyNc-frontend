@@ -2,8 +2,8 @@
  * @FileDescription: 导航栏组件
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
- * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 20:40
+ * @LastEditors: 刘铠铭
+ * @LastEditTime: 2022-11-07
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -26,8 +26,8 @@
         style="width: 370px; border-radius: 5px;">
         <template #trigger>
           <router-link to="login" style="text-decoration: none">
-            <n-icon :size="25" color="#0e7a0d">
-              <PersonAddOutline />
+            <n-icon :size="25" color="#0e7a0d" style="margin-top: 6px;">
+              <CalendarPerson20Regular />
             </n-icon>
           </router-link>
         </template>
@@ -95,17 +95,19 @@
       </n-popover>
 
       <n-space vertical>
-        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
-          <PersonAddOutline />
+        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
+          <Collections20Regular />
         </n-icon>
       </n-space>
 
-      <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
-        <PersonAddOutline />
-      </n-icon>
+      <n-space vertical>
+        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
+          <History20Regular />
+        </n-icon>
+      </n-space>
 
       <n-space vertical>
-        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;">
+        <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
           <SignOut20Regular />
         </n-icon>
         <n-text></n-text>
@@ -130,14 +132,16 @@ import {
 import {
   PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
-  PersonAddOutline,
   TimeOutline,
-  AnalyticsOutline
+  AnalyticsOutline,
 } from '@vicons/ionicons5';
 import {
+  CalendarPerson20Regular,
   TargetArrow20Regular,
   SlideMultipleSearch20Regular,
-  SignOut20Regular
+  SignOut20Regular,
+  History20Regular,
+  Collections20Regular
 } from '@vicons/fluent';
 
 import SearchBox from './SearchBox.vue'
