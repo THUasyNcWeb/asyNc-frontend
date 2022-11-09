@@ -13,27 +13,30 @@
           asyNc
         </n-gradient-text>
       </router-link>
-      <search-box :text="state.word" style="width: 40vw" />
+      <search-box :text="state.user.user_name" style="width: 40vw" />
     </n-space>
 
     <n-space justify="end">
-      <n-dropdown v-if="state.username" :options="options" @select="handleSelect">
-        <n-button quaternary>
-          {{ state.username }}
-        </n-button>
-      </n-dropdown>
+      <n-popover v-if="state.user.user_name" :key="state.user.avatar" trigger="hover" placement="bottom"
+        :show-arrow="true">
+        <template #trigger>
+          <n-image style="border-radius:50%; vertical-align: middle;" width="40" height="40" object-fit="cover"
+            :src="state.user.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
+        </template>
+      </n-popover>
+
       <n-popover v-else trigger="hover" placement="bottom" :show-arrow="false"
         style="width: 370px; border-radius: 5px;">
         <template #trigger>
           <router-link to="login" style="text-decoration: none">
-            <n-icon :size="25" color="#0e7a0d" style="margin-top: 6px;">
+            <n-icon :size="25" color="#0e7a0d" style="margin-top: 8px;">
               <CalendarPerson20Regular />
             </n-icon>
           </router-link>
         </template>
         <template #header>
           <n-space>
-            <n-h4 align-text="true" type="info" style="vertical-align: -10%; margin-left: 6px;">
+            <n-h4 type="info" style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px;">
               登录后你可以：
             </n-h4>
           </n-space>
@@ -96,11 +99,11 @@
 
       <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
-          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <StarLineHorizontal316Regular />
           </n-icon>
         </template>
-        <n-space v-if="state.username" vertical></n-space>
+        <n-space v-if="state.user.user_name" vertical></n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -112,11 +115,11 @@
 
       <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
-          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 6px;">
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <History20Regular />
           </n-icon>
         </template>
-        <n-space v-if="state.username" vertical></n-space>
+        <n-space v-if="state.user.user_name" vertical></n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -126,22 +129,23 @@
         </n-space>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover v-if="state.user.user_name" trigger="hover" placement="bottom" :show-arrow="false"
+        style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
-          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 6px;">
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
             <SignOut20Regular />
           </n-icon>
         </template>
-        <n-space v-if="state.username" vertical>
+        <n-space vertical>
           <n-button type="tertiary" size="large" style=" border-radius: 15px; margin: 5px;" @click="handleLogout">
             封存记忆，离开知识的世界
           </n-button>
         </n-space>
-        <n-space v-else vertical>
+        <!-- <n-space v-else vertical>
           <n-button disabled size="medium" style=" border-radius: 15px; margin: 5px;">
             你还没有走入这个世界，求知者
           </n-button>
-        </n-space>
+        </n-space> -->
       </n-popover>
 
     </n-space>
@@ -152,18 +156,16 @@
 <script setup lang="ts">
 import {
   NButton,
-  NDropdown,
   NGradientText,
   NIcon,
   NSpace,
   useDialog,
   NPopover,
   NText,
-  useMessage
+  useMessage,
+  NImage
 } from 'naive-ui';
 import {
-  PersonCircleOutline as UserIcon,
-  LogOutOutline as LogoutIcon,
   TimeOutline,
   AnalyticsOutline,
 } from '@vicons/ionicons5';
@@ -177,83 +179,49 @@ import {
 } from '@vicons/fluent';
 
 import SearchBox from './SearchBox.vue'
-import { decodeToken } from '@/main';
-// import router from '@/router';
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import { Component, h, reactive } from 'vue';
-import '@/mock/SearchPage.mock';
+import { reactive } from 'vue';
+// import '@/mock/SearchPage.mock';
 
-// Query parameters
-const state = reactive({
-  word: router.currentRoute.value.query.q as string,
-  username: decodeToken() || '',
-})
-
-
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, {
-    default: () => h(icon),
-  });
+export interface UserInfo {
+  id: string,
+  user_name: string,
+  signature: string,
+  tags: string[],
+  mail: string,
+  avatar: string,
 }
+const state = reactive({ user: { avatar: '' } as UserInfo, random: Math.random() })
+const default_logo = require("@/assets/asyNc.png")
 
-// Options for user menu
-const options = [
-  {
-    label: '个人中心',
-    key: 'profile',
-    icon: renderIcon(UserIcon),
-  },
-  {
-    label: '退出登录',
-    key: 'logout',
-    icon: renderIcon(LogoutIcon),
-  },
-]
-
-// Handle select event of the user menu
+if (window.localStorage.getItem("token") != null) {
+  API({
+    headers: { "Authorization": window.localStorage.getItem("token") },
+    url: 'userinfo',
+    method: 'get',
+    // 根据不同类别，把类别放在了对应的请求参数中
+  }).then((res) => {
+    state.user = res.data.data
+    console.log(res)
+  }).catch((error) => {
+    console.log(error);
+  });
+  console.log(state.user.avatar)
+}
 
 const exitDialog = useDialog()
 const message = useMessage()
-function handleSelect(key: 'profile' | 'logout') {
-  switch (key) {
-    case 'profile':
-      router.push('/user/userInformation');
-      break;
-    case 'logout':
-    // exitDialog.warning({
-    //   title: '退出登录确认',
-    //   content: '你确定退出登录吗QWQ？',
-    //   positiveText: '确认',
-    //   negativeText: '取消',
-    //   onPositiveClick: () => {
-    //     API({
-    //       headers: { "Authorization": window.localStorage.getItem("token") },
-    //       // 携带token字段
-    //       url: 'logout',
-    //       method: 'post'
-    //     }).then((res) => {
-    //       console.log(res)
-    //       window.localStorage.removeItem('token')
-    //       state.username = ""
-    //       router.push("/")
-    //     })
-    //       .catch((error) => {
-    //         console.log(error)
-    //       })
-    //   },
-    //   onNegativeClick: () => {
-    //   }
-    //   // 若是退出登录界面，则关闭弹窗
-    // })
-  }
+
+function handleToUserHome() {
+  router.push('/user/userInformation');
 }
 
 function handleLogout() {
   exitDialog.warning({
-    title: '退出登录确认',
-    content: '确认不再探索了么？',
+    title: '确认要离开么',
+    content: '今天还有很多新知识，真得不再探索了么？',
     positiveText: '确认',
     negativeText: '取消',
     onPositiveClick: () => {
@@ -265,7 +233,7 @@ function handleLogout() {
       }).then((res) => {
         console.log(res)
         window.localStorage.removeItem('token')
-        state.username = ""
+        state.user.user_name = ""
         router.push("/")
       })
         .catch((error) => {
