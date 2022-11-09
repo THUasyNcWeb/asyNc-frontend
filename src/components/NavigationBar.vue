@@ -18,10 +18,31 @@
 
     <n-space justify="end">
       <n-popover v-if="state.user.user_name" :key="state.user.avatar" trigger="hover" placement="bottom"
-        :show-arrow="true">
+        :show-arrow="true" style="border-radius: 5px;">
         <template #trigger>
           <n-image style="border-radius:50%; vertical-align: middle;" width="40" height="40" object-fit="cover"
             :src="state.user.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
+        </template>
+        <template #header>
+          <n-space>
+            <n-text :strong="true" :underline="true" :depth="2" type="success"
+              style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;"
+              @click="handleToUserHome">
+              {{ state.user.user_name }}
+            </n-text>
+          </n-space>
+        </template>
+
+        <n-space vertical>
+
+        </n-space>
+
+        <template #footer>
+          <n-space>
+            <n-button type="tertiary" size="large" style="margin: 5px;" @click="handleLogout">
+              封存记忆，离开知识的世界
+            </n-button>
+          </n-space>
         </template>
       </n-popover>
 
