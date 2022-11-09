@@ -24,23 +24,35 @@
             :src="state.user.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
         </template>
         <template #header>
-          <n-space>
-            <n-text :strong="true" :underline="true" :depth="2" type="success"
-              style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;"
-              @click="handleToUserHome">
-              {{ state.user.user_name }}
-            </n-text>
-          </n-space>
+          <n-text :depth="2"
+            style="vertical-align: -12%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;">
+            你好,
+          </n-text>
+          <n-text :strong="true" :underline="true" :depth="2" type="success"
+            style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;"
+            @click="handleToUserHome">
+            {{ state.user.user_name }}
+          </n-text>
         </template>
 
         <n-space vertical>
-
+          <n-button type="primary" size="medium" style="margin: 2px; width: 172px;" @click="handleToUserHome">
+            <template #icon>
+              <n-icon :size="20">
+                <CalendarPerson20Regular />
+              </n-icon>
+            </template>
+            个人中心
+          </n-button>
         </n-space>
 
         <template #footer>
           <n-space>
-            <n-button type="tertiary" size="large" style="margin: 5px;" @click="handleLogout">
-              封存记忆，离开知识的世界
+            <n-button type="tertiary" size="medium" style="margin: 2px;" @click="handleLogout">
+              <n-icon :size="20">
+                <SignOut20Regular />
+              </n-icon>
+              封存记忆，退出世界
             </n-button>
           </n-space>
         </template>
