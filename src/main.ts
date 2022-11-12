@@ -16,20 +16,6 @@ const app = createApp(App);
 app.use(router);
 app.mount("#app");
 
-function judgeToken() {
-  API({
-    headers:{"Authorization": window.localStorage.getItem("token")},
-    url:'checklogin',
-    method:'post',
-  }).then((res) => {
-    console.log(res)
-  }).catch((error) => {
-    console.log(error)
-    console.log("错啦")
-    localStorage.removeItem("token")
-  })
-}
-
 function decodeToken() :(string | boolean) {
   /**
   * @description: 判断当前token是否有效
@@ -38,8 +24,13 @@ function decodeToken() :(string | boolean) {
   if(localStorage.getItem("token") == null) {
     return false
   }
-  judgeToken()
-  try{
+  API({
+    headers:{"Authorization": window.localStorage.getItem("token")},
+    url:'checklogin',
+    method:'post',
+  }).then((res) => {
+    console.log(res)
+    try{
       const tokenString:string = localStorage.getItem("token");
       const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))
       console.log(token)
@@ -51,14 +42,20 @@ function decodeToken() :(string | boolean) {
           throw Error("The token has expired!")
       }
       return token.user_name
-  }
-  catch(error){
+    }
+    catch(error){
       console.log(error)
       console.log("错啦")
       localStorage.removeItem("token")
       // 清除原来无用的token
       return false
-  }
+    }
+  }).catch((error) => {
+    console.log(error)
+    console.log("错啦")
+    localStorage.removeItem("token")
+  })
+  
 }
 
 router.beforeEach((to, _, next) => {
