@@ -49,7 +49,7 @@ import {
   LogOutOutline as LogoutIcon
 } from '@vicons/ionicons5';
 import SearchBox from './SearchBox.vue'
-import { decodeToken } from '@/main';
+import { decodeToken,judgeToken } from '@/main';
 // import router from '@/router';
 import router from '@/router';
 import API from '@/store/axiosInstance';
@@ -60,9 +60,17 @@ import { Component, h, reactive } from 'vue';
 // Query parameters
 const state = reactive({
   word: router.currentRoute.value.query.q as string,
-  username: decodeToken() || '',
+  username: decodeToken(),
 })
 
+async function init_username() {
+  const value = await judgeToken()
+  console.log(value)
+  console.log("异步请求")
+  state.username = value
+}
+
+init_username()
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, {

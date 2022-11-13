@@ -56,7 +56,7 @@ import API from "../../store/axiosInstance"
 import {reactive, defineProps} from 'vue'
 import {useRouter} from 'vue-router'
 import {NInput,NButton,NGrid,NGridItem,NGradientText,NCard} from 'naive-ui'
-import {decodeToken} from "@/main"
+import {judgeToken} from "@/main"
 export interface UserInfo {
   id: string,
   user_name: string,
@@ -71,9 +71,9 @@ const props = defineProps<{
 }>();
 
 const state = reactive({ old_password:"", new_password: "", new_password_again:""})
-let flag = decodeToken()
+let username_valid = await judgeToken()
 let router = useRouter()
-if(typeof(flag) == "boolean") {
+if(username_valid == "") {
     alert("请先登录或者注册")
     router.push("/")
 }
