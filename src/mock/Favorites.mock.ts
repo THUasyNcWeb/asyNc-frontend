@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 02:44
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 02:55
+ * @LastEditTime: 2022-11-14 23:59
  */
 
 import Mock from 'better-mock';
@@ -41,7 +41,7 @@ let favList = [
   },
   {
     id: 4,
-    title: '有图片的很长的非常好新闻',
+    title: '有图片的很长的非常好新闻一个一个一个啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊',
     media: '有仙则名新闻',
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     image_url: 'https://www.desmos.com/assets/img/homepage-student.png',
@@ -50,7 +50,7 @@ let favList = [
   {
     id: 5,
     title: 'Breaking News',
-    media: 'Foobar News',
+    media: 'Foobar News Pro Plus Max Ultra',
     url: 'https://breaking.news',
     image_url: 'https://breaking.news/picture.png',
     pub_time: '2022-10-21T19:02:16.305Z',

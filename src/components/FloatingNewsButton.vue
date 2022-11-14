@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-14 22:28
+ * @LastEditTime: 2022-11-14 23:38
 -->
 
 <template>
@@ -100,7 +100,14 @@ if (loggedIn) {
         page: 1,
       },
     }).then(response => {
-      state[tab.name].news = response.data.data.news.slice(0, maxNewsCount);
+      const news = response.data.data.news.slice(0, maxNewsCount);
+      state[tab.name].news = [];
+      news.forEach(item => {
+        state[tab.name].news.push({
+          ...item,
+          visit_time: item.visit_time ? new Date(item.visit_time) : undefined,
+        })
+      });
     })
   });
 }

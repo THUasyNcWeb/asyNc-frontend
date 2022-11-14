@@ -3,39 +3,41 @@
  * @Author: 王博文
  * @Date: 2022-11-14 19:07
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-14 22:07
+ * @LastEditTime: 2022-11-15 00:38
 -->
 
 <template>
-  <!-- <n-a :href="url" @click="newsClick(id)"> -->
+  <n-a :href="url" @click="newsClick(id)" style="text-decoration: none">
     <n-grid x-gap="12" cols="3">
+      <n-gi :span="image_url ? 2 : 3">
+        <n-space vertical justify="space-between" size="small" style="min-height: 72px">
+          <n-ellipsis line-clamp="2" :tooltip="false">
+            <n-text strong style="line">
+              {{title}}
+            </n-text>
+          </n-ellipsis>
+          <n-ellipsis line-clamp="1" depth="3" style="font-size: 12px" :tooltip="false">
+            {{visit_time
+              ? visit_time.getMonth() + '-'
+                + visit_time.getDate() + ' '
+                + visit_time.getHours() + ':'
+                + visit_time.getMinutes() + '\t' + media
+              : media}}
+          </n-ellipsis>
+        </n-space>
+      </n-gi>
       <n-gi>
         <n-image v-if="image_url" :src="image_url"
           width="128" height="72" object-fit="cover" preview-disabled
           style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
       </n-gi>
-      <n-gi :span="image_url ? 2 : 3" style="height: 144">
-        <n-space vertical justify="space-evenly" style="height: 144">
-          <n-ellipsis line-clamp="2" tooltip="false">
-            <n-text strong>
-              {{title}}
-            </n-text>
-          </n-ellipsis>
-          <!-- {{''}} -->
-          <n-text depth="3" style="font-size: 12px">
-            {{media}}
-          </n-text>
-        </n-space>
-        <!-- <n-ellipsis line-clamp="2" tooltip="false">
-          {{title}}
-        </n-ellipsis> -->
-      </n-gi>
+      
     </n-grid>
-  <!-- </n-a> -->
+  </n-a>
 </template>
 
 <script setup lang="ts">
-import { NGrid, NGi, NImage, NSpace, NText } from 'naive-ui';
+import { NA, NEllipsis, NGrid, NGi, NImage, NSpace, NText } from 'naive-ui';
 
 import { newsClick } from '@/main';
 
