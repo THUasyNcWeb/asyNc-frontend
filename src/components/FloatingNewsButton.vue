@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 05:25
+ * @LastEditTime: 2022-11-14 22:28
 -->
 
 <template>
@@ -45,7 +45,7 @@ import {
 } from '@vicons/ionicons5/';
 
 import { decodeToken } from '@/main';
-import NewsPane from './NewsPane.vue';
+import NewsPane from './FavoriteNewsPanel.vue';
 import API from '@/store/axiosInstance';
 
 import '@/mock/Favorites.mock';
