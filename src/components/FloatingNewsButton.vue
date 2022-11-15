@@ -19,7 +19,7 @@
         </n-button>
       </template>
       <n-tabs animated default-value="readlater" justify-content="center">
-        <n-tab-pane v-for="tab in tabs" :name="tab.name">
+        <n-tab-pane v-for="tab, id in tabs" :name="tab.name" :key="id">
           <template #tab>
             <n-icon size="large" :component="tab.icon" />
           </template>

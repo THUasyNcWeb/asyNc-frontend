@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from 'vue';
+
 import { NEllipsis, NGrid, NGi, NIcon, NImage, NSpace, NText } from 'naive-ui';
 
 import {
@@ -57,7 +59,7 @@ export interface News {
   media: string,
   image_url?: string,
   visit_time?: Date,
-};
+}
 
 defineProps<News>();
 </script>

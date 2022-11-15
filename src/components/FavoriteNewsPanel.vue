@@ -10,7 +10,7 @@
   <n-layout style="height: 60vh">
     <n-empty v-if="!news.length" size="large" />
     <n-list v-else hoverable>
-      <n-list-item v-for="item in news">
+      <n-list-item v-for="item, id in news" :key="id">
         <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none;">
           <news-panel-entry :id="item.id" :url="item.url" :title="item.title"
           :media="item.media" :image_url="item.image_url" :visit_time="item.visit_time"/>
@@ -26,6 +26,8 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from 'vue';
+
 import {
   NA,
   NButton,
