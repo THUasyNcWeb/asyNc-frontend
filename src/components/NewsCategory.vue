@@ -2,7 +2,7 @@
     <n-space vertical>
         <n-empty v-if="!props.news.length" size="large" description="什么也没有找到" />
         <template v-else>
-          <n-carousel style=" height:300px ;" autoplay dot-type="line" show-arrow>
+          <n-carousel style="height:300px" autoplay dot-type="line" show-arrow>
             <template #arrow="{ prev, next }">
               <div class="custom-arrow">
                 <button type="button" class="custom-arrow--left" @click="prev">
@@ -16,7 +16,8 @@
               <n-carousel-item v-for="(news, pic_index) in props.news.slice(0,10)" :key = pic_index>
                   <div class="pic_item">
                       <a :href="news.url" target="_blank">
-                          <n-image class="small" :src="news.picture_url" preview-disabled :fallback-src="default_logo" />
+                          <n-image 
+                          :src="news.picture_url" preview-disabled :fallback-src="default_logo" />
                       </a>
                       <h2>{{news.title}}</h2>
                   </div>
@@ -116,7 +117,7 @@ const default_logo = require("@/assets/asyNc.png")
   height: 28px;
   margin-right: 12px;
   color: rgb(8, 8, 8);
-  background-color: rgba(189, 21, 21, 0.1);
+  background-color: hwb(0 97% 0% / 0.942);
   border-width: 0;
   border-radius: 8px;
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -133,17 +134,19 @@ const default_logo = require("@/assets/asyNc.png")
 }
 
 
-.small {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
 .pic_item {
+  width: 100%;
   position: relative;
   height: 100%;
-  box-shadow:  inset
-    0px -50px 30px  rgb(217, 222, 222);  
+  display: flex;
+/*   
+  justify-content: center;
+    align-items: center; */
+  /* position: absolute; */
+  inset: 0;
+  background-image: var(--mask-gradient,linear-gradient(to top,#020e33,rgba(2,14,51,0) 120px));
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px 2px #dcdcdc;
       /*下边阴影  */
 }
 
@@ -152,14 +155,27 @@ const default_logo = require("@/assets/asyNc.png")
 }
 
 .pic_item img {
+  z-index: -1;
   width: 100%;
   height: 100%;
-  position: relative;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .pic_item h2 {
   position: absolute;
   left: 1rem;
   bottom: 1rem;
+  color:white
 }
+
+/* .mask_div {
+  display: flex;
+  z-index: 999;
+  position: absolute;
+  inset: 0;
+  background-image: var(--mask-gradient,linear-gradient(to top,#0d4a80,rgba(2,14,51,0) 120px));
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px 2px #dcdcdc;
+} */
 </style>
