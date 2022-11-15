@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 11:29
+ * @LastEditTime: 2022-11-15 18:14
 -->
 
 <template>
@@ -25,7 +25,8 @@
           </template>
           <n-spin :show="state[tab.name].loading">
             <news-pane :news="state[tab.name].news" :more-path="`user/${tab.name}`"
-            @remove="id => remove(tab.name, id)" />
+              :history-mode="tab.name === 'history'"
+              @remove="id => remove(tab.name, id)" />
           </n-spin>
         </n-tab-pane>
       </n-tabs>
