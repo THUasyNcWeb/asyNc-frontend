@@ -32,7 +32,7 @@ let favList = [
   },
   {
     id: 3,
-    title: '有图片的非常好新闻',
+    title: '有图片的非常好新闻有图片的非常好新闻有图片的非常好新闻',
     media: '亦可赛艇新闻',
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date(1926, 7, 17).toJSON(),
