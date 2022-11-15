@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 02:44
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-14 23:59
+ * @LastEditTime: 2022-11-15 11:17
  */
 
 import Mock from 'better-mock';
@@ -66,13 +66,15 @@ let favList = [
   }
 ];
 
+favList = favList.concat(favList);
+
 Mock.mock(/history|readlater|favorites/, 'get', _ => {
   return {
     code: 0,
     message: 'SUCCESS',
     data: {
       page_count: 5,
-      news: favList.slice(-5).reverse(),
+      news: favList.slice(-10).reverse(),
     }
   }
 })

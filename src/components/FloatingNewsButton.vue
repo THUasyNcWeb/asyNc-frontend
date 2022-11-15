@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-06 23:26
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-14 23:38
+ * @LastEditTime: 2022-11-15 11:29
 -->
 
 <template>
@@ -50,7 +50,7 @@ import API from '@/store/axiosInstance';
 
 import '@/mock/Favorites.mock';
 
-const maxNewsCount = 5;
+const maxNewsCount = 10;
 
 const state = reactive({
   username: decodeToken(),
