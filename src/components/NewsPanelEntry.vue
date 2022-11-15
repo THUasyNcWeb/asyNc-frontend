@@ -3,13 +3,13 @@
  * @Author: 王博文
  * @Date: 2022-11-14 19:07
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 10:35
+ * @LastEditTime: 2022-11-15 10:56
 -->
 
 <template>
   <n-grid x-gap="12" cols="3">
     <n-gi :span="image_url ? 2 : 3">
-      <n-space vertical justify="space-between" size="small" style="min-height: 68px">
+      <n-space vertical justify="space-between" size="small" style="min-height: 80px">
         <n-ellipsis line-clamp="1" :tooltip="false">
           <n-text strong style="line">
             {{title}}
