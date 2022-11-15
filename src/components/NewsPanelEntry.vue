@@ -7,39 +7,49 @@
 -->
 
 <template>
-  <n-a :href="url" @click="newsClick(id)" style="text-decoration: none">
-    <n-grid x-gap="12" cols="3">
-      <n-gi :span="image_url ? 2 : 3">
-        <n-space vertical justify="space-between" size="small" style="min-height: 68px">
-          <n-ellipsis line-clamp="1" :tooltip="false">
-            <n-text strong style="line">
-              {{title}}
-            </n-text>
-          </n-ellipsis>
-          <n-ellipsis line-clamp="2" style="font-size: 12px" :tooltip="false">
-            <template v-if="visit_time">
-              {{visit_time.getMonth() + '-'
-                + visit_time.getDate() + ' '
-                + visit_time.getHours() + ':'
-                + visit_time.getMinutes()}}
-              <br>
-            </template>
+  <n-grid x-gap="12" cols="3">
+    <n-gi :span="image_url ? 2 : 3">
+      <n-space vertical justify="space-between" size="small" style="min-height: 68px">
+        <n-ellipsis line-clamp="1" :tooltip="false">
+          <n-text strong style="line">
+            {{title}}
+          </n-text>
+        </n-ellipsis>
+        <n-ellipsis line-clamp="2" style="font-size: 12px" :tooltip="false">
+          <n-space size="small" v-if="visit_time">
+            <n-icon size="18">
+              <time-icon />
+            </n-icon>
+            {{visit_time.getMonth() + '-'
+              + visit_time.getDate() + ' '
+              + visit_time.getHours() + ':'
+              + visit_time.getMinutes()}}
+            <br>
+          </n-space>
+          <n-space size="small">
+            <n-icon size="18">
+              <media-icon />
+            </n-icon>
             {{media}}
-          </n-ellipsis>
-        </n-space>
-      </n-gi>
-      <n-gi>
-        <n-image v-if="image_url" :src="image_url"
-          width="120" height="68" object-fit="cover" preview-disabled
-          style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
-      </n-gi>
-      
-    </n-grid>
-  </n-a>
+          </n-space>
+        </n-ellipsis>
+      </n-space>
+    </n-gi>
+    <n-gi>
+      <n-image v-if="image_url" :src="image_url"
+        width="120" height="76" object-fit="cover" preview-disabled
+        style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
+    </n-gi>
+  </n-grid>
 </template>
 
 <script setup lang="ts">
-import { NA, NEllipsis, NGrid, NGi, NImage, NSpace, NText } from 'naive-ui';
+import { NA, NEllipsis, NGrid, NGi, NIcon, NImage, NSpace, NText } from 'naive-ui';
+
+import {
+  NewspaperOutline as MediaIcon,
+  TimeOutline as TimeIcon,
+} from '@vicons/ionicons5/';
 
 import { newsClick } from '@/main';
 
