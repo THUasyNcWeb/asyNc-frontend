@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 02:44
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 11:17
+ * @LastEditTime: 2022-11-15 18:59
  */
 
 import Mock from 'better-mock';
@@ -21,7 +21,7 @@ let favList = [
     media: '腾讯新闻',
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date().toJSON(),
-    visit_time: new Date().toJSON(),
+    visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
   },
   {
     id: 2,
@@ -29,6 +29,7 @@ let favList = [
     media: '亦可赛艇新闻',
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date(1926, 7, 17).toJSON(),
+    visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
   },
   {
     id: 3,
@@ -37,7 +38,7 @@ let favList = [
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date(1926, 7, 17).toJSON(),
     image_url: 'https://app.moegirl.org.cn/萌百娘表情包/萌百娘表情包2/钻地.png',
-    visit_time: new Date().toJSON(),
+    visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
   },
   {
     id: 4,
@@ -46,6 +47,7 @@ let favList = [
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     image_url: 'https://www.desmos.com/assets/img/homepage-student.png',
     pub_time: new Date(9876, 4, 43).toJSON(),
+    visit_time: new Date(new Date().setDate(new Date().getDate() - 1)).toJSON(),
   },
   {
     id: 5,
@@ -54,7 +56,7 @@ let favList = [
     url: 'https://breaking.news',
     image_url: 'https://breaking.news/picture.png',
     pub_time: '2022-10-21T19:02:16.305Z',
-    visit_time: new Date().toJSON(),
+    visit_time: new Date(new Date().setHours(new Date().getHours() - 1)).toJSON(),
   },
   {
     id: 6,
@@ -63,10 +65,11 @@ let favList = [
     url: 'https://baike.baidu.com/item/萨满祭司/49863467?fr=aladdin',
     image_url: 'https://bkimg.cdn.bcebos.com/pic/3801213fb80e7beccf8ad6f12b2eb9389b506b4a?x-bce-process=image/resize,m_lfit,w_128,limit_1',
     pub_time: '2022-10-24T19:02:16.305Z',
+    visit_time: new Date().toJSON(),
   }
 ];
 
-favList = favList.concat(favList);
+// favList = favList.concat(favList);
 
 Mock.mock(/history|readlater|favorites/, 'get', _ => {
   return {
@@ -87,6 +90,7 @@ Mock.mock(/history|readlater|favorites/, 'post', rqst => {
     title: `News ${id}`,
     url: `https://baidu.com`,
     pub_time: new Date().toJSON(),
+    visit_time: new Date().toJSON(),
   });
   return {
     code: 0,
