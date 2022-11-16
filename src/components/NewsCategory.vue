@@ -173,10 +173,6 @@ const default_logo = require("@/assets/asyNc.png")
 
 .pic_item img {
   z-index: -1;
-  /* height: 100%; */
-  /* max-width: 1000px; */
-  /* width: 700px; */
-  /* height: auto; */
   border-radius: 10px;
   object-fit: cover;
 }
@@ -188,13 +184,4 @@ const default_logo = require("@/assets/asyNc.png")
   color:white
 }
 
-/* .mask_div {
-  display: flex;
-  z-index: 999;
-  position: absolute;
-  inset: 0;
-  background-image: var(--mask-gradient,linear-gradient(to top,#0d4a80,rgba(2,14,51,0) 120px));
-  border-radius: 10px;
-  box-shadow: 5px 5px 5px 2px #dcdcdc;
-} */
 </style>
