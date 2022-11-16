@@ -10,29 +10,39 @@ const props = defineProps<{
   tags:{},
 }>();
 
-function init_chart(tags: Object) {
+function init_chart(tags) {
   console.log("初始化")
   console.log(tags)
   var wc = new Js2WordCloud(document.getElementById("chart2"));
   let list = [];
-  // if( props.tags.length != 0) {
+  if( typeof(tags) == 'object' && Object.keys(tags).length !== 0) {
     for(var key in tags) {
       list.push([key, tags[key]])  
     }
     let option = {
-      // imageShape: require("@/assets/asyNc.png"),
       fontSizeFactor: 5,
       maxFontSize: 50,
       minFontSize: 20,
-      color: "random-light",
-      backgroundColor: "rgba(0,0,0,0.701961)",
+      color: "random-dark",
+      backgroundColor: "rgba(255,255,255,0.701961)",
       list: list,
     };
     wc.setOption(option);
     window.onresize = function () {
       wc.setOption(option);
     };
+  }
+  else {
+    let loadingOption = {
+      backgroundColor: '#eee',
+      text: '正在加载...',
+      effect: 'spin'
+    }
+    wc.showLoading(loadingOption)
+  }
 }
+
+
 
 onMounted(() => 
   {
