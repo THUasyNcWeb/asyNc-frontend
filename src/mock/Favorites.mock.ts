@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 02:44
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 18:59
+ * @LastEditTime: 2022-11-16 23:25
  */
 
 import Mock from 'better-mock';
@@ -22,6 +22,7 @@ let favList = [
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date().toJSON(),
     visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
+    content: "拍过我的人",
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ let favList = [
     url: 'https://www.bilibili.com/video/BV1GJ411x7h7',
     pub_time: new Date(1926, 7, 17).toJSON(),
     visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
+    content: "傻笑得多诚恳",
   },
   {
     id: 3,
@@ -39,6 +41,7 @@ let favList = [
     pub_time: new Date(1926, 7, 17).toJSON(),
     image_url: 'https://app.moegirl.org.cn/萌百娘表情包/萌百娘表情包2/钻地.png',
     visit_time: new Date(new Date().setDate(new Date().getDate() - 2)).toJSON(),
+    content: "摁下了快门",
   },
   {
     id: 4,
@@ -48,6 +51,7 @@ let favList = [
     image_url: 'https://www.desmos.com/assets/img/homepage-student.png',
     pub_time: new Date(9876, 4, 43).toJSON(),
     visit_time: new Date(new Date().setDate(new Date().getDate() - 1)).toJSON(),
+    content: "晓得心动不长存",
   },
   {
     id: 5,
@@ -57,6 +61,7 @@ let favList = [
     image_url: 'https://breaking.news/picture.png',
     pub_time: '2022-10-21T19:02:16.305Z',
     visit_time: new Date(new Date().setHours(new Date().getHours() - 1)).toJSON(),
+    content: "热情没及格",
   },
   {
     id: 6,
@@ -66,6 +71,7 @@ let favList = [
     image_url: 'https://bkimg.cdn.bcebos.com/pic/3801213fb80e7beccf8ad6f12b2eb9389b506b4a?x-bce-process=image/resize,m_lfit,w_128,limit_1',
     pub_time: '2022-10-24T19:02:16.305Z',
     visit_time: new Date().toJSON(),
+    content: "真性情得高分",
   }
 ];
 
@@ -91,6 +97,7 @@ Mock.mock(/history|readlater|favorites/, 'post', rqst => {
     url: `https://baidu.com`,
     pub_time: new Date().toJSON(),
     visit_time: new Date().toJSON(),
+    content: 'Test content',
   });
   return {
     code: 0,
