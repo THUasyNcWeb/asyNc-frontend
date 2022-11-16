@@ -6,14 +6,8 @@
  * @LastEditTime: 2022-10-13 10:31
  -->
 <template>
-    <n-card title="用户基本信息" :bordered="true" size="small" class="shadow-sm rounded-16px">
-        <n-button v-if="state.edit_status==true" style="float:left" type="warning" @click="returnInfo" >
-            返回
-        </n-button>
-        <n-button style="float:right" type="success" @click="changeStatus" :disabled="!state.send_valid">
-            {{state.button_text}}
-        </n-button>
-        <n-grid y-gap="20" :cols=1 style="margin-top:15%">
+    <n-card :title="state.title" :bordered="true" size="large" class="shadow-sm rounded-16px">
+        <n-grid y-gap="20" :cols=1>
             <n-grid-item >
                 <n-grid cols="3" item-responsive>
                     <n-grid-item style="text-align:center">
@@ -88,13 +82,20 @@
                 </n-grid>
             </n-grid-item>
         </n-grid>
+        <n-space style="margin-top:5%" justify="center" :size=50>
+            <n-button v-if="state.edit_status==true" style="float:left" type="warning" @click="returnInfo" >
+                返回
+            </n-button>
+            <n-button style="border-radius: 20px;" size="large" type="success" @click="changeStatus" :disabled="!state.send_valid">
+                {{state.button_text}}
+            </n-button>
+        </n-space>
     </n-card>
-    
 </template>
 
 <script setup lang="ts">
 import { defineProps, reactive,ref,defineEmits } from 'vue'
-import {NH3,NText,NCard,NGrid,NGridItem,NButton,NInput} from 'naive-ui'
+import {NH3,NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace} from 'naive-ui'
 import API from '@/store/axiosInstance'
 export interface UserInfo {
   id: string,
@@ -112,6 +113,7 @@ const emits = defineEmits(['change-info','change-avatar']);
 const state = reactive({
     edit_status:false,
     button_text:'编辑信息', 
+    title: "详细信息",
     user: {
         mail:ref(null), 
         signature:ref(null), 
@@ -135,6 +137,7 @@ function initModify(){
 function returnInfo(){
     state.edit_status = false
     state.button_text = '编辑信息'
+    state.title = '详细信息'
     state.send_valid = true
 }
 
@@ -143,6 +146,7 @@ function changeStatus(){
         state.send_valid = true
         state.edit_status = true
         state.button_text = '保存'
+        state.title = '编辑信息'
         initModify()
         checkMail()
         checkSignature()
@@ -164,6 +168,7 @@ function changeStatus(){
             console.log(res)
             state.edit_status = false
             state.button_text = '编辑信息'
+            state.title = '详细信息'
             emits("change-info", state.user.user_name, state.user.signature, state.user.mail)
             alert("修改成功")
         }).catch((error) => {
