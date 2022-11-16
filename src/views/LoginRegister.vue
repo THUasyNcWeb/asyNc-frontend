@@ -27,7 +27,7 @@
             <n-space vertical>
               <n-input size="large" placeholder="请输入用户名" v-model:value="username" style="" />
               <n-text v-if="state.title == '注册'" depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%;">
-                |&nbsp 用户名为包含 "中英文数字 _ -" 在内的 1-14 位字符，且首字符需为中文或英文
+                |&nbsp;用户名为包含 "中英文数字 _ -" 在内的 1-14 位字符，且首字符需为中文或英文
               </n-text>
             </n-space>
           </n-grid-item>
@@ -36,7 +36,7 @@
               <n-input type="password" size="large" placeholder="请输入密码" v-model:value="password"
                 show-password-on="click" />
               <n-text v-if="state.title == '注册'" depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%;">
-                |&nbsp 密码为包含 "英文 _ -" 在内的 8-14 个字符
+                |&nbsp;密码为包含 "英文 _ -" 在内的 8-14 个字符
               </n-text>
             </n-space>
           </n-grid-item>
@@ -90,13 +90,14 @@ import {
   NButton,
   NSpace,
   NText,
+  useMessage,
 } from 'naive-ui'
 
 var title: string = ""
 const state = reactive({ title })
+const message = useMessage()
 
-watch(() => router.currentRoute.value.path, (newValue, _oldValue) => {
-  console.log('watch', newValue);
+watch(() => router.currentRoute.value.path, (newValue) => {
   if (newValue == "/login") {
     state.title = "登录"
   } else {
@@ -123,23 +124,34 @@ function handleHomePage() {
 
 function judgeUser(username: string) {
   if (username.length > 14) {
+    message.error('用户名不应超过 14 个字符');
     return false;
   }
-  return /^[A-Za-z\u4e00-\u9fa5][-A-Za-z0-9\u4e00-\u9fa5_]*$/.test(username)
+  if (!(/^[A-Za-z\u4e00-\u9fa5][-A-Za-z0-9\u4e00-\u9fa5_]*$/.test(username))) {
+    message.error('用户名应只包含 "中英文 数字 _ -"，且首字符需为中文或英文');
+    return false;
+  }
+  return true;
 }
 
 function judgePassword(password: string) {
   if (password.length > 14 || password.length < 8) {
+    message.error('密码长度应为 8-14 个字符');
     return false;
   }
-  return /^[-A-Za-z0-9_]*$/.test(password)
+  if (!(/^[-A-Za-z0-9_]*$/.test(password))) {
+    message.error('密码应只包含 "英文 数字 _ -"');
+    return false;
+  }
+  return true;
 }
 
 function judgeRepassword() {
   if (re_password.value != password.value) {
+    message.error("两次输入的密码不一致")
     return false;
   }
-  return judgePassword(re_password.value)
+  return true;
 }
 
 function login() {
@@ -156,14 +168,12 @@ function login() {
     }
   }).then((res) => {
     // 对登录接口请求成功
-    console.log(res)
     window.localStorage.setItem("token", res.data.data.token)
     // 存储token
-    alert("登录成功，欢迎来到asyNc！")
+    message.success("欢迎回来，"+username.value+"!")
     router.push("/")
-  }).catch((error) => {
-    console.log(error);
-    alert("用户名或密码错误")
+  }).catch(() => {
+    message.error("用户名或密码错误")
   })
 }
 
@@ -173,19 +183,14 @@ function register() {
   * @return {void}
   */
   if (judgeUser(username.value) == false) {
-    alert("输入用户名不规范")
     return;
   }
   if (judgePassword(password.value) == false) {
-    alert("输入密码不规范")
     return;
   }
   if (judgeRepassword() == false) {
-    alert("重新输入密码不规范")
     return;
   }
-  console.log(username.value)
-  console.log(password.value)
   API({
     url: 'register',
     method: 'post',
@@ -195,14 +200,12 @@ function register() {
     }
   }).then((res) => {
     // 对注册接口请求成功
-    console.log(res)
     window.localStorage.setItem("token", res.data.data.token)
     // 存储token
-    alert("注册成功，欢迎来到asyNc！")
+    message.success("欢迎来到知识的世界，"+username.value+"!")
     router.push("/")
-  }).catch((error) => {
-    console.log(error);
-    alert("注册失败")
+  }).catch(() => {
+    message.error("用户名重复")
   })
 }
 </script>
