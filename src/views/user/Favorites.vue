@@ -1,72 +1,113 @@
 <!--
  * @FileDescription: 新闻收藏页面
  * @Author: 王博文
- * @Date: 2022-11-16 11:00
+ * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-16 20:59
- -->
-
+ * @LastEditTime: 2022-11-16 23:23
+-->
 <template>
-  <n-grid x-gap="12" :cols="5">
-    <n-gi v-for="item in state.news">
-      <n-space vertical>
-        <n-image height="100" :src="item.image_url ?? DefaultLogo" object-fit="cover" />
-        <n-ellipsis :tooltip="false" :line-clamp="2">
-          {{item.title}}
-        </n-ellipsis>
-        <n-space justify="space-between">
-          {{item.media}}
-          <n-button>
-            123
-          </n-button>
-        </n-space>
-      </n-space>
-    </n-gi>
-  </n-grid>
+  <n-space vertical style="padding: 18px 96px">
+    <template v-if="!state.loading">
+      <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
+      <template v-else>
+        <n-list hoverable clickable>
+          <n-list-item v-for="entry, id in state.news" :key="id">
+            <news-entry :news="entry" />
+          </n-list-item>
+        </n-list>
+        <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
+      </template>
+    </template>
+    <template v-else v-for="_ in 10" :key="_">
+      <n-skeleton text size="medium" style="width: 30%" />
+      <n-skeleton text :repeat="3" />
+      <n-skeleton text style="width: 20%" />
+    </template>
+  </n-space>
 </template>
 
 <script setup lang="ts">
-import { NButton, NEllipsis, NGi, NGrid, NImage, NSpace } from 'naive-ui';
-import { reactive } from 'vue';
+import { inject, reactive } from 'vue';
+import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import {
+  NEmpty,
+  NList,
+  NListItem,
+  NPagination,
+  NSkeleton,
+  NSpace,
+  useMessage,
+} from 'naive-ui';
 
-import { News } from '@/components/NewsPanelEntry.vue';
-
-import DefaultLogo from '@/assets/asyNc.png';
+import NewsEntry from '@/components/NewsEntry.vue'
+import router from '@/router';
 import API from '@/store/axiosInstance';
 
 import '@/mock/Favorites.mock';
 
-const state: {
-  news: News[],
-} = reactive({
+const state = reactive({
+  page: 0,
+  page_count: 0,
+  loading: true,
   news: [],
-});
-
-API({
-  headers: {
-    Authorization: window.localStorage.getItem('token'),
-  },
-  url: 'favorites',
-  method: 'get',
-  params: {
-    page: 1,
-  },
-}).then(response => {
-  const data = response.data.data.news.slice(0, 10);
-  console.log(data);
-  state.news = [];
-  data.forEach(item => {
-    state.news.push({
-      ...item,
-      visit_time: item.visit_time ? new Date(item.visit_time) : undefined,
-    })
-  });
 })
-</script>
 
-<style scoped>
-.n-image {
-  border-radius: 8px;
-  box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);
+// Reference to the layout content, for scrolling
+const contentRef: any = inject('contentRef');
+
+// Refresh when router changed
+// router.beforeEach(to => init(to));
+onBeforeRouteUpdate(to => init(to));
+// router.beforeResolve
+
+init(router.currentRoute.value);
+
+// Message box
+const message = useMessage();
+
+function error() {
+  message.error('收藏系统出现错误😨');
 }
-</style>
+
+// Jump to specified page
+function jump(page: number) {
+  router.push(`favorites?page=${page}`);
+}
+
+function init(to: RouteLocationNormalized) {
+  state.page = parseInt(to.query.page as string) || 1;
+  state.page_count = 0;
+
+  state.news = [];
+
+  state.loading = true;
+
+  // Scroll to top
+  contentRef.value?.scrollTo({ top: 0 });
+
+  // Fetch news and page count
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: `favorites?page=${state.page}`,
+    method: 'get',
+  }).then(response => {
+    state.loading = false;
+
+    let data = response.data.data;
+    state.page_count = data.page_count;
+    for (const entry of data.news) {
+      // Construct Date object
+      state.news.push({
+        ...entry,
+        pub_time: new Date(entry.pub_time),
+        keywords: [],
+        title_keywords: [],
+      });
+    }
+  }).catch(() => {
+    error();
+  });
+}
+</script>
