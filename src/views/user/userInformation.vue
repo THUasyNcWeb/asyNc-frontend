@@ -112,7 +112,8 @@
                     </n-grid-item>
                     <n-grid-item style="text-align:left"  span="1 300:2">
                         <n-space>    
-                            <n-tag :color="{ color: color_tags[index % 3], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in props.user.tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag>
+                            <!-- <n-tag :color="{ color: color_tags[index % 3], textColor: '#000', borderColor: '#555' }" v-for="(tag,index) in props.user.tags" :key="index" style="margin-right:10px;" >{{tag}}</n-tag> -->
+                            <WordChart :key="state.user.user_name" :tags="props.user.tags"></WordChart>
                         </n-space>
                     </n-grid-item>
                 </n-grid>
@@ -124,14 +125,15 @@
 
 <script setup lang="ts">
 import { defineProps, reactive,ref,defineEmits } from 'vue'
-import {NTag, NSpace,NH3,NText,NCard,NGrid,NGridItem,NButton,NInput} from 'naive-ui'
-import UserAvatar from '@/components/UserAvatar.vue';
+import {NSpace,NH3,NText,NCard,NGrid,NGridItem,NButton,NInput} from 'naive-ui'
+import UserAvatar from '@/components/UserAvatar.vue'
+import WordChart from '@/components/WordChart.vue'
 import API from '../../store/axiosInstance'
 export interface UserInfo {
   id: string,
   user_name: string,
   signature: string,
-  tags: string[],
+  tags: {},
   mail: string,
   avatar: string,
 }
@@ -162,11 +164,6 @@ function initModify(){
         state.user.signature = "这个人很懒，什么都没留下"
     }
 }
-
-
-
-const color_tags = ['#00FFFF','#ADFF2F','#F0E68C']
-// 获取用户信息 
 
 function returnInfo(){
     state.edit_status = false
