@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 00:00
+ * @LastEditTime: 2022-11-16 23:55
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -24,7 +24,6 @@
       <n-skeleton text style="width: 20%" />
     </template>
   </n-space>
-  <floating-news-button />
 </template>
 
 <script setup lang="ts">
@@ -47,7 +46,6 @@ import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
-import FloatingNewsButton from '@/components/FloatingNewsButton.vue';
 
 const state = reactive({
   // Query parameters
@@ -68,8 +66,6 @@ const contentRef: any = inject('contentRef');
 
 // Inclusion/exclusion tags
 const tags: Tag[] = inject('inclusionExclusionTags');
-
-console.log(tags);
 
 // Refresh when router changed
 // router.beforeEach(to => init(to));

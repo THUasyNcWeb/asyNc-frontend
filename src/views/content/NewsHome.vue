@@ -16,7 +16,6 @@ import {
     NTabs,
     NTabPane,
 } from 'naive-ui'
-import FloatingNewsButton from '@/components/FloatingNewsButton.vue';
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
@@ -125,7 +124,6 @@ function selectNews(news, category:string, label:string){
                 <NewsCategory v-else :news="state.all_news"/>
             </n-tab-pane>
          </n-tabs>
-         <floating-news-button />
     </body>
 </template>
   
