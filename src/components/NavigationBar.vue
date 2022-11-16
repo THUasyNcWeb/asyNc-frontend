@@ -2,67 +2,239 @@
  * @FileDescription: 导航栏组件
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
- * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 20:40
+ * @LastEditors: 刘铠铭
+ * @LastEditTime: 2022-11-07
 -->
 <template>
-    <n-space align="center" justify="space-between">
+  <n-space align="center" justify="space-between">
     <n-space>
-        <router-link to="/">
+      <router-link to="/">
         <n-gradient-text type="success" size=24>
-            asyNc
+          asyNc
         </n-gradient-text>
-        </router-link>
-        <search-box :text="state.word" style="width: 40vw" />
+      </router-link>
+      <search-box :text="state.user.user_name" style="width: 40vw" />
     </n-space>
-    <n-dropdown v-if="state.username" :options="options" @select="handleSelect">
-        <n-button quaternary>
-        {{state.username}}
-        </n-button>
-    </n-dropdown>
-    <n-space v-else>
-        <router-link to="login" style="text-decoration: none">
-        <n-button>
-            登录
-        </n-button>
-        </router-link>
-        <router-link to="register" style="text-decoration: none">
-        <n-button primary type="primary">
-            注册
-        </n-button>
-        </router-link>
+
+    <n-space justify="end">
+      <n-popover v-if="state.user.user_name" :key="state.user.avatar" trigger="hover" placement="bottom"
+        :show-arrow="true" style="border-radius: 5px;">
+        <template #trigger>
+          <n-image style="border-radius:50%; vertical-align: middle;" width="40" height="40" object-fit="cover"
+            :src="state.user.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
+        </template>
+        <template #header>
+          <n-text :depth="2"
+            style="vertical-align: -12%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;">
+            你好,
+          </n-text>
+          <n-text :strong="true" :underline="true" :depth="2" type="success"
+            style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;"
+            @click="handleToUserHome">
+            {{ state.user.user_name }}
+          </n-text>
+        </template>
+
+        <n-space vertical>
+          <n-button type="primary" size="medium" style="margin: 2px; width: 172px;" @click="handleToUserHome">
+            <template #icon>
+              <n-icon :size="20">
+                <CalendarPerson20Regular />
+              </n-icon>
+            </template>
+            个人中心
+          </n-button>
+        </n-space>
+
+        <template #footer>
+          <n-space>
+            <n-button type="tertiary" size="medium" style="margin: 2px;" @click="handleLogout">
+              <n-icon :size="20">
+                <SignOut20Regular />
+              </n-icon>
+              封存记忆，退出世界
+            </n-button>
+          </n-space>
+        </template>
+      </n-popover>
+
+      <n-popover v-else trigger="hover" placement="bottom" :show-arrow="false"
+        style="width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <router-link to="login" style="text-decoration: none">
+            <n-icon :size="25" color="#0e7a0d" style="margin-top: 8px;">
+              <CalendarPerson20Regular />
+            </n-icon>
+          </router-link>
+        </template>
+        <template #header>
+          <n-space>
+            <n-h4 type="info" style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px;">
+              登录后你可以：
+            </n-h4>
+          </n-space>
+        </template>
+        <n-space>
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <AnalyticsOutline />
+            </n-icon>
+            <n-text>
+              畅享百万数据模型
+            </n-text>
+          </div>
+
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <TimeOutline />
+            </n-icon>
+            <n-text>
+              多端同步搜索记录
+            </n-text>
+          </div>
+        </n-space>
+        <n-space>
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <TargetArrow20Regular />
+            </n-icon>
+            <n-text>
+              私人定制搜索服务
+            </n-text>
+          </div>
+
+          <div style="margin: 8px; border: 0;padding: 0;">
+            <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+              <SlideMultipleSearch20Regular />
+            </n-icon>
+            <n-text>
+              发现网站更多功能
+            </n-text>
+          </div>
+        </n-space>
+        <template #footer>
+          <n-space>
+            <router-link to="login" style="text-decoration: none">
+              <n-button type="primary" size="large"
+                style="min-width: 315px; border-radius: 15px;margin-left: 4px;margin-top: 5px;">
+                进入知识的世界
+              </n-button>
+            </router-link>
+            <router-link to="register" style="text-decoration: none">
+              <n-button type="tertiary" size="medium"
+                style="min-width: 315px; border-radius: 15px;margin-left: 4px;margin-bottom: 5px;">
+                第一次来？点我注册
+              </n-button>
+            </router-link>
+          </n-space>
+        </template>
+      </n-popover>
+
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
+            <StarLineHorizontal316Regular />
+          </n-icon>
+        </template>
+        <n-space v-if="state.user.user_name" vertical></n-space>
+        <n-space v-else vertical>
+          <router-link to="login" style="text-decoration: none">
+            <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
+              登录以查看收藏的宝藏知识
+            </n-button>
+          </router-link>
+        </n-space>
+      </n-popover>
+
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
+            <History20Regular />
+          </n-icon>
+        </template>
+        <n-space v-if="state.user.user_name" vertical></n-space>
+        <n-space v-else vertical>
+          <router-link to="login" style="text-decoration: none">
+            <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
+              登录以查看记忆中的知识
+            </n-button>
+          </router-link>
+        </n-space>
+      </n-popover>
+
+      <n-popover v-if="state.user.user_name" trigger="hover" placement="bottom" :show-arrow="false"
+        style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
+            <SignOut20Regular />
+          </n-icon>
+        </template>
+        <n-space vertical>
+          <n-button type="tertiary" size="large" style=" border-radius: 15px; margin: 5px;" @click="handleLogout">
+            封存记忆，离开知识的世界
+          </n-button>
+        </n-space>
+        <!-- <n-space v-else vertical>
+          <n-button disabled size="medium" style=" border-radius: 15px; margin: 5px;">
+            你还没有走入这个世界，求知者
+          </n-button>
+        </n-space> -->
+      </n-popover>
+
     </n-space>
-    </n-space>
+
+  </n-space>
 </template>
 
 <script setup lang="ts">
 import {
   NButton,
-  NDropdown,
   NGradientText,
   NIcon,
   NSpace,
   useDialog,
+  NPopover,
+  NText,
+  useMessage,
+  NImage
 } from 'naive-ui';
 import {
-  PersonCircleOutline as UserIcon,
-  LogOutOutline as LogoutIcon
+  TimeOutline,
+  AnalyticsOutline,
 } from '@vicons/ionicons5';
+import {
+  CalendarPerson20Regular,
+  TargetArrow20Regular,
+  SlideMultipleSearch20Regular,
+  SignOut20Regular,
+  History20Regular,
+  StarLineHorizontal316Regular
+} from '@vicons/fluent';
+
 import SearchBox from './SearchBox.vue'
 import { decodeToken,judgeToken } from '@/main';
-// import router from '@/router';
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import { Component, h, reactive } from 'vue';
+import { reactive } from 'vue';
 // import '@/mock/SearchPage.mock';
+
+export interface UserInfo {
+  id: string,
+  user_name: string,
+  signature: string,
+  tags: string[],
+  mail: string,
+  avatar: string,
+}
 
 // Query parameters
 const state = reactive({
+  user: { avatar: '' } as UserInfo,
   word: router.currentRoute.value.query.q as string,
   username: decodeToken(),
 })
-
+const default_logo = require("@/assets/asyNc.png")
 async function init_username() {
   const value = await judgeToken()
   console.log(value)
@@ -72,60 +244,72 @@ async function init_username() {
 
 init_username()
 
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, {
-    default: () => h(icon),
+if (window.localStorage.getItem("token") != null) {
+  API({
+    headers: { "Authorization": window.localStorage.getItem("token") },
+    url: 'userinfo',
+    method: 'get',
+    // 根据不同类别，把类别放在了对应的请求参数中
+  }).then((res) => {
+    state.user = res.data.data
+    console.log(res)
+  }).catch((error) => {
+    console.log(error);
   });
+  console.log(state.user.avatar)
 }
 
-// Options for user menu
-const options = [
-  {
-    label: '个人中心',
-    key: 'profile',
-    icon: renderIcon(UserIcon),
-  },
-  {
-    label: '退出登录',
-    key: 'logout',
-    icon: renderIcon(LogoutIcon),
-  },
-]
-
-// Handle select event of the user menu
-
 const exitDialog = useDialog()
-function handleSelect(key: 'profile' | 'logout') {
-  switch (key) {
-    case 'profile':
-      router.push('/user/userInformation');
-      break;
-    case 'logout':
-      exitDialog.warning({
-        title: '退出登录确认',
-        content: '你确定退出登录吗QWQ？',
-        positiveText: '确认',
-        negativeText: '取消',
-        onPositiveClick: () => {
-            API({
-                headers:{"Authorization": window.localStorage.getItem("token")},
-                // 携带token字段
-                url:'logout',
-                method:'post'}).then((res) => {
-                    console.log(res)
-                    window.localStorage.removeItem('token')
-                    state.username = ""
-                    router.push("/")
-                })
-                .catch((error) => {
-                    console.log(error)
-            })
-        },
-        onNegativeClick: () => {
-        }
-    // 若是退出登录界面，则关闭弹窗
-    })
-  }
+const message = useMessage()
+
+function handleToUserHome() {
+  router.push('/user/userInformation');
+}
+
+function handleLogout() {
+  exitDialog.warning({
+    title: '确认要离开么',
+    content: '今天还有很多新知识，真得不再探索了么？',
+    positiveText: '确认',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      API({
+        headers: { "Authorization": window.localStorage.getItem("token") },
+        // 携带token字段
+        url: 'logout',
+        method: 'post'
+      }).then((res) => {
+        console.log(res)
+        window.localStorage.removeItem('token')
+        state.user.user_name = ""
+        router.push("/")
+      })
+        .catch((error) => {
+          console.log(error)
+        })
+      message.success(
+        "再见，求知者，期待你的归来",
+        { duration: 2000 }
+      )
+      return
+    },
+    onNegativeClick: () => {
+      message.success(
+        "欢迎回来",
+        { duration: 2000 }
+      )
+    },
+    onClose: () => {
+      message.success(
+        "欢迎回来",
+        { duration: 2000 }
+      )
+    },
+  })
+  message.warning(
+    "慎重考虑，求知者",
+    { duration: 2000 }
+  )
 }
 
 </script>
