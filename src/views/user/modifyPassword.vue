@@ -71,12 +71,19 @@ const props = defineProps<{
 }>();
 
 const state = reactive({ old_password:"", new_password: "", new_password_again:""})
-let username_valid = await judgeToken()
-let router = useRouter()
-if(username_valid == "") {
-    alert("请先登录或者注册")
-    router.push("/")
+
+async function init_valid() {
+    const value = await judgeToken()
+    console.log(value)
+    console.log("异步请求")
+    if(value=='') {
+        let router = useRouter()
+        alert("请先登录或者注册")
+        router.push("/")
+    }
 }
+
+init_valid()
 
 function judgePassword(password : string) {
     if(password.length > 14 || password.length < 8){
@@ -153,10 +160,6 @@ function modify() {
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     background-color: rgba(255, 255, 255, 0.8);
-    box-shadow:    0px -0.5px 5px #808080,   /*上边阴影 */
-    -0.5px 0px 5px #808080,   /*左边阴影 */
-    0.5px 0px 5px #808080,    /*右边阴影 */
-    0px 0.5px 5px #808080;    /*下边阴影  */
 }
 
 </style>
