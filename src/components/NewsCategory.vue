@@ -14,12 +14,16 @@
               </div>
             </template>
               <n-carousel-item v-for="(news, pic_index) in props.news.slice(0,10)" :key = pic_index>
-                  <div class="pic_item" style="  height: 100%;">
+                  <div class="pic_item">
                       <a :href="news.url" target="_blank">
                           <n-image :width="state.img_width" object-fit="cover" 
                           :src="news.picture_url" preview-disabled :fallback-src="default_logo" />
                       </a>
-                      <h2>{{news.title}}</h2>
+                      <h2>
+                        <n-ellipsis :tooltip=false :line-clamp="1">
+                          {{news.title}}
+                        </n-ellipsis>
+                      </h2>
                   </div>
               </n-carousel-item>
           </n-carousel>
@@ -95,6 +99,8 @@ const props = defineProps<{
   news:All_News[],
 }>();
 
+console.log(props.news)
+
 const state=reactive({
   img_width: window.innerWidth * 0.6, 
 })
@@ -154,6 +160,7 @@ const default_logo = require("@/assets/asyNc.png")
   position: relative;
   display: flex;
   inset: 0;
+  height: 100%;
   background-image: var(--mask-gradient,linear-gradient(to top,#020e33,rgba(2,14,51,0) 120px));
   border-radius: 10px;
   box-shadow: 5px 5px 5px 2px #dcdcdc;
