@@ -1,5 +1,5 @@
 <template>
-  <div id="chart2" style="width:300px;height: 200px;">
+  <div id="chart2" style="width:350px;height: 200px;">
   </div>
 </template>
 
@@ -10,7 +10,7 @@ const props = defineProps<{
   tags:{},
 }>();
 
-function init_chart(tags) {
+function init_chart(tags:Object) {
   console.log("初始化")
   console.log(tags)
   var wc = new Js2WordCloud(document.getElementById("chart2"));
@@ -20,12 +20,18 @@ function init_chart(tags) {
       list.push([key, tags[key]])  
     }
     let option = {
-      fontSizeFactor: 5,
-      maxFontSize: 50,
-      minFontSize: 20,
-      color: "random-dark",
-      backgroundColor: "rgba(255,255,255,0.701961)",
+      fontSizeFactor: 0.2,                                    // 当词云值相差太大，可设置此值进字体行大小微调，默认0.1
+      maxFontSize: 60,                                        // 最大fontSize，用来控制weightFactor，默认60
+      minFontSize: 30,                                        // 最小fontSize，用来控制weightFactor，默认12
       list: list,
+      noDataLoadingOption: {                                  // 无数据提示。
+        backgroundColor: '#eee',
+        text: '暂无数据',
+        textStyle: {
+          color: '#888',
+          fontSize: 14
+        }
+      }
     };
     wc.setOption(option);
     window.onresize = function () {

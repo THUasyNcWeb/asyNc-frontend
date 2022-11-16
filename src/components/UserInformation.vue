@@ -128,7 +128,7 @@ import { defineProps, reactive,ref,defineEmits } from 'vue'
 import {NSpace,NH3,NText,NCard,NGrid,NGridItem,NButton,NInput} from 'naive-ui'
 import UserAvatar from '@/components/UserAvatar.vue'
 import WordChart from '@/components/WordChart.vue'
-import API from '../../store/axiosInstance'
+import API from '@/store/axiosInstance'
 export interface UserInfo {
   id: string,
   user_name: string,
