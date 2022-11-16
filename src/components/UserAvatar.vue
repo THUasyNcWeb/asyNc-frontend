@@ -28,7 +28,7 @@
         <n-image :width=props.width :height=props.height object-fit="cover"
         :src="props.image_code"
         preview-disabled
-        style="z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
+        style=" z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
         :fallback-src="default_logo"
         />
     </div>
@@ -97,6 +97,7 @@ function beforeUpload (data: {
 display: block;
 position: relative;
 border-radius:50%; 
+text-align: center;
 }
 .mask {
 position: absolute;
