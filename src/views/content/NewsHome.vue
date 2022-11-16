@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { reactive,h } from 'vue';
-// import '@/mock/SearchPage.mock'
+import '@/mock/SearchPage.mock'
 import API from "../../store/axiosInstance"
 import NewsCategory from '@/components/NewsCategory.vue'
 import SelectMore from '@/components/SelectMore.vue';
@@ -122,7 +122,7 @@ function colChange(category:string, label:string) {
         pane-style="margin-left:20%;width:60%;min-height:500px;"
         size="large" default-value="home">
             <n-tab-pane v-for="item in state.all_category" :key="item.key" :name=item.key :tab=main_news(item.label)>
-                <n-spin :show="state.loading" size="large" style="margin-top:20%">
+                <n-spin :show="state.loading" size="large" style="top:200px;">
                     <NewsCategory v-if="state.loading == false" :news="state.all_news" style="margin-top:-20%" />
                     <template #description>
                         <br/>

@@ -2,7 +2,7 @@
     <n-space vertical>
         <n-empty v-if="!props.news.length" size="large" description="什么也没有找到" />
         <template v-else>
-          <n-carousel style="height:300px" autoplay dot-type="line" show-arrow>
+          <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
             <template #arrow="{ prev, next }">
               <div class="custom-arrow">
                 <button type="button" class="custom-arrow--left" @click="prev">
@@ -14,9 +14,9 @@
               </div>
             </template>
               <n-carousel-item v-for="(news, pic_index) in props.news.slice(0,10)" :key = pic_index>
-                  <div class="pic_item">
+                  <div class="pic_item" style="  height: 100%;">
                       <a :href="news.url" target="_blank">
-                          <n-image 
+                          <n-image :width="state.img_width" object-fit="cover" 
                           :src="news.picture_url" preview-disabled :fallback-src="default_logo" />
                       </a>
                       <h2>{{news.title}}</h2>
@@ -78,7 +78,7 @@
 </template>
 
 <script  setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, reactive } from 'vue';
 import {PeopleCircleOutline,CalendarNumberOutline,StarOutline,ArrowBack,ArrowForward} from "@vicons/ionicons5"
 
 import { NA, NH2,NIcon, NText, NSpace, NEmpty,NList,NListItem,NImage,NEllipsis,NCarousel,NCarouselItem } from 'naive-ui';
@@ -95,11 +95,27 @@ const props = defineProps<{
   news:All_News[],
 }>();
 
+const state=reactive({
+  img_width: window.innerWidth * 0.6, 
+})
+
+// change the offset dynamically
+window.onresize = () => {
+    state.img_width = window.innerWidth * 0.6
+}
+
 function favorites(){
   alert("我先占个位置，代表收藏了")
 }
 const default_logo = require("@/assets/asyNc.png")
 </script>
+
+
+<style lang="scss" scoped>
+.carousel_size{
+  height: 300px;
+}
+</style>
 
 <style>
 .custom-arrow {
@@ -135,14 +151,8 @@ const default_logo = require("@/assets/asyNc.png")
 
 
 .pic_item {
-  width: 100%;
   position: relative;
-  height: 100%;
   display: flex;
-/*   
-  justify-content: center;
-    align-items: center; */
-  /* position: absolute; */
   inset: 0;
   background-image: var(--mask-gradient,linear-gradient(to top,#020e33,rgba(2,14,51,0) 120px));
   border-radius: 10px;
@@ -156,8 +166,10 @@ const default_logo = require("@/assets/asyNc.png")
 
 .pic_item img {
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  /* max-width: 1000px; */
+  /* width: 700px; */
+  /* height: auto; */
   border-radius: 10px;
   object-fit: cover;
 }
