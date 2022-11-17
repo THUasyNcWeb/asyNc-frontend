@@ -2,8 +2,8 @@
  * @FileDescription: 用户主页
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 10:08
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-17 08:30
  -->
 
 <template>
@@ -31,7 +31,7 @@
 
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content content-style="padding: 24px;">
+        <n-layout-content ref="contentRef" content-style="padding: 24px;">
           <router-view :user="state.user"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
@@ -42,9 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import {h,Component, reactive,defineEmits} from "vue"
+import {h,Component, reactive,defineEmits, provide, ref} from "vue"
 import {RouterLink, useRouter} from 'vue-router'
-import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog, NA  } from 'naive-ui'
+import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NImage,NText,useDialog, NA, LayoutInst  } from 'naive-ui'
 import API from "@/store/axiosInstance"
 import {
   PersonOutline as PersonIcon,
@@ -78,6 +78,10 @@ if(window.localStorage.getItem("token") != null) {
       console.log(error);
   });
 }
+
+// Provide content ref for scrolling in favorites page
+const contentRef = ref<LayoutInst | null>(null);
+provide('contentRef', contentRef);
 
 const emits = defineEmits(['reload']);
 const default_logo = require("@/assets/asyNc_avatar.png")
