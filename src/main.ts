@@ -16,48 +16,56 @@ const app = createApp(App);
 app.use(router);
 app.mount("#app");
 
-function judgeToken() {
-  API({
+function decodeToken() :string {
+  try{
+    const tokenString:string = localStorage.getItem("token");
+    const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))
+    console.log(token)
+    const expire_date =  new Date(token.expire_time * 1000)
+    console.log(expire_date)
+    const now_date = new Date()
+    console.log(now_date)
+    if (expire_date < now_date) {
+        throw Error("The token has expired!")
+    }
+    console.log("返回2")
+    return token.user_name
+  }
+  catch(error){
+    console.log(error)
+    console.log("错啦")
+    localStorage.removeItem("token")
+    // 清除原来无用的token
+    console.log("返回4")
+    return ''
+  }
+}
+async function judgeToken() : Promise<string> {
+  /**
+  * @description: 判断当前token是否有效
+  * @return {string} 若token有效则返回对应用户名，否则返回false
+  */    
+  console.log("进入")
+  if(localStorage.getItem("token") == null) {
+    console.log("返回3")
+    return ''
+  }
+  let return_value = ''
+  const value = await API({
     headers:{"Authorization": window.localStorage.getItem("token")},
     url:'checklogin',
     method:'post',
   }).then((res) => {
     console.log(res)
+    return_value = decodeToken()
   }).catch((error) => {
     console.log(error)
     console.log("错啦")
     localStorage.removeItem("token")
+    console.log("返回1")
+    // return ''
   })
-}
-
-function decodeToken() :(string | boolean) {
-  /**
-  * @description: 判断当前token是否有效
-  * @return {string | boolean} 若token有效则返回对应用户名，否则返回false
-  */    
-  if(localStorage.getItem("token")!= null) {
-    judgeToken()
-  }
-  try{
-      const tokenString:string = localStorage.getItem("token");
-      const token = JSON.parse(decodeURIComponent(encodeURIComponent(window.atob(tokenString.split('.')[1]))))
-      console.log(token)
-      const expire_date =  new Date(token.expire_time * 1000)
-      console.log(expire_date)
-      const now_date = new Date()
-      console.log(now_date)
-      if (expire_date < now_date) {
-          throw Error("The token has expired!")
-      }
-      return token.user_name
-  }
-  catch(error){
-      console.log(error)
-      console.log("错啦")
-      localStorage.removeItem("token")
-      // 清除原来无用的token
-      return false
-  }
+  return return_value
 }
 
 router.beforeEach((to, _, next) => {
@@ -92,4 +100,4 @@ router.beforeEach((to, _, next) => {
   }
 })
 
-export {decodeToken}
+export {decodeToken,judgeToken}
