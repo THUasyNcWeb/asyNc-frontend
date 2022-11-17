@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 04:44
+ * @LastEditTime: 2022-11-17 09:29
 -->
 
 <template>
@@ -29,6 +29,12 @@
       </n-space>
       <template #footer>
         <n-space>
+          <n-button type="warning" text style="font-size: 20px" @click.prevent="favoritesClick">
+            <n-icon>
+              <favorites-icon-filled v-if="news.is_favorite" />
+              <favorites-icon v-else />
+            </n-icon>
+          </n-button>
           <n-text type="info">
             {{news.media}}
           </n-text>
@@ -43,9 +49,16 @@
   
 <script setup lang="ts">
 import { computed, defineProps } from 'vue';
-import { NA, NEllipsis, NH2, NImage, NSpace, NText, NThing } from 'naive-ui';
+import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
+
+import {
+  BookmarkOutline as ReadIcon,
+  Star as FavoritesIconFilled,
+  StarOutline as FavoritesIcon,
+} from '@vicons/ionicons5/';
 
 import { newsClick } from '@/main';
+import API from '@/store/axiosInstance';
 
 export interface News {
   id: number,
@@ -57,11 +70,46 @@ export interface News {
   content: string,
   title_keywords: [number, number][],
   keywords: [number, number][],
+  is_favorite: boolean,
+  is_readlater: boolean,
 }
 
 const props = defineProps<{
   news: News,
 }>();
+
+const emits = defineEmits(['favoritesUpdate', 'readLaterUpdate']);
+
+const message = useMessage();
+
+// Add or remove this news to or from favorites
+function favoritesClick() {
+  const favorite = props.news.is_favorite;
+  const action = favorite ? '移除' : '添加';
+  props.news.is_favorite = !favorite;
+
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'favorites',
+    method: favorite ? 'delete' : 'post',
+    params: {
+      id: props.news.id
+    },
+  }).then(response => {
+    if (response.status === 200) {
+      message.success(`${action}收藏成功`);
+      emits('favoritesUpdate');
+    } else {
+      props.news.is_favorite = false;
+      message.error(`${action}收藏失败`);
+    }
+  }).catch(error => {
+    props.news.is_favorite = false;
+    message.error(`${action}收藏失败`);
+  });
+}
 
 interface Span {
   em: boolean,
