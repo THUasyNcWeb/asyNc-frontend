@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import API from "../../store/axiosInstance"
+import API from "@/store/axiosInstance"
 import {reactive, defineProps} from 'vue'
 import {useRouter} from 'vue-router'
 import {NInput,NButton,NGrid,NGridItem,NGradientText,NCard} from 'naive-ui'

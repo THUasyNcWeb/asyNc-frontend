@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path:"/user/userInformation",
                 name:"userInformation",
-                component: () => import("../views/user/userInformation.vue"),
+                component: () => import("../components/UserInformation.vue"),
                 meta: {
                     title: "详细用户信息"
                 }
@@ -49,7 +49,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path:"/user/modifyPassword",
                 name:"modifyPassword",
-                component:() => import("../views/user/modifyPassword.vue"),
+                component:() => import("../components/ModifyPassword.vue"),
                 meta: {
                     title: "修改密码"
                 }
