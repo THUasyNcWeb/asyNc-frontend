@@ -7,7 +7,7 @@
 import Js2WordCloud from "js2wordcloud";
 import {defineProps, onMounted, watch} from 'vue'
 const props = defineProps<{
-  tags:{},
+  tags:object,
 }>();
 
 function init_chart(tags:Object) {

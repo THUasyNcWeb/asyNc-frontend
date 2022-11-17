@@ -72,14 +72,14 @@
 
 <script setup lang="ts">
 import { PersonOutline,MailOutline,PencilOutline } from '@vicons/ionicons5';
-import { defineProps, reactive,ref,defineEmits } from 'vue'
+import { defineProps, reactive,ref,defineEmits,watch } from 'vue'
 import {NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace,NIcon} from 'naive-ui'
 import API from '@/store/axiosInstance'
 export interface UserInfo {
   id: string,
   user_name: string,
   signature: string,
-  tags: {},
+  tags: object,
   mail: string,
   avatar: string,
 }
@@ -104,7 +104,12 @@ const state = reactive({
 })
 
 initModify()
-
+watch(
+  () => props.user,
+  () => {
+    initModify()
+  }
+)
 function initModify(){
 	state.user.mail = ref(props.user.mail)
 	state.user.signature = ref(props.user.signature)

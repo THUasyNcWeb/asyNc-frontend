@@ -14,7 +14,7 @@
     </n-grid-item>
     <n-grid-item span="0:24 640:24 1024:14">
       <n-card title="最近浏览" :bordered="true" size="large" class="card_border">
-        <WordChart :tags="props.user.tags"></WordChart>
+        <WordChart :tags="props.user.tags == undefined ? {} : props.user.tags"></WordChart>
       </n-card>
     </n-grid-item>
     <n-grid-item span="0:24 640:24 1024:24">
@@ -34,7 +34,7 @@ export interface UserInfo {
   id: string,
   user_name: string,
   signature: string,
-  tags: {},
+  tags: object,
   mail: string,
   avatar: string,
 }
