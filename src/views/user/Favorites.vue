@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-16 23:23
+ * @LastEditTime: 2022-11-17 08:41
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -45,6 +45,10 @@ import API from '@/store/axiosInstance';
 
 import '@/mock/Favorites.mock';
 
+const props = defineProps<{
+  path: string,
+}>();
+
 const state = reactive({
   page: 0,
   page_count: 0,
@@ -56,9 +60,7 @@ const state = reactive({
 const contentRef: any = inject('contentRef');
 
 // Refresh when router changed
-// router.beforeEach(to => init(to));
 onBeforeRouteUpdate(to => init(to));
-// router.beforeResolve
 
 init(router.currentRoute.value);
 
@@ -66,12 +68,12 @@ init(router.currentRoute.value);
 const message = useMessage();
 
 function error() {
-  message.error('收藏系统出现错误😨');
+  message.error(`获取${document.title}时出现错误😨`);
 }
 
 // Jump to specified page
 function jump(page: number) {
-  router.push(`favorites?page=${page}`);
+  router.push(`${props.path}?page=${page}`);
 }
 
 function init(to: RouteLocationNormalized) {
@@ -90,7 +92,7 @@ function init(to: RouteLocationNormalized) {
     headers: {
       Authorization: window.localStorage.getItem('token'),
     },
-    url: `favorites?page=${state.page}`,
+    url: `${props.path}?page=${state.page}`,
     method: 'get',
   }).then(response => {
     state.loading = false;
