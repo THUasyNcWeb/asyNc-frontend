@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 09:29
+ * @LastEditTime: 2022-11-17 13:15
 -->
 
 <template>
@@ -29,10 +29,16 @@
       </n-space>
       <template #footer>
         <n-space>
-          <n-button type="warning" text style="font-size: 20px" @click.prevent="favoritesClick">
+          <n-button type="warning" text style="font-size: 20px" @click.prevent="favoritesClick('favorites')">
             <n-icon>
-              <favorites-icon-filled v-if="news.is_favorite" />
+              <favorites-icon-filled v-if="news.is_favorites" />
               <favorites-icon v-else />
+            </n-icon>
+          </n-button>
+          <n-button type="error" text style="font-size: 20px" @click.prevent="favoritesClick('readlater')">
+            <n-icon>
+              <read-icon-filled v-if="news.is_readlater" />
+              <read-icon v-else />
             </n-icon>
           </n-button>
           <n-text type="info">
@@ -52,6 +58,7 @@ import { computed, defineProps } from 'vue';
 import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
 
 import {
+  Bookmark as ReadIconFilled,
   BookmarkOutline as ReadIcon,
   Star as FavoritesIconFilled,
   StarOutline as FavoritesIcon,
@@ -70,7 +77,7 @@ export interface News {
   content: string,
   title_keywords: [number, number][],
   keywords: [number, number][],
-  is_favorite: boolean,
+  is_favorites: boolean,
   is_readlater: boolean,
 }
 
@@ -78,36 +85,38 @@ const props = defineProps<{
   news: News,
 }>();
 
-const emits = defineEmits(['favoritesUpdate', 'readLaterUpdate']);
+const emits = defineEmits(['favoritesUpdate', 'readlaterUpdate']);
 
 const message = useMessage();
 
-// Add or remove this news to or from favorites
-function favoritesClick() {
-  const favorite = props.news.is_favorite;
+// Add or remove this news to or from favorites or read later
+function favoritesClick(type: 'favorites' | 'readlater') {
+  const favorite = props.news['is_' + type];
   const action = favorite ? '移除' : '添加';
-  props.news.is_favorite = !favorite;
+  const target = type === 'favorites' ? '收藏' : '稍后再看';
+  props.news['is_' + type] = !favorite;
 
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),
     },
-    url: 'favorites',
+    url: type,
     method: favorite ? 'delete' : 'post',
     params: {
       id: props.news.id
     },
   }).then(response => {
     if (response.status === 200) {
-      message.success(`${action}收藏成功`);
-      emits('favoritesUpdate');
+      message.success(`${action}${target}成功`);
+      const emit = `${type}Update` as 'favoritesUpdate' | 'readlaterUpdate';
+      emits(emit);
     } else {
-      props.news.is_favorite = false;
-      message.error(`${action}收藏失败`);
+      props.news['is_' + type] = false;
+      message.error(`${action}${target}失败`);
     }
   }).catch(error => {
-    props.news.is_favorite = false;
-    message.error(`${action}收藏失败`);
+    props.news['is_' + type] = false;
+    message.error(`${action}${target}失败`);
   });
 }
 
