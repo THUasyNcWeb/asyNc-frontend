@@ -6,16 +6,33 @@
  * @LastEditTime: 2022-10-13 10:31
  -->
 <template>
-  <n-card  title="详细信息" :bordered="true" size="large" class="card_border" style="width:100%">
+  <n-card :bordered="true" size="large" class="card_border" style="width:100%">
     <n-grid :item-responsive="true" :x-gap="16" :y-gap="16">
+      <n-grid-item span="0:24 640:24 1024:24">
+        <n-space justify="space-between" :size=50>
+          <n-h2>
+            {{state.title}}
+          </n-h2>
+          <n-space>
+            <n-button v-if="state.edit_status==true" style="border-radius: 20px;font-size:20px" type="warning" @click="returnInfo" >
+              返回
+            </n-button>
+            <n-button style="border-radius: 20px;font-size:15px" type="success" @click="changeStatus" :disabled="!state.send_valid">
+              {{state.button_text}}
+            </n-button>
+          </n-space>
+        </n-space> 
+      </n-grid-item>
       <n-grid-item span="0:24 640:10 1024:10">
         <!-- <n-card class="card_border" style="width: 100%;"> -->
           <n-space :vertical="true" >
             <n-space>
-              <n-icon>
+              <n-icon :size="25">
                 <PersonOutline />
               </n-icon>
-              用户名
+              <n-text style="font-size:18px">
+                用户名
+              </n-text>
             </n-space>
             <n-input :disabled="!state.edit_status" v-model:value="state.user.user_name" placeholder="请输入用户名" :on-blur="checkUsername"/>
             <n-text v-if="state.user.user_valid == false" style="color:red">
@@ -28,52 +45,60 @@
         <!-- <n-card class="card_border" style="width: 100%;"> -->
           <n-space :vertical="true" >
             <n-space>
-              <n-icon>
+              <n-icon :size="25">
                 <MailOutline />
               </n-icon>
-              邮箱
+              <n-text style="font-size:18px">
+                邮箱
+              </n-text>
             </n-space>
             <n-input :disabled="!state.edit_status" v-model:value="state.user.mail" placeholder="请输入邮箱" :on-blur="checkMail"/>
             <n-text v-if="state.user.mail_valid == false" style="color:red">
               邮箱不符合格式
             </n-text>
           </n-space>
-        <!-- </n-card>   -->
       </n-grid-item>
       <n-grid-item span="0:24 640:24 1024:24">
-        <!-- <n-card class="card_border"> -->
           <n-space :vertical="true" >
             <n-space>
-              <n-icon>
+              <n-icon :size="25">
                 <PencilOutline />
               </n-icon>
-              个性签名
+              <n-text style="font-size:18px">
+                个性签名
+              </n-text>
             </n-space>
-            <n-input :disabled="!state.edit_status" v-model:value="state.user.signature" placeholder="请输入个人签名" :on-blur="checkSignature"/>
+            <n-input type="textarea" :autosize="{
+              minRows: 1,
+              maxRows: 3
+            }" 
+            :disabled="!state.edit_status" v-model:value="state.user.signature" placeholder="请输入个人签名" :on-blur="checkSignature"/>
             <n-text v-if="state.user.sign_valid == false" style="color:red">
               个人签名不符合格式（个性签名长度不超过50）
             </n-text>
           </n-space>
-        <!-- </n-card>     -->
       </n-grid-item>
       <n-grid-item span="0:24 640:24 1024:24">
-        <n-space  justify="center" :size=50>
-          <n-button v-if="state.edit_status==true" style="border-radius: 20px;font-size:20px" type="warning" @click="returnInfo" >
-            返回
-          </n-button>
-          <n-button style="border-radius: 20px;font-size:20px" size="large" type="success" @click="changeStatus" :disabled="!state.send_valid">
-            {{state.button_text}}
-          </n-button>
-        </n-space> 
+        <n-space>
+          <n-icon :size="25">
+            <EyeOutline />
+          </n-icon>
+          <n-text style="font-size:18px">
+            最近浏览
+          </n-text>
+        </n-space>
+        <WordChart :tags="props.user.tags == undefined ? {} : props.user.tags"></WordChart>
       </n-grid-item>
     </n-grid>
+
   </n-card>
 </template>
 
 <script setup lang="ts">
-import { PersonOutline,MailOutline,PencilOutline } from '@vicons/ionicons5';
+import WordChart from './WordChart.vue';
+import { PersonOutline,MailOutline,PencilOutline,EyeOutline } from '@vicons/ionicons5';
 import { defineProps, reactive,ref,defineEmits,watch } from 'vue'
-import {NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace,NIcon} from 'naive-ui'
+import {NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace,NIcon,NH2} from 'naive-ui'
 import API from '@/store/axiosInstance'
 export interface UserInfo {
   id: string,
