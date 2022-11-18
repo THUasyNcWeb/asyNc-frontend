@@ -59,7 +59,7 @@ function get_token(){
 }
 
 function update() {
-    message.success("上传成功🥳	")
+    message.success("上传成功🥳")
     API({
         headers:{"Authorization": window.localStorage.getItem("token")},
         url:'userinfo',

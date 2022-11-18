@@ -15,7 +15,7 @@ function init_chart(tags:Object) {
   console.log(tags)
   var wc = new Js2WordCloud(document.getElementById("chart2"));
   let list = [];
-  if( typeof(tags) == 'object' && Object.keys(tags).length !== 0) {
+  if( typeof(tags) == 'object') {
     for(var key in tags) {
       list.push([key, tags[key]])  
     }
