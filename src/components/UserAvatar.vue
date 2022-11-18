@@ -1,6 +1,6 @@
 <template>
     <div class="img_div" :style="{width: props.width + 'px',height: props.height + 'px'}">
-        <div class="mask">
+        <div class="mask" style="margin:auto">
             <div style="text-align:center;margin-top: 30%;">
                 <n-upload
                     response-type="json"
@@ -39,6 +39,8 @@
 import { defineProps,defineEmits } from 'vue'
 import {NImage,NUpload,NA} from 'naive-ui'
 import type { UploadFileInfo } from 'naive-ui'
+
+
 import API from "../store/axiosInstance"
 const props = defineProps<{
   width:number,
@@ -98,6 +100,7 @@ display: block;
 position: relative;
 border-radius:50%; 
 text-align: center;
+margin: auto;
 }
 .mask {
 position: absolute;
@@ -105,7 +108,6 @@ background: rgba(101, 101, 101, 0.6);
 color: #ffffff;
 opacity: 0;
 top: 0;
-right: 0;
 width: 100%;
 height: 100%;
 border-radius: 150%;

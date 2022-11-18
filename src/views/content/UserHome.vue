@@ -41,6 +41,7 @@ import {RouterLink, useRouter} from 'vue-router'
 import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NText,useDialog, NA  } from 'naive-ui'
 import API from "@/store/axiosInstance"
 import UserAvatar from "@/components/UserAvatar.vue"
+import emitter from "@/utils/bus"
 import {
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
@@ -204,6 +205,7 @@ for(let x of menuOptions) {
 function update_avatar(img_code:string) {
   state.user.avatar = img_code
   state.random = Math.random()
+  emitter.emit('updateavatar', img_code)
   // 更新主页面
 }
 

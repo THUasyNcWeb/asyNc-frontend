@@ -4,7 +4,7 @@
       <n-space :vertical="true" :size="16">
         <n-card :bordered="true" size="large" style="height:300px" class="card_border">
 					<n-space :vertical="true" :size="16" style="text-align:center" >
-						<UserAvatar style="margin-left:35%" :width="120" :height="120" :image_code="props.user.avatar" @changeavatar="update_avatar"></UserAvatar>
+						<UserAvatar :width="120" :height="120" :image_code="props.user.avatar" @changeavatar="update_avatar"/>
 						<n-text style="font-size:30px">
               欢迎，{{props.user.user_name}}！
 						</n-text>
