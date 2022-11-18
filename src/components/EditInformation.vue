@@ -24,7 +24,6 @@
         </n-space> 
       </n-grid-item>
       <n-grid-item span="0:24 640:10 1024:10">
-        <!-- <n-card class="card_border" style="width: 100%;"> -->
           <n-space :vertical="true" >
             <n-space>
               <n-icon :size="25">
@@ -98,7 +97,7 @@
 import WordChart from './WordChart.vue';
 import { PersonOutline,MailOutline,PencilOutline,EyeOutline } from '@vicons/ionicons5';
 import { defineProps, reactive,ref,defineEmits,watch } from 'vue'
-import {NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace,NIcon,NH2} from 'naive-ui'
+import {NText,NCard,NGrid,NGridItem,NButton,NInput,NSpace,NIcon,NH2,useMessage} from 'naive-ui'
 import API from '@/store/axiosInstance'
 export interface UserInfo {
   id: string,
@@ -108,6 +107,10 @@ export interface UserInfo {
   mail: string,
   avatar: string,
 }
+
+// Message box
+const message = useMessage();
+
 const props = defineProps<{
   user:UserInfo,
 }>();
@@ -184,10 +187,12 @@ function changeStatus(){
 			state.button_text = '编辑信息'
 			state.title = '详细信息'
 			emits("change-info", state.user.user_name, state.user.signature, state.user.mail)
-			alert("修改成功")
+      message.success('修改成功🥳')
+      // alert("修改成功")
 		}).catch((error) => {
 			console.log(error);
-			alert("修改失败")
+			// alert("修改失败")
+      message.error('修改失败😢')
 		});
 		// 发送接口
 	}

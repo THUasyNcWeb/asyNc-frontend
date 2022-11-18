@@ -12,6 +12,7 @@
                     'test': 'cool! naive!'
                     }" 
                     name="avatar"
+                    @error="update_error"
                     @finish="update"
                     :show-file-list=false
                     @before-upload="beforeUpload"
@@ -37,7 +38,7 @@
 
 <script setup lang="ts">
 import { defineProps,defineEmits } from 'vue'
-import {NImage,NUpload,NA} from 'naive-ui'
+import {NImage,NUpload,NA, useMessage} from 'naive-ui'
 import type { UploadFileInfo } from 'naive-ui'
 
 
@@ -49,24 +50,27 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['changeavatar']);
 const default_logo = require("@/assets/asyNc.png")
+// Message box
+const message = useMessage();
+
 
 function get_token(){
     return window.localStorage.getItem('token')
 }
 
 function update() {
-    alert("上传完成")
+    message.success("上传成功🥳	")
     API({
-      headers:{"Authorization": window.localStorage.getItem("token")},
-      url:'userinfo',
-      method:'get',
-      // 根据不同类别，把类别放在了对应的请求参数中
-  }).then((res)=>{
-      var response = res.data.data
-      emits("changeavatar", response.avatar)
-  }).catch((error) => {
-      console.log(error);
-  });
+        headers:{"Authorization": window.localStorage.getItem("token")},
+        url:'userinfo',
+        method:'get',
+        // 根据不同类别，把类别放在了对应的请求参数中
+    }).then((res)=>{
+        var response = res.data.data
+        emits("changeavatar", response.avatar)
+    }).catch((error) => {
+        console.log(error);
+    });
 }
 function beforeUpload (data: {
     file: UploadFileInfo
@@ -82,16 +86,22 @@ function beforeUpload (data: {
         }
     }
     if (flag == false ){
-        alert("上传格式有误，仅可以上传png/jpg/jpeg格式文件")
+        message.warning("上传格式有误，仅可以上传png/jpg/jpeg格式文件😢")
         return false
     }
     // 大小单位；kb
     if(data.file.file.size / 1024 / 1024 > 5) {
-        alert("上传文件过大，最多不能超过5mb")
+        message.warning("上传文件过大，最多不能超过5mb😢")
         return false
     }
     return true
 }
+
+function update_error() {
+  message.error('上传图片时出现错误😢');
+}
+
+
 </script>
 
 <style scoped>
