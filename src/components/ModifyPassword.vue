@@ -6,55 +6,54 @@
  * @LastEditTime: 2022-10-13 10:31
  -->
 <template>
-    <n-card class="card_bordered" style="margin:auto; width: 50%;" hoverable:="true">
-        <n-space justify="space-between" style="margin-bottom: 3%;">
-          <img src="../assets/asyNc.png" style="width:120px;overflow: hidden;" />
-          <n-gradient-text type="primary" :size="26.5" style="margin-top: 20px;">修改密码
-          </n-gradient-text>
+  <div style="margin:auto;width:90%">
+      <!-- <n-space justify="space-between" style="margin-bottom: 3%;">
+        <img src="../assets/asyNc.png" style="width:120px;overflow: hidden;" /> -->
+      <n-gradient-text type="primary" :size="26.5" style="margin-bottom: 5%;">修改密码
+      </n-gradient-text>
+    <!-- </n-space> -->
+    <n-grid y-gap="12" :cols="1">
+      <n-grid-item>
+        <n-space vertical>
+          <n-text style="font-size:16px">
+            旧密码
+          </n-text>
+          <n-input size="large"  type="password" placeholder="请输入旧密码" v-model:value="state.old_password"/>
         </n-space>
-        <n-grid y-gap="12" :cols="1">
-          <n-grid-item>
-            <n-space vertical>
-              <n-text style="font-size:25px">
-                旧密码
-              </n-text>
-              <n-input size="large"  type="password" placeholder="请输入旧密码" v-model:value="state.old_password"/>
-            </n-space>
-          </n-grid-item>
-          <n-grid-item>
-            <n-space vertical>
-              <n-text style="font-size:25px">
-                新密码
-              </n-text>
-              <n-input size="large"  type="password" placeholder="请输入新密码" v-model:value="state.new_password"/>
-              <n-text depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%;">
-                |&nbsp;密码为包含英文字母、下划线"_"、连字符"-" 在内的 8-14 个字符
-              </n-text>
-            </n-space>
-          </n-grid-item>
-          <n-grid-item>
-            <n-space vertical>
-              <n-text style="font-size:25px">
-                请再次输入密码
-              </n-text>
-              <n-input size="large"  type="password" placeholder="请再次输入密码" v-model:value="state.new_password_again"/>
-            </n-space>
-          </n-grid-item>
-          <n-grid-item>
-            <n-button style="width:100%; margin-top:5%;" type="success" @click="modify()">
-                  确定
-            </n-button>
-          </n-grid-item>
-        </n-grid>
-
-    </n-card>
+      </n-grid-item>
+      <n-grid-item>
+        <n-space vertical>
+          <n-text style="font-size:16px">
+            新密码
+          </n-text>
+          <n-input size="large"  type="password" placeholder="请输入新密码" v-model:value="state.new_password"/>
+          <n-text depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%;">
+            |&nbsp;密码为包含英文字母、下划线"_"、连字符"-" 在内的 8-14 个字符
+          </n-text>
+        </n-space>
+      </n-grid-item>
+      <n-grid-item>
+        <n-space vertical>
+          <n-text style="font-size:16px">
+            请再次输入密码
+          </n-text>
+          <n-input size="large"  type="password" placeholder="请再次输入密码" v-model:value="state.new_password_again"/>
+        </n-space>
+      </n-grid-item>
+      <n-grid-item>
+        <n-button style="width:100%; margin-top:5%;" type="success" @click="modify()">
+              确定
+        </n-button>
+      </n-grid-item>
+    </n-grid>
+  </div>
 </template>
 
 <script setup lang="ts">
 import API from "@/store/axiosInstance"
 import {reactive, defineProps} from 'vue'
 import {useRouter} from 'vue-router'
-import {NInput,NButton,NGrid,NGridItem,NGradientText,NCard,NText,NSpace, useMessage} from 'naive-ui'
+import {NInput,NButton,NGrid,NGridItem,NGradientText,NText,NSpace, useMessage} from 'naive-ui'
 import {judgeToken} from "@/main"
 export interface UserInfo {
   id: string,
@@ -161,10 +160,5 @@ function modify() {
 </script>
 
 <style scoped>
-.card_bordered {
-  border-radius: 20px;
-  border-color: #000000;
-  /* background-color: #F5F5F5; */
-}
 
 </style>
