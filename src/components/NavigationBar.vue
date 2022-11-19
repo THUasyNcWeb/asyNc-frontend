@@ -196,7 +196,8 @@ import {
   NPopover,
   NText,
   useMessage,
-  NImage
+  NImage,
+  NH4
 } from 'naive-ui';
 import {
   TimeOutline,
@@ -211,6 +212,8 @@ import {
   StarLineHorizontal316Regular
 } from '@vicons/fluent';
 
+import emitter from "@/utils/bus"
+import {onBeforeUnmount} from "vue";
 import SearchBox from './SearchBox.vue'
 import { decodeToken,judgeToken } from '@/main';
 import router from '@/router';
@@ -234,6 +237,14 @@ const state = reactive({
   word: router.currentRoute.value.query.q as string,
   username: decodeToken(),
 })
+emitter.on('updateavatar', (data) => {
+  state.user.avatar = data as string
+})
+
+onBeforeUnmount(() => {
+  emitter.off('updateavatar')  //关闭
+})
+
 const default_logo = require("@/assets/asyNc.png")
 async function init_username() {
   const value = await judgeToken()

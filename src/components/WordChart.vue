@@ -7,7 +7,7 @@
 import Js2WordCloud from "js2wordcloud";
 import {defineProps, onMounted, watch} from 'vue'
 const props = defineProps<{
-  tags:{},
+  tags:object,
 }>();
 
 function init_chart(tags:Object) {
@@ -15,7 +15,7 @@ function init_chart(tags:Object) {
   console.log(tags)
   var wc = new Js2WordCloud(document.getElementById("chart2"));
   let list = [];
-  if( typeof(tags) == 'object' && Object.keys(tags).length !== 0) {
+  if( typeof(tags) == 'object') {
     for(var key in tags) {
       list.push([key, tags[key]])  
     }

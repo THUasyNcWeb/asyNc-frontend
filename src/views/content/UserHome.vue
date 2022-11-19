@@ -7,32 +7,28 @@
  -->
 
 <template>
-  <n-space vertical size="large">
-    <!-- 以space作为主控件 -->
-    <n-layout style="width:100%;height: 100%;">
+  <div class="main_card">
+    <n-layout style="width:100%;height: 100%;border-radius: 10px;">
       <n-layout has-sider>
         <n-layout-sider bordered :width="250">
-          <n-space vertical style="margin-top: 10%;">
-            <n-space vertical style="text-align: center;">
-              <UserAvatar style="margin-left:34%" :width="80" :height="80" :image_code="state.user.avatar" :key="state.random" />
-              <n-text>
-                {{state.user.user_name}}
-              </n-text>
-            </n-space>
+          <n-space vertical style="margin-top: 10%;text-align: center;">
+            <UserAvatar style="margin:auto" :width="80" :height="80" :image_code="state.user.avatar" :key="state.random" />
+            <n-text>
+              {{state.user.user_name}}
+            </n-text>
             <n-config-provider :theme-overrides="menuThemeOverrides">
-              <n-menu :options="menuOptions" :default-value="default_val" />
+              <n-menu style="text-align:center" :options="menuOptions" :default-value="default_val" />
             </n-config-provider>  
           </n-space>
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content content-style="padding: 24px;">
+        <n-layout-content content-style="padding: 24px;" style="margin-top:2%">
           <router-view :user="state.user" :key="state.random" @change-info="update_info"  @change-avatar="update_avatar"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
     </n-layout>
-  </n-space>
-  
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +37,7 @@ import {RouterLink, useRouter} from 'vue-router'
 import {NLayout,NLayoutSider, NLayoutContent,NSpace,NMenu,NIcon,NConfigProvider,NText,useDialog, NA  } from 'naive-ui'
 import API from "@/store/axiosInstance"
 import UserAvatar from "@/components/UserAvatar.vue"
+import emitter from "@/utils/bus"
 import {
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
@@ -155,18 +152,18 @@ const menuOptions = [
             negativeText: '取消',
             onPositiveClick: () => {
                 API({
-                    headers:{"Authorization": window.localStorage.getItem("token")},
-                    // 携带token字段
-                    url:'logout',
-                    method:'post'}).then((res) => {
-                        console.log(res)
-                        window.localStorage.removeItem('token')
-                        state.user = {} as UserInfo
-                        router.push("/")
-                        emits('reload')
-                    })
-                    .catch((error) => {
-                        console.log(error)
+                  headers:{"Authorization": window.localStorage.getItem("token")},
+                  // 携带token字段
+                  url:'logout',
+                  method:'post'}).then((res) => {
+                    console.log(res)
+                    window.localStorage.removeItem('token')
+                    state.user = {} as UserInfo
+                    router.push("/")
+                    emits('reload')
+                  })
+                  .catch((error) => {
+                    console.log(error)
                 })
             },
             onNegativeClick: () => {
@@ -204,6 +201,7 @@ for(let x of menuOptions) {
 function update_avatar(img_code:string) {
   state.user.avatar = img_code
   state.random = Math.random()
+  emitter.emit('updateavatar', img_code)
   // 更新主页面
 }
 
@@ -216,6 +214,14 @@ function update_info(username: string, signature:string, mail:string) {
 
 </script>
 
-<style>
+<style scoped>
+.main_card{
+  width: 60%;
+  margin: auto;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  border-radius: 10px; 
+  border: 2px solid black;
+}
 
 </style>
