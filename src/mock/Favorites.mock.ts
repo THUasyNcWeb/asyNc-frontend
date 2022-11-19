@@ -51,7 +51,7 @@ let favList = [
     image_url: 'https://www.desmos.com/assets/img/homepage-student.png',
     pub_time: new Date(9876, 4, 43).toJSON(),
     visit_time: new Date(new Date().setDate(new Date().getDate() - 1)).toJSON(),
-    content: "晓得心动不长存",
+    content: "晓得心动不长存\n很长的新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻新闻",
   },
   {
     id: 5,

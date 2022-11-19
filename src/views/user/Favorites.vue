@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 08:41
+ * @LastEditTime: 2022-11-19 19:29
 -->
 <template>
   <n-space vertical>
@@ -85,7 +85,7 @@ function init(to: RouteLocationNormalized) {
   state.loading = true;
 
   // Scroll to top
-  usersContentRef.value?.scrollTo({ top: 0 });
+  usersContentRef.value?.scrollTo({ top: 0,});
 
   // Fetch news and page count
   API({

@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 08:30
+ * @LastEditTime: 2022-11-19 19:29
  -->
 
 <template>
@@ -31,7 +31,8 @@
 
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content ref="contentRef" content-style="padding: 24px;">
+        <n-layout-content ref="usersContentRef"
+          content-style="padding: 24px; height: calc(100vh - 74px)">
           <router-view :user="state.user"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
@@ -80,8 +81,8 @@ if(window.localStorage.getItem("token") != null) {
 }
 
 // Provide content ref for scrolling in favorites page
-const contentRef = ref<LayoutInst | null>(null);
-provide('contentRef', contentRef);
+const usersContentRef = ref<LayoutInst | null>(null);
+provide('usersContentRef', usersContentRef);
 
 const emits = defineEmits(['reload']);
 const default_logo = require("@/assets/asyNc_avatar.png")
