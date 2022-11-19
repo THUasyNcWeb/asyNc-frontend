@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 13:15
+ * @LastEditTime: 2022-11-19 18:45
 -->
 
 <template>
@@ -20,8 +20,7 @@
           style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"
           :fallback-src="default_logo"
           />
-        <n-ellipsis :class="{ narrow: news.picture_url, wide: !news.picture_url }" id="content"
-          line-clamp=3 :tooltip="false">
+        <n-ellipsis style="width: 65vw" id="content" line-clamp=3 :tooltip="false">
           <span v-for="span, id in contentSpans" :key="id" :class="{ em: span.em }">
             {{span.text}}
           </span>
@@ -157,11 +156,5 @@ const default_logo = require("../assets/asyNc.png")
 .em {
   font-weight: bold;
   color:rgb(75, 158, 95)
-}
-.wide {
-  width: 80vw
-}
-.narrow {
-  width: 65vw
 }
 </style>

@@ -6,13 +6,13 @@
  * @LastEditTime: 2022-11-17 08:41
 -->
 <template>
-  <n-space vertical style="padding: 18px 96px">
+  <n-space vertical>
     <template v-if="!state.loading">
       <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
       <template v-else>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
-            <news-entry :news="entry" />
+            <news-entry :news="entry" style="width: 65vw" />
           </n-list-item>
         </n-list>
         <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
@@ -57,7 +57,7 @@ const state = reactive({
 })
 
 // Reference to the layout content, for scrolling
-const contentRef: any = inject('contentRef');
+const usersContentRef: any = inject('usersContentRef');
 
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
@@ -85,7 +85,7 @@ function init(to: RouteLocationNormalized) {
   state.loading = true;
 
   // Scroll to top
-  contentRef.value?.scrollTo({ top: 0 });
+  usersContentRef.value?.scrollTo({ top: 0 });
 
   // Fetch news and page count
   API({
