@@ -9,7 +9,7 @@
   <div style="width:90%;margin: auto; ">
     <n-grid :item-responsive="true" :x-gap="16" :y-gap="16">
       <n-grid-item span="0:24 640:24 1024:24">
-        <n-space justify="space-between" :size=50>
+        <n-space justify="space-between">
           <n-h2>
             {{state.title}}
           </n-h2>

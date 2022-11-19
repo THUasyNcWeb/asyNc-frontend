@@ -10,7 +10,7 @@
   <div class="main_card">
     <n-layout style="width:100%;height: 100%;border-radius: 10px;">
       <n-layout has-sider>
-        <n-layout-sider bordered :width="220">
+        <n-layout-sider bordered :width="250">
           <n-space vertical style="margin-top: 10%;text-align: center;">
             <UserAvatar style="margin:auto" :width="80" :height="80" :image_code="state.user.avatar" :key="state.random" />
             <n-text>
@@ -22,7 +22,7 @@
           </n-space>
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content content-style="padding: 24px;" style="margin-top:8%">
+        <n-layout-content content-style="padding: 24px;" style="margin-top:2%">
           <router-view :user="state.user" :key="state.random" @change-info="update_info"  @change-avatar="update_avatar"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
