@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 19:29
+ * @LastEditTime: 2022-11-19 20:10
 -->
 <template>
   <n-space vertical>
@@ -12,7 +12,7 @@
       <template v-else>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
-            <news-entry :news="entry" style="width: 65vw" />
+            <news-entry :news="entry" style="width: 65vw" @update="handleUpdate"/>
           </n-list-item>
         </n-list>
         <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
@@ -62,7 +62,7 @@ const usersContentRef: any = inject('usersContentRef');
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
 
-init(router.currentRoute.value);
+init(router.currentRoute.value)
 
 // Message box
 const message = useMessage();
@@ -74,6 +74,13 @@ function error() {
 // Jump to specified page
 function jump(page: number) {
   router.push(`${props.path}?page=${page}`);
+}
+
+// Refresh the page when favorites are updated
+function handleUpdate(type: 'favorites' | 'readlater') {
+  if (type === props.path) {
+    init(router.currentRoute.value);
+  }
 }
 
 function init(to: RouteLocationNormalized) {

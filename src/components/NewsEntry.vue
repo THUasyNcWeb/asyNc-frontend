@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 18:45
+ * @LastEditTime: 2022-11-19 20:10
 -->
 
 <template>
@@ -84,7 +84,7 @@ const props = defineProps<{
   news: News,
 }>();
 
-const emits = defineEmits(['favoritesUpdate', 'readlaterUpdate']);
+const emits = defineEmits(['update']);
 
 const message = useMessage();
 
@@ -107,8 +107,7 @@ function favoritesClick(type: 'favorites' | 'readlater') {
   }).then(response => {
     if (response.status === 200) {
       message.success(`${action}${target}成功`);
-      const emit = `${type}Update` as 'favoritesUpdate' | 'readlaterUpdate';
-      emits(emit);
+      emits('update', type);
     } else {
       props.news['is_' + type] = false;
       message.error(`${action}${target}失败`);
