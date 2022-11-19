@@ -12,7 +12,7 @@
       <n-layout has-sider>
         <n-layout-sider bordered :width="250">
           <n-space vertical style="margin-top: 10%;text-align: center;">
-            <UserAvatar style="margin:auto" :width="80" :height="80" :image_code="state.user.avatar" :key="state.random" />
+            <UserAvatar style="margin:auto" :width="80" :height="80" :image_code="state.user.avatar" :key="state.random"  @changeavatar="update_avatar" />
             <n-text>
               {{state.user.user_name}}
             </n-text>
@@ -23,7 +23,7 @@
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;" style="margin-top:2%">
-          <router-view :user="state.user" :key="state.random" @change-info="update_info"  @change-avatar="update_avatar"></router-view>
+          <router-view :user="state.user" :key="state.random" @change-info="update_info" ></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
