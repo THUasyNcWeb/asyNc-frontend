@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-16 23:55
+ * @LastEditTime: 2022-11-17 13:26
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -129,6 +129,7 @@ function init(to: RouteLocationNormalized) {
       state.news.push({
         ...entry,
         pub_time: new Date(entry.pub_time),
+        is_favorites: entry.is_favorite
       });
     }
   }).catch(() => {
