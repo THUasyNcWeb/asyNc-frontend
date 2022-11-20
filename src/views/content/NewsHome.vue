@@ -41,6 +41,7 @@ const state = reactive({
   error: false,
   tags: "",
   // 更多栏的显示标签与对应的键值
+  empty_content: "自己探索的世界才更为真实",
 });
 
 // change the offset dynamically
@@ -57,61 +58,78 @@ state.all_category.push(
   { key: "tech", label: "科技" }
 );
 
-if (decodeToken() != "") {
-  API({
-    headers: { Authorization: window.localStorage.getItem("token") },
-    url: "userinfo",
-    method: "get",
-    // 根据不同类别，把类别放在了对应的请求参数中
-  })
-    .then((res) => {
-      for (let x in res.data.data.tags) {
-        state.tags += x + " ";
-      }
-      state.tags = state.tags.trim();
-      console.log(res);
+function init_tags() {
+  state.tags = "";
+  if (decodeToken() != "") {
+    API({
+      headers: { Authorization: window.localStorage.getItem("token") },
+      url: "userinfo",
+      method: "get",
+      // 根据不同类别，把类别放在了对应的请求参数中
     })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((res) => {
+        console.log(res.data.data.tags);
+        for (let x in res.data.data.tags) {
+          console.log(x);
+          state.tags += x + " ";
+        }
+        state.tags = state.tags.trim();
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
 
+init_tags();
 get_news("home");
 
 function get_news(category: string) {
+  state.empty_content = "自己探索的世界才更为真实";
   if (category == "more") {
     return;
   }
   state.loading = true;
   state.error = false;
+  state.all_news = new Array<All_News>();
   if (category == "person") {
-    API({
-      headers: {
-        Authorization: window.localStorage.getItem("token"),
-      },
-      url: "search",
-      method: "post",
-      data: {
-        query: state.tags,
-        page: 1,
-        include: [],
-        exclude: [],
-      },
-    })
-      .then((res) => {
-        state.loading = false;
-        for (const entry of res.data.data.news) {
-          // Construct Date object
-          state.all_news.push({
-            ...entry,
-            pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
-          });
-        }
+    if (decodeToken() != "") {
+      state.empty_content = "你还没有在这里留下足迹，去尽情探索吧。";
+      // 当登录状态有效，获取tags对应的新闻
+      API({
+        headers: {
+          Authorization: window.localStorage.getItem("token"),
+        },
+        url: "search",
+        method: "post",
+        data: {
+          query: state.tags,
+          page: 1,
+          include: [],
+          exclude: [],
+        },
       })
-      .catch(() => {
-        state.loading = false;
-        state.error = true;
-      });
+        .then((res) => {
+          state.loading = false;
+          for (const entry of res.data.data.news) {
+            // Construct Date object
+            state.all_news.push({
+              ...entry,
+              pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+            });
+          }
+        })
+        .catch(() => {
+          state.loading = false;
+          state.error = true;
+        });
+    } else {
+      // 不属于报错，需要提醒要登录
+      state.empty_content = "登录以畅享独特的个人推荐";
+      state.loading = false;
+      state.error = false;
+    }
     return;
   }
 
@@ -212,6 +230,7 @@ function colChange(category: string, label: string) {
           <NewsCategory
             v-if="state.loading == false"
             :news="state.all_news"
+            :empty_content="state.empty_content"
             style="margin-top: -20%"
           />
           <template #description>
@@ -228,9 +247,9 @@ function colChange(category: string, label: string) {
           </template>
         </n-spin>
         <n-result
-          v-if="state.error"
-          status="404"
-          title="404 资源不存在"
+          v-else
+          status="500"
+          title="500 服务器链接错误"
           description="你家服务器怎么又炸了"
           style="margin-top: 5%"
         >
@@ -256,6 +275,7 @@ function colChange(category: string, label: string) {
           <NewsCategory
             v-if="!state.loading && !state.error"
             :news="state.all_news"
+            :empty_content="state.empty_content"
             style="margin-top: -20%"
           />
           <template #description>

@@ -1,10 +1,12 @@
 <template>
   <n-space vertical>
-    <n-empty
+    <n-result
       v-if="!props.news.length"
-      size="large"
-      description="什么也没有找到"
-    />
+      status="404"
+      title="404 资源不存在"
+      :description="props.empty_content"
+    >
+    </n-result>
     <template v-else>
       <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
         <template #arrow="{ prev, next }">
@@ -122,7 +124,7 @@ import {
   NIcon,
   NText,
   NSpace,
-  NEmpty,
+  NResult,
   NList,
   NListItem,
   NImage,
@@ -141,6 +143,7 @@ export interface All_News {
 
 const props = defineProps<{
   news: All_News[];
+  empty_content: string;
 }>();
 
 console.log(props.news);
