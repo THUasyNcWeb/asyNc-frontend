@@ -17,8 +17,17 @@ import { FastFoodOutline } from "@vicons/ionicons5";
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
+export interface All_News {
+  title: string;
+  url: string;
+  media: string;
+  pub_time: Date;
+  picture_url?: string;
+}
+
 const state = reactive({
-  all_news: new Array(),
+  all_news: new Array<All_News>(),
+
   window_width: window.innerWidth * 0.35,
   all_category: new Array(),
   // 所有的分类
