@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { reactive, h } from "vue";
-// import '@/mock/SearchPage.mock'
+// import "@/mock/SearchPage.mock";
 import API from "../../store/axiosInstance";
 import NewsCategory from "@/components/NewsCategory.vue";
 import SelectMore from "@/components/SelectMore.vue";
@@ -211,7 +211,7 @@ function colChange(category: string, label: string) {
       type="line"
       animated
       :tabs-padding="state.window_width"
-      pane-style="margin-left:20%;width:60%;min-height:500px;"
+      pane-style="margin-left:15%;width:70%;min-height:500px;"
       size="large"
       default-value="home"
     >
@@ -231,7 +231,7 @@ function colChange(category: string, label: string) {
             v-if="state.loading == false"
             :news="state.all_news"
             :empty_content="state.empty_content"
-            style="margin-top: -20%"
+            style="margin-top: -15%"
           />
           <template #description>
             <br />

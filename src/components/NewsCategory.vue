@@ -8,39 +8,46 @@
     >
     </n-result>
     <template v-else>
-      <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
-        <template #arrow="{ prev, next }">
-          <div class="custom-arrow">
-            <button type="button" class="custom-arrow--left" @click="prev">
-              <n-icon><ArrowBack /></n-icon>
-            </button>
-            <button type="button" class="custom-arrow--right" @click="next">
-              <n-icon><ArrowForward /></n-icon>
-            </button>
-          </div>
-        </template>
-        <n-carousel-item
-          v-for="(news, pic_index) in state.picture_news"
-          :key="pic_index"
-        >
-          <div class="pic_item">
-            <a :href="news.url" target="_blank">
-              <n-image
-                :width="state.img_width"
-                object-fit="cover"
-                :src="news.picture_url"
-                preview-disabled
-                :fallback-src="default_logo"
-              />
-            </a>
-            <h2>
-              <n-ellipsis :tooltip="false" :line-clamp="1">
-                {{ news.title }}
-              </n-ellipsis>
-            </h2>
-          </div>
-        </n-carousel-item>
-      </n-carousel>
+      <n-grid :item-responsive="true" :x-gap="16" :y-gap="16">
+        <n-grid-item span="0:24 640:14 1024:14">
+          <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
+            <template #arrow="{ prev, next }">
+              <div class="custom-arrow">
+                <button type="button" class="custom-arrow--left" @click="prev">
+                  <n-icon><ArrowBack /></n-icon>
+                </button>
+                <button type="button" class="custom-arrow--right" @click="next">
+                  <n-icon><ArrowForward /></n-icon>
+                </button>
+              </div>
+            </template>
+            <n-carousel-item
+              v-for="(news, pic_index) in state.picture_news"
+              :key="pic_index"
+            >
+              <div class="pic_item">
+                <a :href="news.url" target="_blank">
+                  <n-image
+                    :width="state.img_width"
+                    object-fit="cover"
+                    :src="news.picture_url"
+                    preview-disabled
+                    :fallback-src="default_logo"
+                  />
+                </a>
+                <h2>
+                  <n-ellipsis :tooltip="false" :line-clamp="1">
+                    {{ news.title }}
+                  </n-ellipsis>
+                </h2>
+              </div>
+            </n-carousel-item>
+          </n-carousel>
+        </n-grid-item>
+        <n-grid-item span="0:24 640:10 1024:10">
+          <n-card> 测试 </n-card>
+        </n-grid-item>
+      </n-grid>
 
       <n-list hoverable clickable>
         <n-list-item v-for="(item, id) in state.show_news" :key="id">
@@ -49,7 +56,7 @@
               vertical
               justify="space-between"
               :style="{
-                'max-width': item.picture_url ? '550px' : '900px',
+                'max-width': item.picture_url ? '800px' : '1100px',
                 'min-height': '140px',
               }"
             >
@@ -131,6 +138,9 @@ import {
   NEllipsis,
   NCarousel,
   NCarouselItem,
+  NGrid,
+  NGridItem,
+  NCard,
 } from "naive-ui";
 
 export interface All_News {
@@ -149,7 +159,7 @@ const props = defineProps<{
 console.log(props.news);
 
 const state = reactive({
-  img_width: window.innerWidth * 0.6,
+  img_width: window.innerWidth * 0.4,
   picture_news: new Array<All_News>(),
   // 用于走马灯
   show_news: new Array<All_News>(),
@@ -158,7 +168,7 @@ const state = reactive({
 
 // change the offset dynamically
 window.onresize = () => {
-  state.img_width = window.innerWidth * 0.6;
+  state.img_width = window.innerWidth * 0.4;
 };
 
 function favorites() {
@@ -201,7 +211,7 @@ watch(
 
 <style lang="scss" scoped>
 .carousel_size {
-  height: 300px;
+  height: 400px;
 }
 </style>
 
@@ -246,7 +256,6 @@ watch(
     --mask-gradient,
     linear-gradient(to top, #020e33, rgba(2, 14, 51, 0) 120px)
   );
-  border-radius: 10px;
   box-shadow: 5px 5px 5px 2px #dcdcdc;
   /*下边阴影  */
 }
@@ -257,7 +266,6 @@ watch(
 
 .pic_item img {
   z-index: -1;
-  border-radius: 10px;
   object-fit: cover;
 }
 
