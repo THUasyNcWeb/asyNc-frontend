@@ -45,12 +45,26 @@
           </n-carousel>
         </n-grid-item>
         <n-grid-item span="0:24 640:10 1024:10">
-          <n-card> 测试 </n-card>
+          <n-space vertical>
+            <n-h4
+              v-for="(item, id) in state.show_news.slice(0, 6)"
+              :key="id"
+              prefix="bar"
+            >
+              <n-a :href="item.url" style="text-decoration: none">
+                <n-ellipsis :line-clamp="1" :tooltip="false">
+                  <n-text type="primary">
+                    {{ item.title }}
+                  </n-text>
+                </n-ellipsis>
+              </n-a>
+            </n-h4>
+          </n-space>
         </n-grid-item>
       </n-grid>
 
       <n-list hoverable clickable>
-        <n-list-item v-for="(item, id) in state.show_news" :key="id">
+        <n-list-item v-for="(item, id) in state.show_news.slice(7)" :key="id">
           <n-space justify="space-between" stlye="display:inline-block">
             <n-space
               vertical
@@ -140,7 +154,7 @@ import {
   NCarouselItem,
   NGrid,
   NGridItem,
-  NCard,
+  NH4,
 } from "naive-ui";
 
 export interface All_News {
@@ -211,7 +225,7 @@ watch(
 
 <style lang="scss" scoped>
 .carousel_size {
-  height: 400px;
+  height: 340px;
 }
 </style>
 
