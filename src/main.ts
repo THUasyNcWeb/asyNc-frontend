@@ -83,15 +83,12 @@ router.beforeEach((to, _, next) => {
   }
   else if (window.localStorage.getItem("token")) {
     const flag = decodeToken()
-    if( typeof(flag) == "boolean" ) {
+    if( flag == '' ) {
       alert("请先登录或者注册")
       next("/login")
     }
-    else if (typeof(flag) == "string") {
-      next()
-    }
     else {
-      alert("无权访问!")
+      next()
     }
   }
   else {
