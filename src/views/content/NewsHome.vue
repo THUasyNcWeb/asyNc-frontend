@@ -12,8 +12,10 @@ import { reactive, h } from "vue";
 import API from "../../store/axiosInstance";
 import NewsCategory from "@/components/NewsCategory.vue";
 import SelectMore from "@/components/SelectMore.vue";
-import { NTabs, NTabPane, NSpin, NIcon, NH2 } from "naive-ui";
+import { NTabs, NTabPane, NSpin, NIcon, NH2, NResult, NButton } from "naive-ui";
 import { FastFoodOutline } from "@vicons/ionicons5";
+import { decodeToken } from "@/main";
+import { format } from "date-fns";
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
@@ -36,6 +38,8 @@ const state = reactive({
   more_label: "更多",
   more_key: "more",
   loading: false,
+  error: false,
+  tags: "",
   // 更多栏的显示标签与对应的键值
 });
 
@@ -46,17 +50,71 @@ window.onresize = () => {
 
 state.all_category.push(
   { key: "home", label: "首页" },
+  { key: "person", label: "个性化" },
   { key: "ent", label: "娱乐" },
   { key: "sports", label: "体育" },
   { key: "politics", label: "政治" },
   { key: "tech", label: "科技" }
 );
+
+if (decodeToken() != "") {
+  API({
+    headers: { Authorization: window.localStorage.getItem("token") },
+    url: "userinfo",
+    method: "get",
+    // 根据不同类别，把类别放在了对应的请求参数中
+  })
+    .then((res) => {
+      for (let x in res.data.data.tags) {
+        state.tags += x + " ";
+      }
+      state.tags = state.tags.trim();
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 get_news("home");
+
 function get_news(category: string) {
   if (category == "more") {
     return;
   }
   state.loading = true;
+  state.error = false;
+  if (category == "person") {
+    API({
+      headers: {
+        Authorization: window.localStorage.getItem("token"),
+      },
+      url: "search",
+      method: "post",
+      data: {
+        query: state.tags,
+        page: 1,
+        include: [],
+        exclude: [],
+      },
+    })
+      .then((res) => {
+        state.loading = false;
+        for (const entry of res.data.data.news) {
+          // Construct Date object
+          state.all_news.push({
+            ...entry,
+            pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+          });
+        }
+      })
+      .catch(() => {
+        state.loading = false;
+        state.error = true;
+      });
+    return;
+  }
+
   API({
     headers: { Authorization: window.localStorage.getItem("token") },
     url: "allnews",
@@ -68,10 +126,18 @@ function get_news(category: string) {
   })
     .then((res) => {
       state.loading = false;
-      state.all_news = res.data.data;
+      for (const entry of res.data.data) {
+        // Construct Date object
+        state.all_news.push({
+          ...entry,
+          pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+        });
+      }
     })
     .catch((error) => {
       console.log(error);
+      state.loading = false;
+      state.error = true;
     });
 }
 
@@ -137,7 +203,12 @@ function colChange(category: string, label: string) {
         :name="item.key"
         :tab="main_news(item.label)"
       >
-        <n-spin :show="state.loading" size="large" style="top: 200px">
+        <n-spin
+          v-if="!state.error"
+          :show="state.loading"
+          size="large"
+          style="top: 200px"
+        >
           <NewsCategory
             v-if="state.loading == false"
             :news="state.all_news"
@@ -156,6 +227,19 @@ function colChange(category: string, label: string) {
             </n-icon>
           </template>
         </n-spin>
+        <n-result
+          v-if="state.error"
+          status="404"
+          title="404 资源不存在"
+          description="你家服务器怎么又炸了"
+          style="margin-top: 5%"
+        >
+          <template #footer>
+            <n-button type="primary" @click="get_news(state.now_category)"
+              >头铁再来一次</n-button
+            >
+          </template>
+        </n-result>
       </n-tab-pane>
       <n-tab-pane :name="state.more_key" :tab="more_news">
         <SelectMore
@@ -170,7 +254,7 @@ function colChange(category: string, label: string) {
           style="margin-top: 20%"
         >
           <NewsCategory
-            v-if="state.loading == false"
+            v-if="!state.loading && !state.error"
             :news="state.all_news"
             style="margin-top: -20%"
           />
