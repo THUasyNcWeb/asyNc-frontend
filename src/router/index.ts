@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 08:41
+ * @LastEditTime: 2022-11-21 03:06
 */
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -55,7 +55,39 @@ const routes: Array<RouteRecordRaw> = [
                     title: "修改密码"
                 }
             },
-            
+            {
+                path: "/user/favorites",
+                name: "favorites",
+                component: Favorites,
+                meta: {
+                    title: "收藏",
+                },
+                props: {
+                    path: 'favorites',
+                }
+            },
+            {
+                path: "/user/readlater",
+                name: "readlater",
+                component: Favorites,
+                meta: {
+                    title: "稍后再看",
+                },
+                props: {
+                    path: 'readlater',
+                }
+            },
+            {
+                path: "/user/history",
+                name: "history",
+                component: Favorites,
+                meta: {
+                    title: "历史记录",
+                },
+                props: {
+                    path: 'history',
+                }
+            },
             ]
         },
         {
@@ -65,39 +97,6 @@ const routes: Array<RouteRecordRaw> = [
             meta: {
                 title: "搜索",
             },
-        },
-        {
-            path: "/favorites",
-            name: "favorites",
-            component: Favorites,
-            meta: {
-                title: "收藏"
-            },
-            props: {
-                path: 'favorites',
-            }
-        },
-        {
-            path: "/readlater",
-            name: "readlater",
-            component: Favorites,
-            meta: {
-                title: "收藏"
-            },
-            props: {
-                path: 'readlater',
-            }
-        },
-        {
-            path: "/history",
-            name: "history",
-            component: Favorites,
-            meta: {
-                title: "收藏"
-            },
-            props: {
-                path: 'history',
-            }
         },
         ]
     },
