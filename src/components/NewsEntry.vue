@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 20:10
+ * @LastEditTime: 2022-11-19 21:01
 -->
 
 <template>
@@ -28,13 +28,15 @@
       </n-space>
       <template #footer>
         <n-space>
-          <n-button type="warning" text style="font-size: 20px" @click.prevent="favoritesClick('favorites')">
+          <n-button type="warning" text style="font-size: 20px"
+            @click.stop.prevent="favoritesClick('favorites')">
             <n-icon>
               <favorites-icon-filled v-if="news.is_favorites" />
               <favorites-icon v-else />
             </n-icon>
           </n-button>
-          <n-button type="error" text style="font-size: 20px" @click.prevent="favoritesClick('readlater')">
+          <n-button type="error" text style="font-size: 20px"
+            @click.stop.prevent="favoritesClick('readlater')">
             <n-icon>
               <read-icon-filled v-if="news.is_readlater" />
               <read-icon v-else />
@@ -45,6 +47,9 @@
           </n-text>
           <n-text depth=3>
             {{news.pub_time.toLocaleDateString()}}
+          </n-text>
+          <n-text depth=3>
+            {{news.visit_time?.toLocaleString()}}
           </n-text>
         </n-space>
       </template>
@@ -63,8 +68,9 @@ import {
   StarOutline as FavoritesIcon,
 } from '@vicons/ionicons5/';
 
-import { newsClick } from '@/main';
+import { decodeToken, newsClick } from '@/main';
 import API from '@/store/axiosInstance';
+import router from '@/router';
 
 export interface News {
   id: number,
@@ -78,6 +84,7 @@ export interface News {
   keywords: [number, number][],
   is_favorites: boolean,
   is_readlater: boolean,
+  visit_time?: Date,
 }
 
 const props = defineProps<{
@@ -90,6 +97,7 @@ const message = useMessage();
 
 // Add or remove this news to or from favorites or read later
 function favoritesClick(type: 'favorites' | 'readlater') {
+
   const favorite = props.news['is_' + type];
   const action = favorite ? '移除' : '添加';
   const target = type === 'favorites' ? '收藏' : '稍后再看';
