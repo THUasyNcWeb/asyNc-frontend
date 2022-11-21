@@ -45,25 +45,25 @@ async function judgeToken() : Promise<string> {
   * @description: 判断当前token是否有效
   * @return {string} 若token有效则返回对应用户名，否则返回false
   */    
-  console.log("进入")
   if(localStorage.getItem("token") == null) {
-    console.log("返回3")
     return ''
   }
-  let return_value = ''
-  const value = await API({
+  let return_value = decodeToken()
+  if(return_value == '') {
+    return return_value
+  }
+  await API({
     headers:{"Authorization": window.localStorage.getItem("token")},
     url:'checklogin',
     method:'post',
   }).then((res) => {
-    console.log(res)
-    return_value = decodeToken()
+    console.log(res) 
   }).catch((error) => {
     console.log(error)
     console.log("错啦")
     localStorage.removeItem("token")
     console.log("返回1")
-    // return ''
+    return_value = ''
   })
   return return_value
 }

@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path:"/user/userInformation",
                 name:"userInformation",
-                component: () => import("../components/UserInformation.vue"),
+                component: () => import("../components/EditInformation.vue"),
                 meta: {
                     title: "详细用户信息"
                 }
