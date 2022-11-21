@@ -27,7 +27,7 @@
             </div>
         </div>
         <n-image :width=props.width :height=props.height object-fit="cover"
-        :src="props.image_code"
+        :src="userRef.avatar"
         preview-disabled
         style=" z-index: 5; border-radius:50%; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16);"
         :fallback-src="default_logo"
@@ -37,18 +37,29 @@
 
 
 <script setup lang="ts">
-import { defineProps,defineEmits } from 'vue'
+import { defineProps,inject, ref } from 'vue'
 import {NImage,NUpload,NA, useMessage} from 'naive-ui'
 import type { UploadFileInfo } from 'naive-ui'
-
-
 import API from "../store/axiosInstance"
+
+export interface UserInfo {
+  id: string;
+  user_name: string;
+  signature: string;
+  tags: object;
+  mail: string;
+  avatar: string;
+}
+
 const props = defineProps<{
   width:number,
   height:number,
-  image_code:string,
 }>();
-const emits = defineEmits(['changeavatar']);
+
+const userRef = ref<UserInfo>(inject('userRef'))
+
+const updateUserLocal:Function = inject('updateUserLocal')
+
 const default_logo = require("@/assets/asyNc.png")
 // Message box
 const message = useMessage();
@@ -67,7 +78,12 @@ function update() {
         // 根据不同类别，把类别放在了对应的请求参数中
     }).then((res)=>{
         var response = res.data.data
-        emits("changeavatar", response.avatar)
+        // emits("changeavatar", response.avatar)
+        const new_user:UserInfo = {
+            ...userRef.value,
+            avatar: response.avatar
+        }
+        updateUserLocal(new_user)
     }).catch((error) => {
         console.log(error);
     });

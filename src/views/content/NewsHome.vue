@@ -7,14 +7,13 @@
  -->
 
 <script setup lang="ts">
-import { reactive, h } from "vue";
+import { reactive, h, ref, inject } from "vue";
 // import "@/mock/SearchPage.mock";
 import API from "../../store/axiosInstance";
 import NewsCategory from "@/components/NewsCategory.vue";
 import SelectMore from "@/components/SelectMore.vue";
 import { NTabs, NTabPane, NSpin, NIcon, NH2, NResult, NButton } from "naive-ui";
 import { FastFoodOutline } from "@vicons/ionicons5";
-import { decodeToken } from "@/main";
 import { format } from "date-fns";
 // 按需引入naive-ui组件
 // 之后可能会把上述引入集中在一个固定的ts文件中
@@ -25,6 +24,15 @@ export interface All_News {
   media: string;
   pub_time: Date;
   picture_url?: string;
+}
+
+export interface UserInfo {
+  id: string;
+  user_name: string;
+  signature: string;
+  tags: string[];
+  mail: string;
+  avatar: string;
 }
 
 const state = reactive({
@@ -39,10 +47,11 @@ const state = reactive({
   more_key: "more",
   loading: false,
   error: false,
-  tags: "",
   // 更多栏的显示标签与对应的键值
   empty_content: "自己探索的世界才更为真实",
 });
+
+const userRef = ref<UserInfo>(inject('userRef'));
 
 // change the offset dynamically
 window.onresize = () => {
@@ -58,31 +67,6 @@ state.all_category.push(
   { key: "tech", label: "科技" }
 );
 
-function init_tags() {
-  state.tags = "";
-  if (decodeToken() != "") {
-    API({
-      headers: { Authorization: window.localStorage.getItem("token") },
-      url: "userinfo",
-      method: "get",
-      // 根据不同类别，把类别放在了对应的请求参数中
-    })
-      .then((res) => {
-        console.log(res.data.data.tags);
-        for (let x in res.data.data.tags) {
-          console.log(x);
-          state.tags += x + " ";
-        }
-        state.tags = state.tags.trim();
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-}
-
-init_tags();
 get_news("home");
 
 function get_news(category: string) {
@@ -94,7 +78,7 @@ function get_news(category: string) {
   state.error = false;
   state.all_news = new Array<All_News>();
   if (category == "person") {
-    if (decodeToken() != "") {
+    if (userRef.value.user_name != "") {
       state.empty_content = "你还没有在这里留下足迹，去尽情探索吧。";
       // 当登录状态有效，获取tags对应的新闻
       API({
@@ -104,7 +88,7 @@ function get_news(category: string) {
         url: "search",
         method: "post",
         data: {
-          query: state.tags,
+          query: userRef.value.tags,
           page: 1,
           include: [],
           exclude: [],

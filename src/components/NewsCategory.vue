@@ -1,9 +1,19 @@
 <template>
   <n-space vertical>
-    <n-result v-if="!props.news.length" status="404" title="404 资源不存在" :description="props.empty_content">
+    <n-result
+      v-if="!props.news.length"
+      status="404"
+      title="404 资源不存在"
+      :description="props.empty_content"
+    >
     </n-result>
     <template v-else>
-      <n-grid :item-responsive="true" :x-gap="16" :y-gap="16" style="margin-left: 20px;">
+      <n-grid
+        :item-responsive="true"
+        :x-gap="16"
+        :y-gap="16"
+        style="margin-left: 20px"
+      >
         <n-grid-item span="0:24 640:14 1024:14">
           <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
             <template #arrow="{ prev, next }">
@@ -20,11 +30,19 @@
                 </button>
               </div>
             </template>
-            <n-carousel-item v-for="(news, pic_index) in state.picture_news" :key="pic_index">
+            <n-carousel-item
+              v-for="(news, pic_index) in state.picture_news"
+              :key="pic_index"
+            >
               <div class="pic_item">
                 <a :href="news.url" target="_blank">
-                  <n-image :width="state.img_width" object-fit="cover" :src="news.picture_url" preview-disabled
-                    :fallback-src="default_logo" />
+                  <n-image
+                    :width="state.img_width"
+                    object-fit="cover"
+                    :src="news.picture_url"
+                    preview-disabled
+                    :fallback-src="default_logo"
+                  />
                 </a>
                 <h2>
                   <n-ellipsis :tooltip="false" :line-clamp="1">
@@ -37,26 +55,32 @@
         </n-grid-item>
         <n-grid-item span="0:24 640:10 1024:10">
           <n-space vertical>
-            <n-scrollbar style="max-height: 340px;" trigger="none" >
+            <n-scrollbar style="max-height: 340px" trigger="none">
               <n-list bordered>
                 <template #header>
-                  <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px;">
+                  <n-icon
+                    :size="20"
+                    color="#0e7a0d"
+                    style="vertical-align: -20%; margin-right: 5px"
+                  >
                     <Bonfire />
                   </n-icon>
-                  <n-text style="font-size: larger;">
-                    Hot News
-                  </n-text>
+                  <n-text style="font-size: larger"> Hot News </n-text>
                 </template>
-                <n-list-item v-for="(item, id) in state.show_news.slice(0, 10)" :key="id">
-                  <n-ellipsis :line-clamp="1" :tooltip="false">
-                    <n-text type="primary">
-                      {{ item.title }}
-                    </n-text>
-                  </n-ellipsis>
+                <n-list-item
+                  v-for="(item, id) in state.show_news.slice(0, 10)"
+                  :key="id"
+                >
+                  <a :href="item.url" target="_blank">
+                    <n-ellipsis :line-clamp="1" :tooltip="false">
+                      <n-text type="primary">
+                        {{ item.title }}
+                      </n-text>
+                    </n-ellipsis>
+                  </a>
                 </n-list-item>
               </n-list>
             </n-scrollbar>
-
           </n-space>
         </n-grid-item>
       </n-grid>
@@ -64,10 +88,14 @@
       <n-list hoverable clickable>
         <n-list-item v-for="(item, id) in state.show_news.slice(7)" :key="id">
           <n-space justify="space-between" stlye="display:inline-block">
-            <n-space vertical justify="space-between" :style="{
-              'max-width': item.picture_url ? '800px' : '1100px',
-              'min-height': '140px',
-            }">
+            <n-space
+              vertical
+              justify="space-between"
+              :style="{
+                'max-width': item.picture_url ? '800px' : '1100px',
+                'min-height': '140px',
+              }"
+            >
               <n-h2 stlye="width:200%" prefix="bar">
                 <n-a :href="item.url" style="text-decoration: none">
                   <n-ellipsis :line-clamp="2" :tooltip="false">
@@ -103,11 +131,18 @@
               </n-space>
             </n-space>
             <n-a :href="item.url" style="text-decoration: none">
-              <n-image v-if="item.picture_url" width="160" height="140" object-fit="cover" :src="item.picture_url"
-                preview-disabled style="
+              <n-image
+                v-if="item.picture_url"
+                width="160"
+                height="140"
+                object-fit="cover"
+                :src="item.picture_url"
+                preview-disabled
+                style="
                   border-radius: 8px;
                   box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.16);
-                " />
+                "
+              />
             </n-a>
           </n-space>
         </n-list-item>
@@ -124,7 +159,7 @@ import {
   StarOutline,
   ArrowBack,
   ArrowForward,
-  Bonfire
+  Bonfire,
 } from "@vicons/ionicons5";
 
 import {
@@ -142,7 +177,7 @@ import {
   NCarouselItem,
   NGrid,
   NGridItem,
-  NScrollbar
+  NScrollbar,
 } from "naive-ui";
 
 export interface All_News {
@@ -254,8 +289,10 @@ watch(
   display: flex;
   inset: 0;
   height: 100%;
-  background-image: var(--mask-gradient,
-      linear-gradient(to top, #020e33, rgba(2, 14, 51, 0) 120px));
+  background-image: var(
+    --mask-gradient,
+    linear-gradient(to top, #020e33, rgba(2, 14, 51, 0) 120px)
+  );
   box-shadow: 5px 5px 5px 2px #dcdcdc;
   /*下边阴影  */
 }
