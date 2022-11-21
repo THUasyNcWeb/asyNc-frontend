@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 14:29
+ * @LastEditTime: 2022-11-21 14:54
 -->
 <template>
   <n-space vertical>
@@ -13,6 +13,16 @@
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
             <news-entry :news="entry" style="width: 65vw" @update="handleUpdate"/>
+            <!-- Add remove button in history mode -->
+            <template v-if="path === 'history'" #suffix>
+              <n-button circle tertiary type="error" @click.stop.prevent="handleRemove(id)">
+                <template #icon>
+                  <n-icon >
+                    <remove-icon />
+                  </n-icon>
+                </template>
+              </n-button>
+            </template>
           </n-list-item>
         </n-list>
         <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
@@ -30,7 +40,9 @@
 import { inject, reactive } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
+  NButton,
   NEmpty,
+  NIcon,
   NList,
   NListItem,
   NPagination,
@@ -38,6 +50,7 @@ import {
   NSpace,
   useMessage,
 } from 'naive-ui';
+import { TrashOutline as RemoveIcon } from '@vicons/ionicons5/';
 
 import NewsEntry from '@/components/NewsEntry.vue'
 import router from '@/router';
@@ -48,6 +61,8 @@ import API from '@/store/axiosInstance';
 const props = defineProps<{
   path: string,
 }>();
+
+const emits = defineEmits(['update']);
 
 const state = reactive({
   page: 0,
@@ -76,8 +91,32 @@ function jump(page: number) {
   router.push(`${props.path}?page=${page}`);
 }
 
+// Remove history entry
+function handleRemove(id: number) {
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'history',
+    method: 'delete',
+    params: {
+      id
+    },
+  }).then(response => {
+    if (response.status === 200) {
+      message.success(`移除历史记录成功`);
+      emits('update', 'history');
+      handleUpdate('history');
+    } else {
+      message.error(`移除历史记录失败`);
+    }
+  }).catch(error => {
+    message.error(`移除历史记录失败`);
+  });
+}
+
 // Refresh the page when favorites are updated
-function handleUpdate(type: 'favorites' | 'readlater') {
+function handleUpdate(type: 'favorites' | 'readlater' | 'history') {
   if (type === props.path) {
     init(router.currentRoute.value);
   }
