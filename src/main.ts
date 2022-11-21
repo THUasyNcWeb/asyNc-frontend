@@ -2,8 +2,8 @@
  * @FileDescription: 主脚本，注册了全局应用app与路由守卫
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 9:38
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-21 22:47
 */
 
 import { createApp } from 'vue'
@@ -40,6 +40,24 @@ function decodeToken() :string {
     return ''
   }
 }
+
+// Record when the user clicks a news
+export function newsClick(id: number) {
+  if (!decodeToken()) {
+    return;
+  }
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem('token'),
+    },
+    url: 'history',
+    method: 'post',
+    params: {
+      id
+    },
+  });
+}
+
 async function judgeToken() : Promise<string> {
   /**
   * @description: 判断当前token是否有效
@@ -67,6 +85,7 @@ async function judgeToken() : Promise<string> {
   })
   return return_value
 }
+
 
 router.beforeEach((to, _, next) => {
   /**

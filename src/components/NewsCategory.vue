@@ -35,7 +35,7 @@
               :key="pic_index"
             >
               <div class="pic_item">
-                <a :href="news.url" target="_blank">
+                <a :href="news.url" target="_blank" onclick="newsClick(news.id)">
                   <n-image
                     :width="state.img_width"
                     object-fit="cover"
@@ -180,12 +180,15 @@ import {
   NScrollbar,
 } from "naive-ui";
 
+import { newsClick } from '@/main';
+
 export interface All_News {
-  title: string;
-  url: string;
-  media: string;
-  pub_time: Date;
-  picture_url?: string;
+  id: number,
+  title: string,
+  url: string,
+  media: string,
+  pub_time: Date,
+  picture_url?: string,
 }
 
 const props = defineProps<{
