@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 14:54
+ * @LastEditTime: 2022-11-21 20:46
 -->
 <template>
   <n-space vertical>
@@ -13,9 +13,9 @@
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
             <news-entry :news="entry" style="width: 65vw" @update="handleUpdate"/>
-            <!-- Add remove button in history mode -->
+            <!-- History mode -->
             <template v-if="path === 'history'" #suffix>
-              <n-button circle tertiary type="error" @click.stop.prevent="handleRemove(id)">
+              <n-button circle tertiary type="error" @click.stop.prevent="handleRemove(entry.id)">
                 <template #icon>
                   <n-icon >
                     <remove-icon />
@@ -152,6 +152,7 @@ function init(to: RouteLocationNormalized) {
         content: '',
         ...entry,
         pub_time: new Date(entry.pub_time),
+        visit_time: new Date(entry.visit_time),
         keywords: [],
         title_keywords: [],
       });
