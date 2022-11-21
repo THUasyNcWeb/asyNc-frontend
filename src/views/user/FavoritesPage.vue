@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 20:46
+ * @LastEditTime: 2022-11-21 21:49
 -->
 <template>
   <n-space vertical>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, reactive } from 'vue';
+import { inject, reactive, defineEmits, defineProps } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
   NButton,
@@ -110,7 +110,7 @@ function handleRemove(id: number) {
     } else {
       message.error(`移除历史记录失败`);
     }
-  }).catch(error => {
+  }).catch(() => {
     message.error(`移除历史记录失败`);
   });
 }

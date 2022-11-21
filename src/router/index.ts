@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 03:06
+ * @LastEditTime: 2022-11-21 21:51
 */
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -12,7 +12,7 @@ import UserHome from "../views/content/UserHome.vue";
 import SearchPage from "../views/content/SearchPage.vue";
 import MainSurface from "../views/MainSurface.vue"
 import LoginRegister from "../views/LoginRegister.vue"
-import Favorites from '@/views/user/Favorites.vue';
+import Favorites from '@/views/user/FavoritesPage.vue';
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",

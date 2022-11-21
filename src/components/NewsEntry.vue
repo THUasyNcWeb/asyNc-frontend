@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 21:01
+ * @LastEditTime: 2022-11-19 21:59
 -->
 
 <template>
@@ -31,14 +31,14 @@
           <n-button type="warning" text style="font-size: 20px"
             @click.stop.prevent="favoritesClick('favorites')">
             <n-icon>
-              <favorites-icon-filled v-if="news.is_favorites" />
+              <favorites-icon-filled v-if="state.is_favorites" />
               <favorites-icon v-else />
             </n-icon>
           </n-button>
           <n-button type="error" text style="font-size: 20px"
             @click.stop.prevent="favoritesClick('readlater')">
             <n-icon>
-              <read-icon-filled v-if="news.is_readlater" />
+              <read-icon-filled v-if="state.is_readlater" />
               <read-icon v-else />
             </n-icon>
           </n-button>
@@ -58,7 +58,7 @@
 </template>
   
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed, defineEmits, defineProps, reactive } from 'vue';
 import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
 
 import {
@@ -91,6 +91,11 @@ const props = defineProps<{
   news: News,
 }>();
 
+const state = reactive({
+  is_favorites: props.news.is_favorites,
+  is_readlater: props.news.is_readlater,
+})
+
 const emits = defineEmits(['update']);
 
 const message = useMessage();
@@ -104,10 +109,10 @@ function favoritesClick(type: 'favorites' | 'readlater') {
     return;
   }
 
-  const favorite = props.news['is_' + type];
+  const favorite = state['is_' + type];
   const action = favorite ? '移除' : '添加';
   const target = type === 'favorites' ? '收藏' : '稍后再看';
-  props.news['is_' + type] = !favorite;
+  state['is_' + type] = !favorite;
 
   API({
     headers: {
@@ -123,11 +128,11 @@ function favoritesClick(type: 'favorites' | 'readlater') {
       message.success(`${action}${target}成功`);
       emits('update', type);
     } else {
-      props.news['is_' + type] = false;
+      state['is_' + type] = false;
       message.error(`${action}${target}失败`);
     }
-  }).catch(error => {
-    props.news['is_' + type] = false;
+  }).catch(() => {
+    state['is_' + type] = false;
     message.error(`${action}${target}失败`);
   });
 }
