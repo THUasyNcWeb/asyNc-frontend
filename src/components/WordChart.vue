@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import Js2WordCloud from "js2wordcloud";
-import { onMounted, watch, inject } from "vue";
+import { onMounted, watch, inject, ref } from "vue";
 
 export interface UserInfo {
   id: string;
@@ -15,7 +15,7 @@ export interface UserInfo {
   avatar: string;
 }
 
-const userRef: UserInfo = inject("userRef");
+const userRef = ref<UserInfo>(inject("userRef"));
 
 function init_chart(tags: Object) {
   console.log("初始化");
@@ -56,10 +56,10 @@ function init_chart(tags: Object) {
 }
 
 onMounted(() => {
-  init_chart(userRef.tags);
+  init_chart(userRef.value.tags);
 });
 watch(
-  () => userRef.tags,
+  () => userRef.value.tags,
   (new_tag) => {
     /* ... */
     init_chart(new_tag);
