@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 04:39
+ * @LastEditTime: 2022-11-21 21:09
 */
 
 import { createApp } from 'vue'
@@ -18,6 +18,9 @@ app.mount("#app");
 
 // Record when the user clicks a news
 export function newsClick(id: number) {
+  if (!decodeToken()) {
+    return;
+  }
   API({
     headers: {
       Authorization: window.localStorage.getItem('token'),

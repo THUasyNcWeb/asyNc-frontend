@@ -97,6 +97,12 @@ const message = useMessage();
 
 // Add or remove this news to or from favorites or read later
 function favoritesClick(type: 'favorites' | 'readlater') {
+  // Ask user to login first
+  if (!decodeToken()) {
+    message.info('请先登录');
+    router.push('login');
+    return;
+  }
 
   const favorite = props.news['is_' + type];
   const action = favorite ? '移除' : '添加';
