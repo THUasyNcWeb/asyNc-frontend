@@ -3,27 +3,27 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-10-31 20:14
+ * @LastEditTime: 2022-11-17 13:26
 -->
 <template>
-    <n-space vertical style="padding: 18px 96px">
-      <template v-if="!state.loading">
-        <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
-        <template v-else>
-          <n-list hoverable clickable>
-            <n-list-item v-for="entry, id in state.news" :key="id">
-              <news-entry :news="entry" />
-            </n-list-item>
-          </n-list>
-          <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
-        </template>
+  <n-space vertical style="padding: 18px 96px">
+    <template v-if="!state.loading">
+      <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
+      <template v-else>
+        <n-list hoverable clickable>
+          <n-list-item v-for="entry, id in state.news" :key="id">
+            <news-entry :news="entry" />
+          </n-list-item>
+        </n-list>
+        <n-pagination :page="state.page" :page-count="state.page_count" @update:page="jump" />
       </template>
-      <template v-else v-for="_ in 10" :key="_">
-        <n-skeleton text size="medium" style="width: 30%" />
-        <n-skeleton text :repeat="3" />
-        <n-skeleton text style="width: 20%" />
-      </template>
-    </n-space>
+    </template>
+    <template v-else v-for="_ in 10" :key="_">
+      <n-skeleton text size="medium" style="width: 30%" />
+      <n-skeleton text :repeat="3" />
+      <n-skeleton text style="width: 20%" />
+    </template>
+  </n-space>
 </template>
 
 <script setup lang="ts">
@@ -75,8 +75,6 @@ const contentRef: any = inject('contentRef');
 
 // Inclusion/exclusion tags
 const tags: Tag[] = inject('inclusionExclusionTags');
-
-console.log(tags);
 
 // Refresh when router changed
 // router.beforeEach(to => init(to));
@@ -140,6 +138,7 @@ function init(to: RouteLocationNormalized) {
       state.news.push({
         ...entry,
         pub_time: new Date(entry.pub_time),
+        is_favorites: entry.is_favorite
       });
     }
   }).catch(() => {

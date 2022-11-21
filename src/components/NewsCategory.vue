@@ -35,7 +35,11 @@
               :key="pic_index"
             >
               <div class="pic_item">
-                <a :href="news.url" target="_blank">
+                <n-a
+                  :href="news.url"
+                  target="_blank"
+                  @onclick="newsClick(news.id)"
+                >
                   <n-image
                     :width="state.img_width"
                     object-fit="cover"
@@ -43,7 +47,7 @@
                     preview-disabled
                     :fallback-src="default_logo"
                   />
-                </a>
+                </n-a>
                 <h2>
                   <n-ellipsis :tooltip="false" :line-clamp="1">
                     {{ news.title }}
@@ -180,7 +184,10 @@ import {
   NScrollbar,
 } from "naive-ui";
 
+import { newsClick } from "@/main";
+
 export interface All_News {
+  id: number;
   title: string;
   url: string;
   media: string;

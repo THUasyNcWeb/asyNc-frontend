@@ -2,12 +2,12 @@
  * @FileDescription: 新闻搜索与展示主页
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 10:07  
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-07 00:00
  -->
 
 <script setup lang="ts">
-import { reactive, h, ref, inject } from "vue";
+import { reactive, h, ref, inject, watch } from "vue";
 // import "@/mock/SearchPage.mock";
 import API from "../../store/axiosInstance";
 import NewsCategory from "@/components/NewsCategory.vue";
@@ -19,6 +19,7 @@ import { format } from "date-fns";
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
 export interface All_News {
+  id: number;
   title: string;
   url: string;
   media: string;
@@ -51,7 +52,7 @@ const state = reactive({
   empty_content: "自己探索的世界才更为真实",
 });
 
-const userRef = ref<UserInfo>(inject('userRef'));
+const userRef = ref<UserInfo>(inject("userRef"));
 
 // change the offset dynamically
 window.onresize = () => {
@@ -69,6 +70,13 @@ state.all_category.push(
 
 get_news("home");
 
+watch(userRef, () => {
+  // 监听用户状态变化，改变个性化推荐
+  console.log(state.now_category);
+  if (state.now_category == "person") {
+    get_news(state.now_category);
+  }
+});
 function get_news(category: string) {
   state.empty_content = "自己探索的世界才更为真实";
   if (category == "more") {
