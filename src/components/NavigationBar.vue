@@ -2,8 +2,8 @@
  * @FileDescription: 导航栏组件
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
- * @LastEditors: 刘铠铭
- * @LastEditTime: 2022-11-07
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-22 02:25
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -132,13 +132,18 @@
         </template>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="width: 30vw; max-width: 370px; border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <StarLineHorizontal316Regular />
           </n-icon>
         </template>
-        <n-space v-if="userRef.user_name" vertical></n-space>
+        <n-space v-if="userRef.user_name" vertical>
+          <n-spin :show="state.favorites.loading">
+            <news-panel :news="state.favorites.news"
+              :more-path="`/user/favorites`" :history-mode="false"/>
+          </n-spin>
+        </n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -148,13 +153,18 @@
         </n-space>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="width: 30vw; max-width: 370px; border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <History20Regular />
           </n-icon>
         </template>
-        <n-space v-if="userRef.user_name" vertical></n-space>
+        <n-space v-if="userRef.user_name" vertical>
+          <n-spin :show="state.history.loading">
+            <news-panel :news="state.history.news"
+              :more-path="`/user/history`" :history-mode="true"/>
+          </n-spin>
+        </n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -188,12 +198,13 @@ import {
   NButton,
   NGradientText,
   NIcon,
-  NSpace,
-  useDialog,
-  NPopover,
-  NText,
-  useMessage,
   NImage,
+  NPopover,
+  NSpace,
+  NSpin,
+  NText,
+  useDialog,
+  useMessage,
 } from 'naive-ui';
 import {
   TimeOutline,
@@ -208,10 +219,12 @@ import {
   StarLineHorizontal316Regular
 } from '@vicons/fluent';
 
-import { inject, ref } from "vue";
+import { inject, reactive, ref } from "vue";
 import SearchBox from './SearchBox.vue'
+import NewsPanel from './FavoriteNewsPanel.vue';
 import router from '@/router';
 import API from '@/store/axiosInstance';
+import { decodeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 
@@ -224,7 +237,6 @@ export interface UserInfo {
   avatar: string,
 }
 
-
 const userRef = ref<UserInfo>(inject('userRef'));
 
 const updateUserLocal:Function = inject('updateUserLocal')
@@ -234,6 +246,46 @@ const default_logo = require("@/assets/asyNc.png")
 const exitDialog = useDialog()
 
 const message = useMessage()
+
+const state = reactive({
+  history: {
+    loading: false,
+    news: [],
+  },
+  readlater: {
+    loading: false,
+    news: [],
+  },
+  favorites: {
+    loading: false,
+    news: [],
+  },
+});
+
+// Fetch news if logged in
+if (decodeToken()) {
+  ['history', 'readlater', 'favorites'].forEach(tab => {
+    API({
+      headers: {
+        Authorization: window.localStorage.getItem('token'),
+      },
+      url: tab,
+      method: 'get',
+      params: {
+        page: 1,
+      },
+    }).then(response => {
+      const news = response.data.data.news;
+      state[tab].news = [];
+      news.forEach(item => {
+        state[tab].news.push({
+          ...item,
+          visit_time: item.visit_time ? new Date(item.visit_time) : undefined,
+        })
+      });
+    })
+  });
+}
 
 function handleToUserHome() {
   router.push('/user/userInformation');
