@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import API from "@/store/axiosInstance"
-import {reactive, defineProps} from 'vue'
+import {reactive, ref, inject} from 'vue'
 import {useRouter} from 'vue-router'
 import {NInput,NButton,NGrid,NGridItem,NGradientText,NText,NSpace, useMessage} from 'naive-ui'
 import {judgeToken} from "@/main"
@@ -66,9 +66,7 @@ export interface UserInfo {
 const router = useRouter()
 const message = useMessage()
 
-const props = defineProps<{
-  user:UserInfo,
-}>();
+const userRef = ref<UserInfo>(inject('userRef')) 
 
 const state = reactive({
   old_password:"", 
@@ -130,7 +128,7 @@ function modify() {
         url:'modifypassword',
         method:'post',
         data:{
-            "user_name": props.user.user_name,
+            "user_name": userRef.value.user_name,
             "old_password":state.old_password,
             "new_password":state.new_password,
         }
