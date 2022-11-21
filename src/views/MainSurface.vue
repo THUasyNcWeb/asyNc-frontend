@@ -43,7 +43,6 @@ export interface UserInfo {
 
 const state = reactive({
   random_key: Math.random(),
-  user: { user_name: "" } as UserInfo,
 });
 
 function reload() {
@@ -52,8 +51,8 @@ function reload() {
 }
 
 function updateUserLocal(new_user: UserInfo) {
-  // 清空用户信息
-  state.user = new_user;
+  // 更新用户信息
+  userRef.value = new_user;
 }
 
 async function getUser() {
@@ -65,23 +64,24 @@ async function getUser() {
       // 根据不同类别，把类别放在了对应的请求参数中
     })
       .then((res) => {
-        state.user = res.data.data;
+        userRef.value = res.data.data;
         console.log(res);
+        console.log('新建用户')
       })
       .catch((error) => {
         console.log(error);
-        updateUserLocal({ user_name: "" } as UserInfo);
+        updateUserLocal({ user_name: "",tags:{} } as UserInfo);
       });
   } else {
     // 清空用户状态
-    updateUserLocal({ user_name: "" } as UserInfo);
+    updateUserLocal({ user_name: "",tags:{} } as UserInfo);
   }
 }
 
 getUser();
 
 // procive news ref
-const userRef = ref<UserInfo>(state.user);
+const userRef = ref<UserInfo>({ user_name: "",tags:{} } as UserInfo);
 provide("userRef", userRef);
 provide("getUser", getUser);
 provide("updateUserLocal", updateUserLocal);

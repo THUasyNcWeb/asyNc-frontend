@@ -16,9 +16,7 @@
               style="margin: auto"
               :width="80"
               :height="80"
-              :image_code="userRef.avatar"
               :key="state.random"
-              @changeavatar="update_avatar"
             />
             <n-text>
               {{ userRef.user_name }}
@@ -35,9 +33,7 @@
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content content-style="padding: 24px;" style="margin-top: 2%">
           <router-view
-            :user="userRef"
             :key="state.random"
-            @change-info="update_info"
           ></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
@@ -47,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, Component, reactive, defineEmits, inject } from "vue";
+import { h, Component, reactive, defineEmits, inject, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
@@ -82,7 +78,7 @@ const state = reactive({
   random: Math.random(),
 });
 
-const userRef: UserInfo = inject("userRef");
+const userRef = ref<UserInfo>(inject("userRef"));
 
 // const getUser: () => void = inject("getUser");
 
@@ -90,19 +86,6 @@ const updateUserLocal: Function = inject("updateUserLocal");
 // 设置组件
 let router = useRouter();
 let path = router.currentRoute.value.path;
-// if(decodeToken() != '') {
-//   API({
-//       headers:{"Authorization": window.localStorage.getItem("token")},
-//       url:'userinfo',
-//       method:'get',
-// 根据不同类别，把类别放在了对应的请求参数中
-//   }).then((res)=>{
-//       state.user = res.data.data
-//       console.log(res)
-//   }).catch((error) => {
-//       console.log(error);
-//   });
-// }
 
 const emits = defineEmits(["reload"]);
 function renderIcon(icon: Component) {
@@ -181,7 +164,7 @@ const menuOptions = [
                 .then((res) => {
                   console.log(res);
                   window.localStorage.removeItem("token");
-                  updateUserLocal({ user_name: "" } as UserInfo);
+                  updateUserLocal({ user_name: "", tags:{} } as UserInfo);
                   router.push("/");
                   emits("reload");
                 })
@@ -219,26 +202,6 @@ for (let x of menuOptions) {
 }
 // 获取初始的选项，与路由对应
 
-function update_avatar(img_code: string) {
-  state.random = Math.random();
-  const new_user: UserInfo = {
-    ...userRef,
-    avatar: img_code,
-  };
-  updateUserLocal(new_user);
-  // 更新主页面
-}
-
-function update_info(username: string, signature: string, mail: string) {
-  const new_user: UserInfo = {
-    ...userRef,
-    user_name: username,
-    signature: signature,
-    mail: mail,
-  };
-  updateUserLocal(new_user);
-  state.random = Math.random();
-}
 </script>
 
 <style scoped>

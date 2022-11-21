@@ -104,9 +104,7 @@
           </n-icon>
           <n-text style="font-size: 18px"> 最近浏览 </n-text>
         </n-space>
-        <WordChart
-          :tags="props.user.tags == undefined ? {} : props.user.tags"
-        ></WordChart>
+        <WordChart/>
       </n-grid-item>
     </n-grid>
   </div>
@@ -120,7 +118,7 @@ import {
   PencilOutline,
   EyeOutline,
 } from "@vicons/ionicons5";
-import { defineProps, reactive, ref, defineEmits, watch } from "vue";
+import { reactive, ref, watch, inject } from "vue";
 import {
   NText,
   NGrid,
@@ -145,12 +143,9 @@ export interface UserInfo {
 // Message box
 const message = useMessage();
 
-// const userRef:UserInfo = inject('userRef')
+const userRef = ref<UserInfo>(inject("userRef")) ;
 
-const props = defineProps<{
-  user: UserInfo;
-}>();
-const emits = defineEmits(["change-info", "change-avatar"]);
+const updateUserLocal: Function = inject("updateUserLocal");
 
 const state = reactive({
   edit_status: false,
@@ -168,16 +163,13 @@ const state = reactive({
 });
 
 initModify();
-watch(
-  () => props.user,
-  () => {
-    initModify();
-  }
-);
+watch(userRef,()=> {
+  initModify();
+});
 function initModify() {
-  state.user.mail = ref(props.user.mail);
-  state.user.signature = ref(props.user.signature);
-  state.user.user_name = ref(props.user.user_name);
+  state.user.mail = ref(userRef.value.mail);
+  state.user.signature = ref(userRef.value.signature);
+  state.user.user_name = ref(userRef.value.user_name);
   if (
     state.user.signature == "" ||
     state.user.signature == null ||
@@ -227,12 +219,13 @@ function changeStatus() {
         state.edit_status = false;
         state.button_text = "编辑信息";
         state.title = "详细信息";
-        emits(
-          "change-info",
-          state.user.user_name,
-          state.user.signature,
-          state.user.mail
-        );
+        const new_user: UserInfo = {
+          ...userRef.value,
+          user_name: state.user.user_name,
+          signature: state.user.signature,
+          mail: state.user.mail,
+        };
+        updateUserLocal(new_user);
         message.success("修改成功🥳");
         // alert("修改成功")
       })
@@ -305,11 +298,8 @@ function checkSignature() {
 }
 
 function checkSend() {
-  if (state.user.sign_valid && state.user.mail_valid && state.user.user_valid) {
-    state.send_valid = true;
-  } else {
-    state.send_valid = false;
-  }
+  state.send_valid =
+    state.user.sign_valid && state.user.mail_valid && state.user.user_valid;
 }
 </script>
 
