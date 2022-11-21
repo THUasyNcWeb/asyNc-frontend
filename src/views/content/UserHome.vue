@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 22:48
+ * @LastEditTime: 2022-11-22 02:15
  -->
 
 <template>
@@ -76,6 +76,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import {
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
+  BookmarkOutline as ReadlaterIcon,
   StarOutline as FavoriteIcon,
   LockClosedOutline as PasswordIcon,
   LogOutOutline as LogoutIcon,
@@ -141,11 +142,11 @@ const menuOptions = [
       h(RouterLink, {
         innerHTML: "浏览历史",
         to: {
-          path: "/user/modifyPassword",
+          path: "/user/history",
         },
       }),
     key: "history",
-    path: "/user/modifyPassword",
+    path: "/user/history",
     icon: renderIcon(HistoryIcon),
   },
   {
@@ -153,12 +154,24 @@ const menuOptions = [
       h(RouterLink, {
         innerHTML: "我的收藏",
         to: {
-          path: "/user/modifyPassword",
+          path: "/user/favorites",
         },
       }),
     key: "favorites",
-    path: "/user/modifyPassword",
+    path: "/user/favorites",
     icon: renderIcon(FavoriteIcon),
+  },
+  {
+    label: () =>
+      h(RouterLink, {
+        innerHTML: "稍后再看",
+        to: {
+          path: "/user/readlater",
+        },
+      }),
+    key: "readlater",
+    path: "/user/readlater",
+    icon: renderIcon(ReadlaterIcon),
   },
   {
     label: () =>
