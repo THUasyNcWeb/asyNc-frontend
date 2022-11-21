@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 02:25
+ * @LastEditTime: 2022-11-22 02:57
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -132,13 +132,13 @@
         </template>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="width: 30vw; max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <StarLineHorizontal316Regular />
           </n-icon>
         </template>
-        <n-space v-if="userRef.user_name" vertical>
+        <n-space style="width: 30vw" v-if="userRef.user_name" vertical>
           <n-spin :show="state.favorites.loading">
             <news-panel :news="state.favorites.news"
               :more-path="`/user/favorites`" :history-mode="false"/>
@@ -153,13 +153,34 @@
         </n-space>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="width: 30vw; max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+        <template #trigger>
+          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
+            <bookmark-icon />
+          </n-icon>
+        </template>
+        <n-space style="width: 30vw" v-if="userRef.user_name" vertical>
+          <n-spin :show="state.readlater.loading">
+            <news-panel :news="state.readlater.news"
+              :more-path="`/user/readlater`" :history-mode="false"/>
+          </n-spin>
+        </n-space>
+        <n-space v-else vertical>
+          <router-link to="login" style="text-decoration: none">
+            <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
+              登录以查看书签下的知识
+            </n-button>
+          </router-link>
+        </n-space>
+      </n-popover>
+
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <History20Regular />
           </n-icon>
         </template>
-        <n-space v-if="userRef.user_name" vertical>
+        <n-space style="width: 30vw" v-if="userRef.user_name" vertical>
           <n-spin :show="state.history.loading">
             <news-panel :news="state.history.news"
               :more-path="`/user/history`" :history-mode="true"/>
@@ -216,7 +237,8 @@ import {
   SlideMultipleSearch20Regular,
   SignOut20Regular,
   History20Regular,
-  StarLineHorizontal316Regular
+  StarLineHorizontal316Regular,
+  BookmarkMultiple20Regular as BookmarkIcon,
 } from '@vicons/fluent';
 
 import { inject, reactive, ref } from "vue";
