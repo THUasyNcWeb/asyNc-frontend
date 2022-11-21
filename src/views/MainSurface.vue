@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-18 19:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-03 13:49
+ * @LastEditTime: 2022-11-22 03:00
  -->
 
 <template>
@@ -12,7 +12,7 @@
       <Navigation style="padding: 18px 96px" />
     </n-layout-header>
     <n-layout-content ref="contentRef" style="top: 74px" position="absolute">
-      <router-view @reload="reload"></router-view>
+      <router-view @reload="reload" @update="reload"></router-view>
     </n-layout-content>
   </n-layout>
 </template>

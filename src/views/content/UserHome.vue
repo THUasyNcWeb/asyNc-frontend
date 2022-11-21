@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 02:15
+ * @LastEditTime: 2022-11-22 03:10
  -->
 
 <template>
@@ -38,7 +38,7 @@
           content-style="padding: 24px; height: calc(100vh - 74px)"
           style="margin-top: 2%"
         >
-          <router-view :key="state.random"></router-view>
+          <router-view :key="state.random" @update="$emit('update')"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
