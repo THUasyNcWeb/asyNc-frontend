@@ -68,10 +68,12 @@
           </router-link>
         </template>
         <template #header>
-          <n-space>
-            <n-h4 type="info" style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px;">
+          <n-space vertical>
+            <n-text></n-text>
+            <n-text strong style="margin-left: 6px; margin-top: 5px; margin-bottom: 5px;">
               登录后你可以：
-            </n-h4>
+            </n-text>
+            <n-text></n-text>
           </n-space>
         </template>
         <n-space>
@@ -174,11 +176,6 @@
             封存记忆，离开知识的世界
           </n-button>
         </n-space>
-        <!-- <n-space v-else vertical>
-          <n-button disabled size="medium" style=" border-radius: 15px; margin: 5px;">
-            你还没有走入这个世界，求知者
-          </n-button>
-        </n-space> -->
       </n-popover>
 
     </n-space>
@@ -197,7 +194,6 @@ import {
   NText,
   useMessage,
   NImage,
-  NH4
 } from 'naive-ui';
 import {
   TimeOutline,
@@ -213,9 +209,9 @@ import {
 } from '@vicons/fluent';
 
 import emitter from "@/utils/bus"
-import {onBeforeUnmount} from "vue";
+import { onBeforeUnmount } from "vue";
 import SearchBox from './SearchBox.vue'
-import { decodeToken,judgeToken } from '@/main';
+import { decodeToken, judgeToken } from '@/main';
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
