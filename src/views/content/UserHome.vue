@@ -2,8 +2,8 @@
  * @FileDescription: 用户主页
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 10:08
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-21 22:48
  -->
 
 <template>
@@ -32,7 +32,7 @@
           </n-space>
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content content-style="padding: 24px;" style="margin-top: 2%">
+        <n-layout-content ref="usersContentRef" content-style="padding: 24px; height: calc(100vh - 74px)" style="margin-top: 2%">
           <router-view
             :key="state.random"
           ></router-view>
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, Component, reactive, defineEmits, inject, ref } from "vue";
+import { h, Component, reactive, defineEmits, inject, provide, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
@@ -57,6 +57,7 @@ import {
   NText,
   useDialog,
   NA,
+  LayoutInst,
 } from "naive-ui";
 import API from "@/store/axiosInstance";
 import UserAvatar from "@/components/UserAvatar.vue";
@@ -82,6 +83,11 @@ const state = reactive({
 const userRef = ref<UserInfo>(inject("userRef"));
 
 const updateUserLocal: Function = inject("updateUserLocal");
+
+// Provide content ref for scrolling in favorites page
+const usersContentRef = ref<LayoutInst | null>(null);
+provide('usersContentRef', usersContentRef);
+
 // 设置组件
 let router = useRouter();
 let path = router.currentRoute.value.path;

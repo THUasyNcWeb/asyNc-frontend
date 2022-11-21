@@ -2,8 +2,8 @@
  * @FileDescription: 注册全局路由
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-13 9:38
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-21 21:51
 */
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -12,6 +12,7 @@ import UserHome from "../views/content/UserHome.vue";
 import SearchPage from "../views/content/SearchPage.vue";
 import MainSurface from "../views/MainSurface.vue"
 import LoginRegister from "../views/LoginRegister.vue"
+import Favorites from '@/views/user/FavoritesPage.vue';
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -53,7 +54,40 @@ const routes: Array<RouteRecordRaw> = [
                 meta: {
                     title: "修改密码"
                 }
-            }
+            },
+            {
+                path: "/user/favorites",
+                name: "favorites",
+                component: Favorites,
+                meta: {
+                    title: "收藏",
+                },
+                props: {
+                    path: 'favorites',
+                }
+            },
+            {
+                path: "/user/readlater",
+                name: "readlater",
+                component: Favorites,
+                meta: {
+                    title: "稍后再看",
+                },
+                props: {
+                    path: 'readlater',
+                }
+            },
+            {
+                path: "/user/history",
+                name: "history",
+                component: Favorites,
+                meta: {
+                    title: "历史记录",
+                },
+                props: {
+                    path: 'history',
+                }
+            },
             ]
         },
         {
