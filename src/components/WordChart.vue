@@ -1,11 +1,12 @@
 <template>
-  <div id="chart2" style="width: 100%; height: 200px"></div>
+  <div id="chart" class="wordcloud">
+  </div>
 </template>
 
 <script setup lang="ts">
-import Js2WordCloud from "js2wordcloud";
-import { onMounted, watch, inject, ref } from "vue";
-
+import { onMounted, inject, ref,onBeforeUnmount } from "vue";
+import "echarts-wordcloud/dist/echarts-wordcloud.min";
+import "echarts-wordcloud/dist/echarts-wordcloud";
 export interface UserInfo {
   id: string;
   user_name: string;
@@ -14,55 +15,104 @@ export interface UserInfo {
   mail: string;
   avatar: string;
 }
-
 const userRef = ref<UserInfo>(inject("userRef"));
-
-function init_chart(tags: Object) {
-  console.log("初始化");
-  console.log(tags);
-  var wc = new Js2WordCloud(document.getElementById("chart2"));
-  let list = [];
-  if (typeof tags == "object") {
-    for (var key in tags) {
-      list.push([key, tags[key]]);
+const echarts = require('echarts');
+function init_chart(tags: Object){
+  let list = []
+  const domMap = document.getElementById("chart");
+  // 清除Echarts默认添加的属性
+  domMap.removeAttribute("_echarts_instance_");
+  let myChart = echarts.init(domMap);
+  if( typeof(tags) == 'object' ) {
+    
+    if(Object.keys(tags).length !== 0) {
+      for(var key in tags) {
+        list.push({
+          name:key,
+          value:tags[key]
+        })  
+      }
+      myChart.hideLoading();
+      myChart.setOption({
+        series: [
+          {
+            type: "wordCloud",
+            //用来调整词之间的距离
+            gridSize: 10,
+            //用来调整字的大小范围
+            // Text size range which the value in data will be mapped to.
+            // Default to have minimum 12px and maximum 60px size.
+            sizeRange: [14, 60],
+            // Text rotation range and step in degree. Text will be rotated randomly in range [-90,                                                                             90] by rotationStep 45
+            //用来调整词的旋转方向，，[0,0]--代表着没有角度，也就是词为水平方向，需要设置角度参考注释内容
+            // rotationRange: [-45, 0, 45, 90],
+            // rotationRange: [ 0,90],
+            rotationRange: [0, 0],
+            //随机生成字体颜色
+            // maskImage: maskImage,
+            textStyle: {
+              fontFamily: '楷体',
+              color: function () {
+                  return 'rgb(' + [
+                    Math.round(Math.random() * 250),
+                    Math.round(Math.random() * 250),
+                    Math.round(Math.random() * 250)
+                  ].join(',') + ')';
+                }
+            },
+            //位置相关设置
+            left: "center",
+            top: "center",
+            right: null,
+            bottom: null,
+            // width: "200%",
+            // height: "200%",
+            //数据
+            data: list
+          }
+        ]
+      })
     }
-    let option = {
-      fontSizeFactor: 0.2, // 当词云值相差太大，可设置此值进字体行大小微调，默认0.1
-      maxFontSize: 60, // 最大fontSize，用来控制weightFactor，默认60
-      minFontSize: 30, // 最小fontSize，用来控制weightFactor，默认12
-      list: list,
-      noDataLoadingOption: {
-        // 无数据提示。
-        backgroundColor: "#eee",
-        text: "暂无数据",
-        textStyle: {
-          color: "#888",
-          fontSize: 14,
-        },
-      },
-    };
-    wc.setOption(option);
-    window.onresize = function () {
-      wc.setOption(option);
-    };
-  } else {
-    let loadingOption = {
-      backgroundColor: "#eee",
-      text: "正在加载...",
-      effect: "spin",
-    };
-    wc.showLoading(loadingOption);
+    else {
+      myChart.showLoading({
+      text: '你还没有留下足迹，快去探索吧',
+      showSpinner: false,
+      textColor: 'black',
+      maskColor: 'rgba(255, 255, 255, 1)',
+      fontSize: '26px',
+      fontWeight: 'bold'
+    })
+    }
+  }
+  else {
+    myChart.showLoading({
+      text: '加载中',
+      showSpinner: false,
+      textColor: 'black',
+      maskColor: 'rgba(255, 255, 255, 1)',
+      fontSize: '26px',
+      fontWeight: 'bold'
+    })
   }
 }
 
+
 onMounted(() => {
-  init_chart(userRef.value.tags);
+  setTimeout(() => {
+    init_chart(userRef.value.tags);
+  },200)
 });
-watch(
-  () => userRef.value.tags,
-  (new_tag) => {
-    /* ... */
-    init_chart(new_tag);
-  }
-);
+
+onBeforeUnmount(() => {
+
+})
+
 </script>
+
+<style>
+.wordcloud {
+  width: 100%;
+  height: 300px;
+}
+
+</style>
