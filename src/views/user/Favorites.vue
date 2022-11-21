@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 20:10
+ * @LastEditTime: 2022-11-21 14:29
 -->
 <template>
   <n-space vertical>
@@ -43,7 +43,7 @@ import NewsEntry from '@/components/NewsEntry.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import '@/mock/Favorites.mock';
+// import '@/mock/Favorites.mock';
 
 const props = defineProps<{
   path: string,
@@ -109,6 +109,8 @@ function init(to: RouteLocationNormalized) {
     for (const entry of data.news) {
       // Construct Date object
       state.news.push({
+        // Pass empty content, if not provided
+        content: '',
         ...entry,
         pub_time: new Date(entry.pub_time),
         keywords: [],
