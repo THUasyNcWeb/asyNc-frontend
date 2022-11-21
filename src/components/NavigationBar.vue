@@ -13,15 +13,15 @@
           asyNc
         </n-gradient-text>
       </router-link>
-      <search-box :text="state.user.user_name" style="width: 40vw" />
+      <search-box :text="userRef.user_name" style="width: 40vw" />
     </n-space>
 
     <n-space justify="end">
-      <n-popover v-if="state.user.user_name" :key="state.user.avatar" trigger="hover" placement="bottom"
+      <n-popover v-if="userRef.user_name" :key="userRef.avatar" trigger="hover" placement="bottom"
         :show-arrow="true" style="border-radius: 5px;">
         <template #trigger>
           <n-image style="border-radius:50%; vertical-align: middle;" width="40" height="40" object-fit="cover"
-            :src="state.user.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
+            :src="userRef.avatar" preview-disabled :fallback-src="default_logo" @click="handleToUserHome" />
         </template>
         <template #header>
           <n-text :depth="2"
@@ -31,7 +31,7 @@
           <n-text :strong="true" :underline="true" :depth="2" type="success"
             style="vertical-align: -10%; margin-left: 6px; padding-top: 5px; padding-bottom: 5px; font-size: large;"
             @click="handleToUserHome">
-            {{ state.user.user_name }}
+            {{ userRef.user_name }}
           </n-text>
         </template>
 
@@ -138,7 +138,7 @@
             <StarLineHorizontal316Regular />
           </n-icon>
         </template>
-        <n-space v-if="state.user.user_name" vertical></n-space>
+        <n-space v-if="userRef.user_name" vertical></n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -154,7 +154,7 @@
             <History20Regular />
           </n-icon>
         </template>
-        <n-space v-if="state.user.user_name" vertical></n-space>
+        <n-space v-if="userRef.user_name" vertical></n-space>
         <n-space v-else vertical>
           <router-link to="login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
@@ -164,7 +164,7 @@
         </n-space>
       </n-popover>
 
-      <n-popover v-if="state.user.user_name" trigger="hover" placement="bottom" :show-arrow="false"
+      <n-popover v-if="userRef.user_name" trigger="hover" placement="bottom" :show-arrow="false"
         style="max-width: 370px; border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
@@ -208,14 +208,11 @@ import {
   StarLineHorizontal316Regular
 } from '@vicons/fluent';
 
-import emitter from "@/utils/bus"
-import { onBeforeUnmount } from "vue";
+import { inject, ref } from "vue";
 import SearchBox from './SearchBox.vue'
-import { decodeToken, judgeToken } from '@/main';
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import { reactive } from 'vue';
 // import '@/mock/SearchPage.mock';
 
 export interface UserInfo {
@@ -227,46 +224,15 @@ export interface UserInfo {
   avatar: string,
 }
 
-// Query parameters
-const state = reactive({
-  user: { avatar: '' } as UserInfo,
-  word: router.currentRoute.value.query.q as string,
-  username: decodeToken(),
-})
-emitter.on('updateavatar', (data) => {
-  state.user.avatar = data as string
-})
 
-onBeforeUnmount(() => {
-  emitter.off('updateavatar')  //关闭
-})
+const userRef = ref<UserInfo>(inject('userRef'));
+
+const updateUserLocal:Function = inject('updateUserLocal')
 
 const default_logo = require("@/assets/asyNc.png")
-async function init_username() {
-  const value = await judgeToken()
-  console.log(value)
-  console.log("异步请求")
-  state.username = value
-}
-
-init_username()
-
-if (window.localStorage.getItem("token") != null) {
-  API({
-    headers: { "Authorization": window.localStorage.getItem("token") },
-    url: 'userinfo',
-    method: 'get',
-    // 根据不同类别，把类别放在了对应的请求参数中
-  }).then((res) => {
-    state.user = res.data.data
-    console.log(res)
-  }).catch((error) => {
-    console.log(error);
-  });
-  console.log(state.user.avatar)
-}
 
 const exitDialog = useDialog()
+
 const message = useMessage()
 
 function handleToUserHome() {
@@ -288,16 +254,17 @@ function handleLogout() {
       }).then((res) => {
         console.log(res)
         window.localStorage.removeItem('token')
-        state.user.user_name = ""
+        const new_user:UserInfo = {user_name:'', tags:{}} as UserInfo;
+        updateUserLocal(new_user)
         router.push("/")
+        message.success(
+        "再见，求知者，期待你的归来",
+        { duration: 2000 }
+      )
       })
         .catch((error) => {
           console.log(error)
         })
-      message.success(
-        "再见，求知者，期待你的归来",
-        { duration: 2000 }
-      )
       return
     },
     onNegativeClick: () => {
@@ -320,7 +287,3 @@ function handleLogout() {
 }
 
 </script>
-
-<style>
-
-</style>
