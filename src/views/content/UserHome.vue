@@ -26,6 +26,7 @@
                 style="text-align: center"
                 :options="menuOptions"
                 :default-value="default_val"
+                :on-update-value="update_menu"
               />
             </n-config-provider>
           </n-space>
@@ -80,8 +81,6 @@ const state = reactive({
 });
 
 const userRef = ref<UserInfo>(inject("userRef"));
-
-// const getUser: () => void = inject("getUser");
 
 const updateUserLocal: Function = inject("updateUserLocal");
 
@@ -207,6 +206,10 @@ for (let x of menuOptions) {
   }
 }
 // 获取初始的选项，与路由对应
+
+function update_menu() {
+  state.random = Math.random()
+}
 
 </script>
 
