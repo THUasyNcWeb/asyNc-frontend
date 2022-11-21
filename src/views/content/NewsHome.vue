@@ -19,6 +19,7 @@ import { format } from "date-fns";
 // 之后可能会把上述引入集中在一个固定的ts文件中
 
 export interface All_News {
+  id: number;
   title: string;
   url: string;
   media: string;

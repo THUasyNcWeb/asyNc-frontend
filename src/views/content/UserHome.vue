@@ -25,6 +25,7 @@
               <n-menu
                 style="text-align: center"
                 :options="menuOptions"
+                :value="state.now_value"
                 :default-value="default_val"
                 :on-update-value="update_menu"
               />
@@ -32,10 +33,12 @@
           </n-space>
         </n-layout-sider>
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content ref="usersContentRef" content-style="padding: 24px; height: calc(100vh - 74px)" style="margin-top: 2%">
-          <router-view
-            :key="state.random"
-          ></router-view>
+        <n-layout-content
+          ref="usersContentRef"
+          content-style="padding: 24px; height: calc(100vh - 74px)"
+          style="margin-top: 2%"
+        >
+          <router-view :key="state.random"></router-view>
           <!-- 中心部分按照当前路由进行显示 -->
         </n-layout-content>
       </n-layout>
@@ -44,7 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import { h, Component, reactive, defineEmits, inject, provide, ref } from "vue";
+import {
+  h,
+  Component,
+  reactive,
+  defineEmits,
+  inject,
+  provide,
+  ref,
+  watch,
+} from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
@@ -78,6 +90,7 @@ export interface UserInfo {
 }
 const state = reactive({
   random: Math.random(),
+  now_value: "info",
 });
 
 const userRef = ref<UserInfo>(inject("userRef"));
@@ -86,7 +99,7 @@ const updateUserLocal: Function = inject("updateUserLocal");
 
 // Provide content ref for scrolling in favorites page
 const usersContentRef = ref<LayoutInst | null>(null);
-provide('usersContentRef', usersContentRef);
+provide("usersContentRef", usersContentRef);
 
 // 设置组件
 let router = useRouter();
@@ -169,7 +182,7 @@ const menuOptions = [
                 .then((res) => {
                   console.log(res);
                   window.localStorage.removeItem("token");
-                  updateUserLocal({ user_name: "", tags:{} } as UserInfo);
+                  updateUserLocal({ user_name: "", tags: {} } as UserInfo);
                   router.push("/");
                   emits("reload");
                 })
@@ -207,10 +220,13 @@ for (let x of menuOptions) {
 }
 // 获取初始的选项，与路由对应
 
-function update_menu() {
-  state.random = Math.random()
+function update_menu(new_key: string) {
+  // 若是退出按钮，则不更新状态
+  state.random = Math.random();
+  if (new_key != "logout") {
+    state.now_value = new_key;
+  }
 }
-
 </script>
 
 <style scoped>
