@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 22:48
+ * @LastEditTime: 2022-11-22 21:30
  -->
 
 <template>
@@ -39,7 +39,7 @@
             content-style="padding: 24px; height: calc(85vh - 74px)"
             style="margin-top: 2%"
           >
-            <router-view :key="state.random"></router-view>
+            <router-view :key="state.random" @update="$emit('update')"></router-view>
             <!-- 中心部分按照当前路由进行显示 -->
           </n-layout-content>
         </n-layout>
@@ -67,9 +67,9 @@ import {
   inject,
   provide,
   ref,
-  watch,
+watch,
 } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
   NLayoutSider,
@@ -91,6 +91,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import {
   PersonOutline as PersonIcon,
   LibraryOutline as HistoryIcon,
+  BookmarkOutline as ReadlaterIcon,
   StarOutline as FavoriteIcon,
   LockClosedOutline as PasswordIcon,
   LogOutOutline as LogoutIcon,
@@ -182,11 +183,11 @@ const menuOptions = [
       h(RouterLink, {
         innerHTML: "浏览历史",
         to: {
-          path: "/user/modifyPassword",
+          path: "/user/history",
         },
       }),
     key: "history",
-    path: "/user/modifyPassword",
+    path: "/user/history",
     icon: renderIcon(HistoryIcon),
   },
   {
@@ -194,12 +195,24 @@ const menuOptions = [
       h(RouterLink, {
         innerHTML: "我的收藏",
         to: {
-          path: "/user/modifyPassword",
+          path: "/user/favorites",
         },
       }),
     key: "favorites",
-    path: "/user/modifyPassword",
+    path: "/user/favorites",
     icon: renderIcon(FavoriteIcon),
+  },
+  {
+    label: () =>
+      h(RouterLink, {
+        innerHTML: "稍后再看",
+        to: {
+          path: "/user/readlater",
+        },
+      }),
+    key: "readlater",
+    path: "/user/readlater",
+    icon: renderIcon(ReadlaterIcon),
   },
   {
     label: () =>
@@ -240,6 +253,25 @@ const menuOptions = [
     icon: renderIcon(LogoutIcon),
   },
 ];
+
+// Update selected menu item depending on route
+function updateSelected() {
+  for (const item of menuOptions) {
+    if (router.currentRoute.value.path === item.path) {
+      state.now_value = item.key;
+      break;
+    }
+  }
+}
+
+updateSelected();
+
+// Reload router view before route update
+onBeforeRouteUpdate(() => {
+  state.random = Math.random();
+  updateSelected();
+})
+
 const menuThemeOverrides = {
   Menu: {
     itemHeight: "50px",

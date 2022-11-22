@@ -152,7 +152,7 @@ function init(to: RouteLocationNormalized) {
         content: '',
         ...entry,
         pub_time: new Date(entry.pub_time),
-        visit_time: new Date(entry.visit_time),
+        visit_time: entry.visit_time ? new Date(entry.visit_time) : undefined,
         keywords: [],
         title_keywords: [],
       });

@@ -35,10 +35,10 @@
               :key="pic_index"
             >
               <div class="pic_item">
-                <a
+                <n-a
                   :href="news.url"
                   target="_blank"
-                  :onclick="newsClick(news.id)"
+                  @click="newsClick(news.id)"
                 >
                   <n-image
                     :width="state.img_width"
@@ -47,7 +47,7 @@
                     preview-disabled
                     :fallback-src="default_logo"
                   />
-                </a>
+                </n-a>
                 <h2>
                   <n-ellipsis :tooltip="false" :line-clamp="1">
                     {{ news.title }}
@@ -75,13 +75,13 @@
                   v-for="(item, id) in state.show_news.slice(0, 10)"
                   :key="id"
                 >
-                  <a :href="item.url" target="_blank">
+                  <n-a :href="item.url" target="_blank" @click="newsClick(item.id)">
                     <n-ellipsis :line-clamp="1" :tooltip="false">
                       <n-text type="primary">
                         {{ item.title }}
                       </n-text>
                     </n-ellipsis>
-                  </a>
+                  </n-a>
                 </n-list-item>
               </n-list>
             </n-scrollbar>
@@ -101,7 +101,7 @@
               }"
             >
               <n-h2 stlye="width:200%" prefix="bar">
-                <n-a :href="item.url" style="text-decoration: none">
+                <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
                   <n-ellipsis :line-clamp="2" :tooltip="false">
                     <n-text type="primary">
                       {{ item.title }}
@@ -134,7 +134,7 @@
                 </n-space>
               </n-space>
             </n-space>
-            <n-a :href="item.url" style="text-decoration: none">
+            <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
               <n-image
                 v-if="item.picture_url"
                 width="160"

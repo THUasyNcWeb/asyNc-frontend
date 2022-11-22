@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 21:59
+ * @LastEditTime: 2022-11-22 21:23
 -->
 
 <template>
@@ -48,8 +48,8 @@
           <n-text depth=3>
             {{news.pub_time.toLocaleDateString()}}
           </n-text>
-          <n-text depth=3>
-            {{news.visit_time?.toLocaleString()}}
+          <n-text v-if="news.visit_time" depth=3>
+            访问于 {{news.visit_time?.toLocaleString()}}
           </n-text>
         </n-space>
       </template>
@@ -58,7 +58,7 @@
 </template>
   
 <script setup lang="ts">
-import { computed, defineEmits, defineProps, reactive } from 'vue';
+import { computed, defineProps, reactive } from 'vue';
 import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
 
 import {
@@ -68,7 +68,7 @@ import {
   StarOutline as FavoritesIcon,
 } from '@vicons/ionicons5/';
 
-import { decodeToken, newsClick } from '@/main';
+import { decodeToken, newsClick, reloadNavigationBar } from '@/main';
 import API from '@/store/axiosInstance';
 import router from '@/router';
 
@@ -95,8 +95,6 @@ const state = reactive({
   is_favorites: props.news.is_favorites,
   is_readlater: props.news.is_readlater,
 })
-
-const emits = defineEmits(['update']);
 
 const message = useMessage();
 
@@ -126,7 +124,7 @@ function favoritesClick(type: 'favorites' | 'readlater') {
   }).then(response => {
     if (response.status === 200) {
       message.success(`${action}${target}成功`);
-      emits('update', type);
+      reloadNavigationBar();
     } else {
       state['is_' + type] = false;
       message.error(`${action}${target}失败`);
