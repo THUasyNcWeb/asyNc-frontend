@@ -35,7 +35,7 @@
             <n-input type="password" size="large" placeholder="请输入密码" v-model:value="password"
               show-password-on="click" />
             <n-text v-if="state.title == '注册'" depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%;">
-              |&nbsp;密码为包含 "英文 _ -" 在内的 8-14 个字符
+              |&nbsp;密码为包含 "英文 数字 _ -" 在内的 8-14 个字符
             </n-text>
           </n-space>
         </n-grid-item>
