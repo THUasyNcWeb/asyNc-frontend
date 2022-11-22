@@ -39,7 +39,10 @@
             content-style="padding: 24px; height: calc(85vh - 74px)"
             style="margin-top: 2%"
           >
-            <router-view :key="state.random" @update="$emit('update')"></router-view>
+            <router-view
+              :key="state.random"
+              @update="$emit('update')"
+            ></router-view>
             <!-- 中心部分按照当前路由进行显示 -->
           </n-layout-content>
         </n-layout>
@@ -67,7 +70,7 @@ import {
   inject,
   provide,
   ref,
-watch,
+  watch,
 } from "vue";
 import { onBeforeRouteUpdate, RouterLink, useRouter } from "vue-router";
 import {
@@ -117,11 +120,25 @@ export interface UserInfo {
 const message = useMessage();
 
 let router = useRouter();
-// 防止本地访问时失去路由
-if (decodeToken() == "") {
-  message.error("请先登录或者注册😢");
-  router.push("/");
-}
+
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    if (newValue.indexOf("/user") == 0) {
+      if (window.localStorage.getItem("token")) {
+        const flag = decodeToken();
+        if (flag == "") {
+          message.error("请先登录或者注册😢");
+          router.push("/");
+        }
+      } else {
+        message.error("请先登录或者注册😢");
+        router.push("/");
+      }
+    }
+  },
+  { immediate: true }
+);
 
 const state = reactive({
   random: Math.random(),
@@ -270,7 +287,7 @@ updateSelected();
 onBeforeRouteUpdate(() => {
   state.random = Math.random();
   updateSelected();
-})
+});
 
 const menuThemeOverrides = {
   Menu: {
