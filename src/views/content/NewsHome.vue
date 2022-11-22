@@ -84,6 +84,9 @@ watch(userRef, () => {
 });
 
 function get_personalize(index: number) {
+  if (userRef.value.tags.length <= index) {
+    return;
+  }
   let tag = userRef.value.tags[index];
   let num = 100;
   if (index == 1) {

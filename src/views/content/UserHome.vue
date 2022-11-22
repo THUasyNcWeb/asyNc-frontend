@@ -61,6 +61,7 @@ import {
   useDialog,
   NA,
   LayoutInst,
+  useMessage,
 } from "naive-ui";
 import API from "@/store/axiosInstance";
 import UserAvatar from "@/components/UserAvatar.vue";
@@ -71,6 +72,8 @@ import {
   LockClosedOutline as PasswordIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
+
+import {decodeToken} from '@/main'
 
 export interface UserTag {
   key: string;
@@ -85,12 +88,23 @@ export interface UserInfo {
   mail: string;
   avatar: string;
 }
+
+const message = useMessage()
+
+let router = useRouter();
+// 防止本地访问时失去路由
+if(decodeToken() == '') {
+  message.error("请先登录或者注册😢")
+  router.push('/')
+}
+
 const state = reactive({
   random: Math.random(),
   now_value: "info",
 });
 
 const userRef = ref<UserInfo>(inject("userRef"));
+
 
 const updateUserLocal: Function = inject("updateUserLocal");
 
@@ -99,7 +113,7 @@ const usersContentRef = ref<LayoutInst | null>(null);
 provide("usersContentRef", usersContentRef);
 
 // 设置组件
-let router = useRouter();
+
 let path = router.currentRoute.value.path;
 
 const emits = defineEmits(["reload"]);
