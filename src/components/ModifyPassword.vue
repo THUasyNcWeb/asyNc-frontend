@@ -59,7 +59,7 @@ export interface UserInfo {
   id: string,
   user_name: string,
   signature: string,
-  tags: string[],
+  tags: object[],
   mails: string,
   avatar: string,
 }

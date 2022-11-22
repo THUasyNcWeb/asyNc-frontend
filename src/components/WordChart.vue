@@ -17,7 +17,7 @@ export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object;
+  tags: object[];
   mail: string;
   avatar: string;
 }
@@ -27,29 +27,17 @@ const echarts = require("echarts");
 const state = reactive({ empty: false });
 
 watch(userRef, () => {
-  state.empty = Object.keys(userRef.value.tags).length == 0;
+  state.empty = userRef.value.tags.length == 0;
   setTimeout(() => {
     init_chart(userRef.value.tags);
   }, 200);
 });
-function init_chart(tags: Object) {
-  let list = [];
+function init_chart(tags: object[]) {
   const domMap = document.getElementById("chart");
   // 清除Echarts默认添加的属性
   domMap.removeAttribute("_echarts_instance_");
   let myChart = echarts.init(domMap);
-  if (typeof tags == "object") {
-    for (var key in tags) {
-      list.push({
-        name: key,
-        value: tags[key],
-      });
-    }
-    if (list.length > 50) {
-      list = list.slice(0, 50);
-      // 至多50个标签
-    }
-
+  if (tags.length != 0) {
     myChart.hideLoading();
     myChart.setOption({
       series: [
@@ -90,7 +78,7 @@ function init_chart(tags: Object) {
           // width: "200%",
           // height: "200%",
           //数据
-          data: list,
+          data: tags,
         },
       ],
     });

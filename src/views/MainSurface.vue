@@ -36,7 +36,7 @@ export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: string[];
+  tags: object[];
   mail: string;
   avatar: string;
 }
@@ -65,23 +65,24 @@ async function getUser() {
     })
       .then((res) => {
         userRef.value = res.data.data;
+        userRef.value.tags = userRef.value.tags.slice(0, 50);
+        // 截取前50个tags
         console.log(res);
-        console.log('新建用户')
       })
       .catch((error) => {
         console.log(error);
-        updateUserLocal({ user_name: "",tags:{} } as UserInfo);
+        updateUserLocal({ user_name: "", tags: [] } as UserInfo);
       });
   } else {
     // 清空用户状态
-    updateUserLocal({ user_name: "",tags:{} } as UserInfo);
+    updateUserLocal({ user_name: "", tags: [] } as UserInfo);
   }
 }
 
 getUser();
 
 // procive news ref
-const userRef = ref<UserInfo>({ user_name: "",tags:{} } as UserInfo);
+const userRef = ref<UserInfo>({ user_name: "", tags: [] } as UserInfo);
 provide("userRef", userRef);
 provide("getUser", getUser);
 provide("updateUserLocal", updateUserLocal);

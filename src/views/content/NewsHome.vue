@@ -31,7 +31,7 @@ export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: string[];
+  tags: object[];
   mail: string;
   avatar: string;
 }

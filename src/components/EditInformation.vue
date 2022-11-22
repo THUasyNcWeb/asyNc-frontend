@@ -135,7 +135,7 @@ export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object;
+  tags: object[];
   mail: string;
   avatar: string;
 }
