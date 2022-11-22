@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 20:42
+ * @LastEditTime: 2022-11-23 01:45
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -107,7 +107,7 @@
         style="width: 370px; border-radius: 5px"
       >
         <template #trigger>
-          <router-link to="login" style="text-decoration: none">
+          <router-link to="/login" style="text-decoration: none">
             <n-icon :size="25" color="#0e7a0d" style="margin-top: 8px">
               <CalendarPerson20Regular />
             </n-icon>
@@ -173,7 +173,7 @@
         </n-space>
         <template #footer>
           <n-space>
-            <router-link to="login" style="text-decoration: none">
+            <router-link to="/login" style="text-decoration: none">
               <n-button
                 type="primary"
                 size="large"
@@ -187,7 +187,7 @@
                 进入知识的世界
               </n-button>
             </router-link>
-            <router-link to="register" style="text-decoration: none">
+            <router-link to="/register" style="text-decoration: none">
               <n-button
                 type="tertiary"
                 size="medium"
@@ -227,7 +227,7 @@
           </n-spin>
         </n-space>
         <n-space v-else vertical>
-          <router-link to="login" style="text-decoration: none">
+          <router-link to="/login" style="text-decoration: none">
             <n-button
               type="primary"
               size="large"
@@ -252,7 +252,7 @@
           </n-spin>
         </n-space>
         <n-space v-else vertical>
-          <router-link to="login" style="text-decoration: none">
+          <router-link to="/login" style="text-decoration: none">
             <n-button type="primary" size="large" style=" border-radius: 15px; margin: 5px;">
               登录以查看书签下的知识
             </n-button>
@@ -277,7 +277,7 @@
           </n-spin>
         </n-space>
         <n-space v-else vertical>
-          <router-link to="login" style="text-decoration: none">
+          <router-link to="/login" style="text-decoration: none">
             <n-button
               type="primary"
               size="large"
