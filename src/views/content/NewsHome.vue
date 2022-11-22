@@ -89,6 +89,10 @@ function get_news(category: string) {
     if (userRef.value.user_name != "") {
       state.empty_content = "你还没有在这里留下足迹，去尽情探索吧。";
       // 当登录状态有效，获取tags对应的新闻
+      let now_query = "";
+      for (var key in userRef.value.tags) {
+        now_query = now_query + key + " ";
+      }
       API({
         headers: {
           Authorization: window.localStorage.getItem("token"),
@@ -96,7 +100,7 @@ function get_news(category: string) {
         url: "search",
         method: "post",
         data: {
-          query: userRef.value.tags,
+          query: now_query,
           page: 1,
           include: [],
           exclude: [],
@@ -243,7 +247,7 @@ function colChange(category: string, label: string) {
           status="500"
           title="500 服务器链接错误"
           description="你家服务器怎么又炸了"
-          style="margin-top: 5%"
+          style="margin-top: 3%"
         >
           <template #footer>
             <n-button type="primary" @click="get_news(state.now_category)"

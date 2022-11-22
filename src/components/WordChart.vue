@@ -1,10 +1,9 @@
 <template>
-  <div id="chart" class="wordcloud">
-  </div>
+  <div id="chart" class="wordcloud"></div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, inject, ref,onBeforeUnmount } from "vue";
+import { onMounted, inject, ref, onBeforeUnmount } from "vue";
 import "echarts-wordcloud/dist/echarts-wordcloud.min";
 import "echarts-wordcloud/dist/echarts-wordcloud";
 export interface UserInfo {
@@ -16,21 +15,20 @@ export interface UserInfo {
   avatar: string;
 }
 const userRef = ref<UserInfo>(inject("userRef"));
-const echarts = require('echarts');
-function init_chart(tags: Object){
-  let list = []
+const echarts = require("echarts");
+function init_chart(tags: Object) {
+  let list = [];
   const domMap = document.getElementById("chart");
   // 清除Echarts默认添加的属性
   domMap.removeAttribute("_echarts_instance_");
   let myChart = echarts.init(domMap);
-  if( typeof(tags) == 'object' ) {
-    
-    if(Object.keys(tags).length !== 0) {
-      for(var key in tags) {
+  if (typeof tags == "object") {
+    if (Object.keys(tags).length !== 0) {
+      for (var key in tags) {
         list.push({
-          name:key,
-          value:tags[key]
-        })  
+          name: key,
+          value: tags[key],
+        });
       }
       myChart.hideLoading();
       myChart.setOption({
@@ -51,14 +49,18 @@ function init_chart(tags: Object){
             //随机生成字体颜色
             // maskImage: maskImage,
             textStyle: {
-              fontFamily: '楷体',
+              fontFamily: "宋体",
               color: function () {
-                  return 'rgb(' + [
+                return (
+                  "rgb(" +
+                  [
                     Math.round(Math.random() * 250),
                     Math.round(Math.random() * 250),
-                    Math.round(Math.random() * 250)
-                  ].join(',') + ')';
-                }
+                    Math.round(Math.random() * 250),
+                  ].join(",") +
+                  ")"
+                );
+              },
             },
             //位置相关设置
             left: "center",
@@ -68,45 +70,39 @@ function init_chart(tags: Object){
             // width: "200%",
             // height: "200%",
             //数据
-            data: list
-          }
-        ]
-      })
-    }
-    else {
+            data: list,
+          },
+        ],
+      });
+    } else {
       myChart.showLoading({
-      text: '你还没有留下足迹，快去探索吧',
-      showSpinner: false,
-      textColor: 'black',
-      maskColor: 'rgba(255, 255, 255, 1)',
-      fontSize: '26px',
-      fontWeight: 'bold'
-    })
+        text: "你还没有留下足迹，快去探索吧",
+        showSpinner: false,
+        textColor: "black",
+        maskColor: "rgba(255, 255, 255, 1)",
+        fontSize: "26px",
+        fontWeight: "bold",
+      });
     }
-  }
-  else {
+  } else {
     myChart.showLoading({
-      text: '加载中',
+      text: "加载中",
       showSpinner: false,
-      textColor: 'black',
-      maskColor: 'rgba(255, 255, 255, 1)',
-      fontSize: '26px',
-      fontWeight: 'bold'
-    })
+      textColor: "black",
+      maskColor: "rgba(255, 255, 255, 1)",
+      fontSize: "26px",
+      fontWeight: "bold",
+    });
   }
 }
-
 
 onMounted(() => {
   setTimeout(() => {
     init_chart(userRef.value.tags);
-  },200)
+  }, 200);
 });
 
-onBeforeUnmount(() => {
-
-})
-
+onBeforeUnmount(() => {});
 </script>
 
 <style>
@@ -114,5 +110,4 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 300px;
 }
-
 </style>
