@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 02:57
+ * @LastEditTime: 2022-11-22 10:53
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -132,7 +132,7 @@
         </template>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <StarLineHorizontal316Regular />
@@ -153,7 +153,7 @@
         </n-space>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
             <bookmark-icon />
@@ -174,7 +174,7 @@
         </n-space>
       </n-popover>
 
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="max-width: 370px; border-radius: 5px;">
+      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px;margin-top: 8px;">
             <History20Regular />
