@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 03:10
+ * @LastEditTime: 2022-11-22 18:19
  -->
 
 <template>
@@ -57,7 +57,7 @@ import {
   ref,
   watch,
 } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
   NLayoutSider,
@@ -212,6 +212,19 @@ const menuOptions = [
     icon: renderIcon(LogoutIcon),
   },
 ];
+
+// Update selected menu item depending on route
+function updateSelected() {
+  for (const item of menuOptions) {
+    if (router.currentRoute.value.path === item.path) {
+      state.now_value = item.key;
+      break;
+    }
+  }
+}
+
+updateSelected();
+
 const menuThemeOverrides = {
   Menu: {
     itemHeight: "50px",
