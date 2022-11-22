@@ -7,47 +7,68 @@
  -->
 
 <template>
-  <div class="main_card">
-    <n-layout style="width: 100%; height: 100%; border-radius: 10px">
-      <n-layout has-sider>
-        <n-layout-sider bordered :width="250">
-          <n-space vertical style="margin-top: 10%; text-align: center">
-            <UserAvatar
-              style="margin: auto"
-              :width="80"
-              :height="80"
-              :key="state.random"
-            />
-            <n-text>
-              {{ userRef.user_name }}
-            </n-text>
-            <n-config-provider :theme-overrides="menuThemeOverrides">
-              <n-menu
-                style="text-align: center"
-                :options="menuOptions"
-                :value="state.now_value"
-                :default-value="default_val"
-                :on-update-value="update_menu"
+  <n-spin :show="state.empty" size="large" style="top: 200px">
+    <div class="main_card">
+      <n-layout style="width: 100%; height: 100%; border-radius: 10px">
+        <n-layout has-sider>
+          <n-layout-sider bordered :width="250">
+            <n-space vertical style="margin-top: 10%; text-align: center">
+              <UserAvatar
+                style="margin: auto"
+                :width="80"
+                :height="80"
+                :key="state.random"
               />
-            </n-config-provider>
-          </n-space>
-        </n-layout-sider>
-        <!-- 侧边导航栏，包括详细信息与修改密码 -->
-        <n-layout-content
-          ref="usersContentRef"
-          content-style="padding: 24px; height: calc(85vh - 74px)"
-          style="margin-top: 2%"
-        >
-          <router-view :key="state.random"></router-view>
-          <!-- 中心部分按照当前路由进行显示 -->
-        </n-layout-content>
+              <n-text>
+                {{ userRef.user_name }}
+              </n-text>
+              <n-config-provider :theme-overrides="menuThemeOverrides">
+                <n-menu
+                  style="text-align: center"
+                  :options="menuOptions"
+                  :value="state.now_value"
+                  :default-value="default_val"
+                  :on-update-value="update_menu"
+                />
+              </n-config-provider>
+            </n-space>
+          </n-layout-sider>
+          <!-- 侧边导航栏，包括详细信息与修改密码 -->
+          <n-layout-content
+            ref="usersContentRef"
+            content-style="padding: 24px; height: calc(85vh - 74px)"
+            style="margin-top: 2%"
+          >
+            <router-view :key="state.random"></router-view>
+            <!-- 中心部分按照当前路由进行显示 -->
+          </n-layout-content>
+        </n-layout>
       </n-layout>
-    </n-layout>
-  </div>
+    </div>
+    <template #description>
+      <br />
+      <n-h2 style="text-align: center; color: deeppink"> 少女祈祷中QWQ </n-h2>
+      <n-h2 style="text-align: center"> 有这个时间等待不如V我50 </n-h2>
+    </template>
+    <template #icon>
+      <n-icon>
+        <FastFoodOutline />
+      </n-icon>
+    </template>
+  </n-spin>
 </template>
 
 <script setup lang="ts">
-import { h, Component, reactive, defineEmits, inject, provide, ref } from "vue";
+import {
+  h,
+  Component,
+  reactive,
+  defineEmits,
+  inject,
+  provide,
+  ref,
+  watch,
+} from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
@@ -62,6 +83,8 @@ import {
   NA,
   LayoutInst,
   useMessage,
+  NSpin,
+  NH2,
 } from "naive-ui";
 import API from "@/store/axiosInstance";
 import UserAvatar from "@/components/UserAvatar.vue";
@@ -71,9 +94,10 @@ import {
   StarOutline as FavoriteIcon,
   LockClosedOutline as PasswordIcon,
   LogOutOutline as LogoutIcon,
+  FastFoodOutline,
 } from "@vicons/ionicons5";
 
-import {decodeToken} from '@/main'
+import { decodeToken } from "@/main";
 
 export interface UserTag {
   key: string;
@@ -89,22 +113,28 @@ export interface UserInfo {
   avatar: string;
 }
 
-const message = useMessage()
+const message = useMessage();
 
 let router = useRouter();
 // 防止本地访问时失去路由
-if(decodeToken() == '') {
-  message.error("请先登录或者注册😢")
-  router.push('/')
+if (decodeToken() == "") {
+  message.error("请先登录或者注册😢");
+  router.push("/");
 }
 
 const state = reactive({
   random: Math.random(),
   now_value: "info",
+  empty: false,
 });
 
 const userRef = ref<UserInfo>(inject("userRef"));
 
+state.empty = userRef.value.user_name == "";
+
+watch(userRef, () => {
+  state.empty = userRef.value.user_name == "";
+});
 
 const updateUserLocal: Function = inject("updateUserLocal");
 
@@ -247,6 +277,5 @@ function update_menu(new_key: string) {
   margin-top: 3%;
   margin-bottom: 3%;
   border-radius: 10px;
-  border: 2px solid black;
 }
 </style>
