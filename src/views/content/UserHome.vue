@@ -71,11 +71,17 @@ import {
   LockClosedOutline as PasswordIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
+
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object[];
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }

@@ -13,11 +13,17 @@ import { onMounted, inject, ref, onBeforeUnmount, watch, reactive } from "vue";
 import { NResult } from "naive-ui";
 import "echarts-wordcloud/dist/echarts-wordcloud.min";
 import "echarts-wordcloud/dist/echarts-wordcloud";
+
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object[];
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }

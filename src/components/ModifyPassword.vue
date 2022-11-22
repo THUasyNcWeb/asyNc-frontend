@@ -55,13 +55,18 @@ import {reactive, ref, inject} from 'vue'
 import {useRouter} from 'vue-router'
 import {NInput,NButton,NGrid,NGridItem,NGradientText,NText,NSpace, useMessage} from 'naive-ui'
 import {judgeToken} from "@/main"
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
-  id: string,
-  user_name: string,
-  signature: string,
-  tags: object[],
-  mails: string,
-  avatar: string,
+  id: string;
+  user_name: string;
+  signature: string;
+  tags: UserTag[];
+  mail: string;
+  avatar: string;
 }
 const router = useRouter()
 const message = useMessage()

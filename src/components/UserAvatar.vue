@@ -52,11 +52,16 @@ import { NImage, NUpload, NA, useMessage } from "naive-ui";
 import type { UploadFileInfo } from "naive-ui";
 import API from "../store/axiosInstance";
 import Config from "../../config/config.json";
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object[];
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }
