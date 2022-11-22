@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 01:36
+ * @LastEditTime: 2022-11-23 01:39
  -->
 
 <template>
@@ -72,7 +72,7 @@ import {
   ref,
   watch,
 } from "vue";
-import { onBeforeRouteUpdate, RouterLink, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, RouteLocationNormalized, RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
   NLayoutSider,
@@ -272,20 +272,22 @@ const menuOptions = [
 ];
 
 // Update selected menu item depending on route
-function updateSelected() {
+function updateSelected(route: RouteLocationNormalized) {
   for (const item of menuOptions) {
-    if (router.currentRoute.value.path === item.path) {
+    if (route.path === item.path) {
       state.now_value = item.key;
       break;
     }
   }
 }
 
-updateSelected();
+updateSelected(router.currentRoute.value);
 
 // Reload router view before route update
-onBeforeRouteUpdate(() => {
-  updateSelected();
+onBeforeRouteUpdate((route) => {
+  updateSelected(route);
+  // Delay router view refresh to next tick
+  // to ensure we refresh with the new route
   setTimeout(() => state.random = Math.random());
 });
 
