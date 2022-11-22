@@ -38,12 +38,23 @@ watch(userRef, () => {
     init_chart(userRef.value.tags);
   }, 200);
 });
-function init_chart(tags: object[]) {
+function init_chart(tags: UserTag[]) {
   const domMap = document.getElementById("chart");
   // 清除Echarts默认添加的属性
   domMap.removeAttribute("_echarts_instance_");
   let myChart = echarts.init(domMap);
   if (tags.length != 0) {
+    let now_tags = [];
+    for (const x of tags) {
+      if (x.key == "") {
+        continue;
+      }
+      now_tags.push({
+        name: x.key,
+        value: x.value,
+      });
+    }
+    console.log(now_tags);
     myChart.hideLoading();
     myChart.setOption({
       series: [
@@ -84,7 +95,7 @@ function init_chart(tags: object[]) {
           // width: "200%",
           // height: "200%",
           //数据
-          data: tags,
+          data: now_tags,
         },
       ],
     });

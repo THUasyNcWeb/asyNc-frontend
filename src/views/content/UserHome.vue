@@ -7,8 +7,8 @@
  -->
 
 <template>
-  <n-spin :show="state.empty" size="large" style="top: 200px">
-    <div class="main_card">
+  <n-spin :show="state.empty" size="large" style="margin-top: 20%">
+    <div v-if="!state.empty" class="main_card">
       <n-layout style="width: 100%; height: 100%; border-radius: 10px">
         <n-layout has-sider>
           <n-layout-sider bordered :width="250">
@@ -277,5 +277,6 @@ function update_menu(new_key: string) {
   margin-top: 3%;
   margin-bottom: 3%;
   border-radius: 10px;
+  margin-top: -20%;
 }
 </style>

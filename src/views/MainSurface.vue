@@ -64,9 +64,11 @@ async function getUser() {
       // 根据不同类别，把类别放在了对应的请求参数中
     })
       .then((res) => {
+        console.log(res);
         userRef.value = res.data.data;
         userRef.value.tags = userRef.value.tags.slice(0, 50);
         // 截取前50个tags
+
         console.log(res);
       })
       .catch((error) => {
