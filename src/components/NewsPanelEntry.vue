@@ -3,13 +3,13 @@
  * @Author: 王博文
  * @Date: 2022-11-14 19:07
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 11:29
+ * @LastEditTime: 2022-11-22 10:34
 -->
 
 <template>
-  <n-grid x-gap="12" cols="3">
-    <n-gi :span="image_url ? 2 : 3">
-      <n-space vertical justify="space-between" size="small" style="min-height: 80px">
+  <n-space justify="space-between">
+      <n-space vertical justify="space-between" size="small"
+        style="width: calc(30vw - 192px); min-height: 80px">
         <n-ellipsis :tooltip="false">
           <n-text strong style="line">
             {{title}}
@@ -33,19 +33,16 @@
           </n-space>
         </n-ellipsis>
       </n-space>
-    </n-gi>
-    <n-gi>
       <n-image v-if="image_url" :src="image_url"
         width="120" height="76" object-fit="cover" preview-disabled
         style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
-    </n-gi>
-  </n-grid>
+  </n-space>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
 
-import { NEllipsis, NGrid, NGi, NIcon, NImage, NSpace, NText } from 'naive-ui';
+import { NEllipsis, NIcon, NImage, NSpace, NText } from 'naive-ui';
 
 import {
   NewspaperOutline as MediaIcon,
