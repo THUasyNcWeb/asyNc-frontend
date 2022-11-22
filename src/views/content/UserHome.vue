@@ -47,16 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  h,
-  Component,
-  reactive,
-  defineEmits,
-  inject,
-  provide,
-  ref,
-  watch,
-} from "vue";
+import { h, Component, reactive, defineEmits, inject, provide, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import {
   NLayout,
