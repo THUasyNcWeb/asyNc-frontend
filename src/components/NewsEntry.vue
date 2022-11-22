@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 20:56
+ * @LastEditTime: 2022-11-22 21:23
 -->
 
 <template>
@@ -58,7 +58,7 @@
 </template>
   
 <script setup lang="ts">
-import { computed, defineEmits, defineProps, reactive } from 'vue';
+import { computed, defineProps, reactive } from 'vue';
 import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
 
 import {

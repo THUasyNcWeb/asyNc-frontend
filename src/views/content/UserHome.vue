@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 18:19
+ * @LastEditTime: 2022-11-22 21:23
  -->
 
 <template>
@@ -55,7 +55,6 @@ import {
   inject,
   provide,
   ref,
-  watch,
 } from "vue";
 import { onBeforeRouteUpdate, RouterLink, useRouter } from "vue-router";
 import {
