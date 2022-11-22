@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-14 19:07
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 10:34
+ * @LastEditTime: 2022-11-22 10:52
 -->
 
 <template>
@@ -33,7 +33,7 @@
           </n-space>
         </n-ellipsis>
       </n-space>
-      <n-image v-if="image_url" :src="image_url"
+      <n-image v-if="picture_url" :src="picture_url"
         width="120" height="76" object-fit="cover" preview-disabled
         style="border-radius: 8px; box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, .16)"/>
   </n-space>
@@ -54,7 +54,7 @@ export interface News {
   url: string,
   title: string,
   media: string,
-  image_url?: string,
+  picture_url?: string,
   visit_time?: Date,
 }
 

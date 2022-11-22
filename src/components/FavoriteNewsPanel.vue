@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 00:40
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-15 19:10
+ * @LastEditTime: 2022-11-22 10:51
 -->
 
 <template>
@@ -20,7 +20,7 @@
         <n-list-item>
           <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none;">
             <news-panel-entry :id="item.id" :url="item.url" :title="item.title"
-            :media="item.media" :image_url="item.image_url"
+            :media="item.media" :picture_url="item.picture_url"
             :visit_time="historyMode ? item.visit_time : undefined"/>
           </n-a>
         </n-list-item>
