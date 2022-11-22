@@ -205,16 +205,12 @@
         </template>
       </n-popover>
 
-<<<<<<< HEAD
       <n-popover
         trigger="hover"
         placement="bottom"
         :show-arrow="false"
         style="max-width: 370px; border-radius: 5px"
       >
-=======
-      <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
->>>>>>> feat-favorites
         <template #trigger>
           <n-icon
             :size="25"
@@ -243,14 +239,6 @@
         </n-space>
       </n-popover>
 
-<<<<<<< HEAD
-      <n-popover
-        trigger="hover"
-        placement="bottom"
-        :show-arrow="false"
-        style="max-width: 370px; border-radius: 5px"
-      >
-=======
       <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
         <template #trigger>
           <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
@@ -273,7 +261,6 @@
       </n-popover>
 
       <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
->>>>>>> feat-favorites
         <template #trigger>
           <n-icon
             :size="25"
@@ -339,10 +326,6 @@ import {
   NGradientText,
   NIcon,
   NImage,
-<<<<<<< HEAD
-} from "naive-ui";
-import { TimeOutline, AnalyticsOutline } from "@vicons/ionicons5";
-=======
   NPopover,
   NSpace,
   NSpin,
@@ -354,7 +337,6 @@ import {
   TimeOutline,
   AnalyticsOutline,
 } from '@vicons/ionicons5';
->>>>>>> feat-favorites
 import {
   CalendarPerson20Regular,
   TargetArrow20Regular,
@@ -362,14 +344,6 @@ import {
   SignOut20Regular,
   History20Regular,
   StarLineHorizontal316Regular,
-<<<<<<< HEAD
-} from "@vicons/fluent";
-
-import { inject, ref } from "vue";
-import SearchBox from "./SearchBox.vue";
-import router from "@/router";
-import API from "@/store/axiosInstance";
-=======
   BookmarkMultiple20Regular as BookmarkIcon,
 } from '@vicons/fluent';
 
@@ -379,7 +353,6 @@ import NewsPanel from './FavoriteNewsPanel.vue';
 import router from '@/router';
 import API from '@/store/axiosInstance';
 import { decodeToken } from '@/main';
->>>>>>> feat-favorites
 
 // import '@/mock/SearchPage.mock';
 
@@ -392,13 +365,9 @@ export interface UserInfo {
   avatar: string;
 }
 
-<<<<<<< HEAD
 const userRef = ref<UserInfo>(inject("userRef"));
 
 const updateUserLocal: Function = inject("updateUserLocal");
-=======
-const userRef = ref<UserInfo>(inject('userRef'));
->>>>>>> feat-favorites
 
 const default_logo = require("@/assets/asyNc.png");
 
