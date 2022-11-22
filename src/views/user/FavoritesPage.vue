@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 01:07
+ * @LastEditTime: 2022-11-23 01:46
 -->
 <template>
   <n-space vertical>
@@ -152,6 +152,7 @@ function init(to: RouteLocationNormalized) {
         visit_time: entry.visit_time ? new Date(entry.visit_time) : undefined,
         keywords: [],
         title_keywords: [],
+        is_favorites: entry.is_favorite,
       });
     }
   }).catch(() => {
