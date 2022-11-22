@@ -35,10 +35,10 @@
               :key="pic_index"
             >
               <div class="pic_item">
-                <n-a
+                <a
                   :href="news.url"
                   target="_blank"
-                  @onclick="newsClick(news.id)"
+                  :onclick="newsClick(news.id)"
                 >
                   <n-image
                     :width="state.img_width"
@@ -47,7 +47,7 @@
                     preview-disabled
                     :fallback-src="default_logo"
                   />
-                </n-a>
+                </a>
                 <h2>
                   <n-ellipsis :tooltip="false" :line-clamp="1">
                     {{ news.title }}

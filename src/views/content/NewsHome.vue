@@ -27,11 +27,16 @@ export interface All_News {
   picture_url?: string;
 }
 
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: string[];
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }
@@ -77,6 +82,50 @@ watch(userRef, () => {
     get_news(state.now_category);
   }
 });
+
+function get_personalize(index: number) {
+  if (userRef.value.tags.length <= index) {
+    return;
+  }
+  let tag = userRef.value.tags[index];
+  let num = 100;
+  if (index == 1) {
+    num = 60;
+  } else if (index > 1) {
+    num = 40;
+  }
+  API({
+    headers: {
+      Authorization: window.localStorage.getItem("token"),
+    },
+    url: "search",
+    method: "post",
+    data: {
+      query: tag.key,
+      page: 1,
+      include: [],
+      exclude: [],
+    },
+  })
+    .then((res) => {
+      state.loading = false;
+      if (res.data.news.length > num) {
+        res.data.news = res.data.news.slice(0, num);
+      }
+      for (const entry of res.data.data.news) {
+        // Construct Date object
+        state.all_news.push({
+          ...entry,
+          pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+        });
+      }
+    })
+    .catch(() => {
+      state.loading = false;
+      state.error = true;
+    });
+}
+
 function get_news(category: string) {
   state.empty_content = "自己探索的世界才更为真实";
   if (category == "more") {
@@ -89,33 +138,9 @@ function get_news(category: string) {
     if (userRef.value.user_name != "") {
       state.empty_content = "你还没有在这里留下足迹，去尽情探索吧。";
       // 当登录状态有效，获取tags对应的新闻
-      API({
-        headers: {
-          Authorization: window.localStorage.getItem("token"),
-        },
-        url: "search",
-        method: "post",
-        data: {
-          query: userRef.value.tags,
-          page: 1,
-          include: [],
-          exclude: [],
-        },
-      })
-        .then((res) => {
-          state.loading = false;
-          for (const entry of res.data.data.news) {
-            // Construct Date object
-            state.all_news.push({
-              ...entry,
-              pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
-            });
-          }
-        })
-        .catch(() => {
-          state.loading = false;
-          state.error = true;
-        });
+      get_personalize(0);
+      get_personalize(1);
+      get_personalize(2);
     } else {
       // 不属于报错，需要提醒要登录
       state.empty_content = "登录以畅享独特的个人推荐";
@@ -243,7 +268,7 @@ function colChange(category: string, label: string) {
           status="500"
           title="500 服务器链接错误"
           description="你家服务器怎么又炸了"
-          style="margin-top: 5%"
+          style="margin-top: 3%"
         >
           <template #footer>
             <n-button type="primary" @click="get_news(state.now_category)"

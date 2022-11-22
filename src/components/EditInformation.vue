@@ -131,11 +131,16 @@ import {
   useMessage,
 } from "naive-ui";
 import API from "@/store/axiosInstance";
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object;
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }
