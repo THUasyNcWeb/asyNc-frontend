@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 10:53
+ * @LastEditTime: 2022-11-22 20:42
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -13,7 +13,7 @@
           asyNc
         </n-gradient-text>
       </router-link>
-      <search-box :text="userRef.user_name" style="width: 40vw" />
+      <search-box :text="state.word" style="width: 40vw" />
     </n-space>
 
     <n-space justify="end">
@@ -270,6 +270,7 @@ const exitDialog = useDialog()
 const message = useMessage()
 
 const state = reactive({
+  word: router.currentRoute.value.query.q as string ?? '',
   history: {
     loading: false,
     news: [],
