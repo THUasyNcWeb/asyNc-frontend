@@ -3,13 +3,23 @@
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 22:47
+ * @LastEditTime: 2022-11-22 21:16
 */
 
-import { createApp } from 'vue'
+import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router'
 import API from './store/axiosInstance';
+
+export const reloader = reactive({
+  timestamp: 0,
+});
+
+// Reload navigation bar when favorites, history etc. update
+export function reloadNavigationBar() {
+  reloader.timestamp++;
+}
+
 // 将页面标题与路由对应
 const app = createApp(App);
 

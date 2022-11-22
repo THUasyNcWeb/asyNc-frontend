@@ -3,16 +3,16 @@
  * @Author: 郑友捷
  * @Date: 2022-10-18 19:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 03:00
+ * @LastEditTime: 2022-11-22 21:17
  -->
 
 <template>
-  <n-layout position="absolute" :key="state.random_key">
+  <n-layout position="absolute">
     <n-layout-header bordered embedded style="height: 74px; position: fixed">
-      <Navigation style="padding: 18px 96px" />
+      <Navigation :key="reloader.timestamp" style="padding: 18px 96px" />
     </n-layout-header>
     <n-layout-content ref="contentRef" style="top: 74px" position="absolute">
-      <router-view @reload="reload" @update="reload"></router-view>
+      <router-view @reload="reloadNavigationBar" @update="reloadNavigationBar"></router-view>
     </n-layout-content>
   </n-layout>
 </template>
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { provide, reactive, ref } from "vue";
 import Navigation from "../components/NavigationBar.vue";
-import { judgeToken } from "@/main";
+import { judgeToken, reloadNavigationBar, reloader } from "@/main";
 import API from "@/store/axiosInstance";
 import { NLayout, NLayoutHeader, NLayoutContent, LayoutInst } from "naive-ui";
 import { RouterView } from "vue-router";
@@ -39,15 +39,6 @@ export interface UserInfo {
   tags: string[];
   mail: string;
   avatar: string;
-}
-
-const state = reactive({
-  random_key: Math.random(),
-});
-
-function reload() {
-  state.random_key = Math.random();
-  // 重新加载导航栏
 }
 
 function updateUserLocal(new_user: UserInfo) {
