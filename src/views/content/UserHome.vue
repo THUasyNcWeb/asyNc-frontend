@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 21:30
+ * @LastEditTime: 2022-11-23 01:36
  -->
 
 <template>
@@ -285,8 +285,8 @@ updateSelected();
 
 // Reload router view before route update
 onBeforeRouteUpdate(() => {
-  state.random = Math.random();
   updateSelected();
+  setTimeout(() => state.random = Math.random());
 });
 
 const menuThemeOverrides = {

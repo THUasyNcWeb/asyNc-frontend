@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 21:49
+ * @LastEditTime: 2022-11-23 01:07
 -->
 <template>
   <n-space vertical>
@@ -74,10 +74,7 @@ const state = reactive({
 // Reference to the layout content, for scrolling
 const usersContentRef: any = inject('usersContentRef');
 
-// Refresh when router changed
-onBeforeRouteUpdate(to => init(to));
-
-init(router.currentRoute.value)
+init(router.currentRoute.value);
 
 // Message box
 const message = useMessage();
