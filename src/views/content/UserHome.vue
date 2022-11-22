@@ -225,6 +225,12 @@ function updateSelected() {
 
 updateSelected();
 
+// Reload router view before route update
+onBeforeRouteUpdate(() => {
+  state.random = Math.random();
+  updateSelected();
+})
+
 const menuThemeOverrides = {
   Menu: {
     itemHeight: "50px",
