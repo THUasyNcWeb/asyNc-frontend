@@ -3,13 +3,11 @@
  * @Author: 王博文
  * @Date: 2022-11-07 00:40
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 10:51
+ * @LastEditTime: 2022-11-22 11:06
 -->
 
 <template>
-  <n-layout :style="{
-    height: historyMode ? 'calc(60vh + 34px)' : '60vh'
-  }">
+  <n-layout style="height: 60vh">
     <n-empty v-if="!news.length" size="large" />
     <n-list v-else hoverable>
       <template v-for="item, id in news" :key="id">
@@ -25,7 +23,7 @@
           </n-a>
         </n-list-item>
       </template>
-      <n-list-item v-if="historyMode">
+      <n-list-item>
         <router-link :to="morePath" style="text-decoration: none">
           <n-button>
             查看全部
@@ -34,11 +32,6 @@
       </n-list-item>
     </n-list>
   </n-layout>
-  <router-link v-if="!historyMode" :to="morePath" style="text-decoration: none">
-    <n-button>
-      查看全部
-    </n-button>
-  </router-link>
 </template>
 
 <script setup lang="ts">
