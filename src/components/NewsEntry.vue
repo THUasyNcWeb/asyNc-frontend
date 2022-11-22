@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-19 21:59
+ * @LastEditTime: 2022-11-22 12:04
 -->
 
 <template>
@@ -48,8 +48,8 @@
           <n-text depth=3>
             {{news.pub_time.toLocaleDateString()}}
           </n-text>
-          <n-text depth=3>
-            {{news.visit_time?.toLocaleString()}}
+          <n-text v-if="news.visit_time" depth=3>
+            访问于 {{news.visit_time?.toLocaleString()}}
           </n-text>
         </n-space>
       </template>
