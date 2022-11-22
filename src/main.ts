@@ -4,12 +4,12 @@
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
  * @LastEditTime: 2022-11-22 21:30
-*/
+ */
 
-import { createApp, reactive } from 'vue'
-import App from './App.vue'
-import router from './router'
-import API from './store/axiosInstance';
+import { createApp, reactive } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import API from "./store/axiosInstance";
 
 export const reloader = reactive({
   timestamp: 0,
@@ -42,14 +42,11 @@ function decodeToken(): string {
     if (expire_date < now_date) {
       throw Error("The token has expired!");
     }
-    console.log("返回2");
     return token.user_name;
   } catch (error) {
     console.log(error);
-    console.log("错啦");
     localStorage.removeItem("token");
     // 清除原来无用的token
-    console.log("返回4");
     return "";
   }
 }
@@ -61,12 +58,12 @@ export function newsClick(id: number) {
   }
   API({
     headers: {
-      Authorization: window.localStorage.getItem('token'),
+      Authorization: window.localStorage.getItem("token"),
     },
-    url: 'history',
-    method: 'post',
+    url: "history",
+    method: "post",
     params: {
-      id
+      id,
     },
   });
 }
@@ -93,9 +90,7 @@ async function judgeToken(): Promise<string> {
     })
     .catch((error) => {
       console.log(error);
-      console.log("错啦");
       localStorage.removeItem("token");
-      console.log("返回1");
       return_value = "";
     });
   return return_value;
@@ -111,20 +106,7 @@ router.beforeEach((to, _, next) => {
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
-  if (to.path.indexOf("/user") != 0) {
-    next();
-  } else if (window.localStorage.getItem("token")) {
-    const flag = decodeToken();
-    if (flag == "") {
-      alert("请先登录或者注册");
-      next("/login");
-    } else {
-      next();
-    }
-  } else {
-    alert("请先登录或者注册");
-    next("/login");
-  }
+  next();
 });
 
 export { decodeToken, judgeToken };
