@@ -35,7 +35,7 @@
         <!-- 侧边导航栏，包括详细信息与修改密码 -->
         <n-layout-content
           ref="usersContentRef"
-          content-style="padding: 24px; height: calc(100vh - 74px)"
+          content-style="padding: 24px; height: calc(85vh - 74px)"
           style="margin-top: 2%"
         >
           <router-view :key="state.random"></router-view>

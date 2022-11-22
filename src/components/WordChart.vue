@@ -30,6 +30,11 @@ function init_chart(tags: Object) {
           value: tags[key],
         });
       }
+      if (list.length > 50) {
+        list = list.slice(0, 50);
+        // 至多50个标签
+      }
+
       myChart.hideLoading();
       myChart.setOption({
         series: [
@@ -40,7 +45,7 @@ function init_chart(tags: Object) {
             //用来调整字的大小范围
             // Text size range which the value in data will be mapped to.
             // Default to have minimum 12px and maximum 60px size.
-            sizeRange: [14, 60],
+            sizeRange: [18, 60],
             // Text rotation range and step in degree. Text will be rotated randomly in range [-90,                                                                             90] by rotationStep 45
             //用来调整词的旋转方向，，[0,0]--代表着没有角度，也就是词为水平方向，需要设置角度参考注释内容
             // rotationRange: [-45, 0, 45, 90],
