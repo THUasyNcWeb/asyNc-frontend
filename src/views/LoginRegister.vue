@@ -2,8 +2,8 @@
  * @FileDescription: 登录注册界面
  * @Author: 郑友捷
  * @Date: 2022-10-20 01:21
- * @LastEditors: 郑友捷
- * @LastEditTime: 2022-10-26 16:16
+ * @LastEditors: 王博文
+ * @LastEditTime: 2022-11-22 18:38
 -->
 <template>
   <div class="back_img first_div">
@@ -169,7 +169,7 @@ function login() {
     window.localStorage.setItem("token", res.data.data.token)
     // 存储token
     message.success("欢迎回来，" + username.value + "!")
-    router.push("/")
+    router.back();
   }).catch(() => {
     message.error("用户名或密码错误")
   })
@@ -201,7 +201,7 @@ function register() {
     window.localStorage.setItem("token", res.data.data.token)
     // 存储token
     message.success("欢迎来到知识的世界，" + username.value + "!")
-    router.push("/")
+    router.back();
   }).catch(() => {
     message.error("用户名重复")
   })
