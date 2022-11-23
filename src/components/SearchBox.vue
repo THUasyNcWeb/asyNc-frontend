@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 17:44
+ * @LastEditTime: 2022-11-23 17:52
 -->
 
 <template>
@@ -107,10 +107,14 @@ function tagInputBlur() {
 
 // Append a new tag
 function tagInputSubmit() {
-  tags.push({
-    type: tagInputType.value,
-    value: tagInputValue.value,
-  });
+  // Reject empty tag
+  if (tagInputValue.value) {
+    tags.push({
+      type: tagInputType.value,
+      value: tagInputValue.value,
+    });
+  }
+
   tagInputVisible.value = false;
   tagInputValue.value = '';
 
