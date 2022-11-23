@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-06 18:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 21:30
+ * @LastEditTime: 2022-11-23 01:49
  */
 
 import { createApp, reactive } from "vue";
@@ -65,7 +65,9 @@ export function newsClick(id: number) {
     params: {
       id,
     },
-  });
+  }).then(() => {
+    reloadNavigationBar();
+  })
 }
 
 async function judgeToken(): Promise<string> {

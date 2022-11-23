@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-21 21:49
+ * @LastEditTime: 2022-11-23 10:27
 -->
 <template>
   <n-space vertical>
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { inject, reactive, defineEmits, defineProps } from 'vue';
-import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { RouteLocationNormalized } from 'vue-router';
 import {
   NButton,
   NEmpty,
@@ -74,10 +74,7 @@ const state = reactive({
 // Reference to the layout content, for scrolling
 const usersContentRef: any = inject('usersContentRef');
 
-// Refresh when router changed
-onBeforeRouteUpdate(to => init(to));
-
-init(router.currentRoute.value)
+init(router.currentRoute.value);
 
 // Message box
 const message = useMessage();
@@ -105,7 +102,6 @@ function handleRemove(id: number) {
   }).then(response => {
     if (response.status === 200) {
       message.success(`移除历史记录成功`);
-      emits('update', 'history');
       handleUpdate('history');
     } else {
       message.error(`移除历史记录失败`);
@@ -117,6 +113,7 @@ function handleRemove(id: number) {
 
 // Refresh the page when favorites are updated
 function handleUpdate(type: 'favorites' | 'readlater' | 'history') {
+  emits('update');
   if (type === props.path) {
     init(router.currentRoute.value);
   }
@@ -155,6 +152,7 @@ function init(to: RouteLocationNormalized) {
         visit_time: entry.visit_time ? new Date(entry.visit_time) : undefined,
         keywords: [],
         title_keywords: [],
+        is_favorites: entry.is_favorite,
       });
     }
   }).catch(() => {
