@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-24 01:54
+ * @LastEditTime: 2022-11-24 03:35
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -73,7 +73,10 @@ const tags: Tag[] = inject('inclusionExclusionTags');
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
 
-init(router.currentRoute.value);
+// Only init once when setup
+if (state.query === null) {
+  init(router.currentRoute.value);
+}
 
 // Message box
 const message = useMessage();
@@ -144,6 +147,10 @@ function init(to: RouteLocationNormalized) {
     let data = response.data.data;
     state.total = data.total
     state.page_count = data.page_count;
+
+    // Ensure we don't replicate news
+    state.news = [];
+
     for (const entry of data.news) {
       // Construct Date object
       state.news.push({
