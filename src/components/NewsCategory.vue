@@ -68,7 +68,7 @@
               'min-height': '140px',
             }">
               <n-h2 stlye="width:200%" prefix="bar">
-                <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
+                <n-a :href="item.url" target="_blank" @click="newsClick(item.id)" style="text-decoration: none">
                   <n-ellipsis :line-clamp="2" :tooltip="false">
                     <n-text type="primary">
                       {{ item.title }}
@@ -101,7 +101,7 @@
                 </n-space>
               </n-space>
             </n-space>
-            <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
+            <n-a :href="item.url" target="_blank" @click="newsClick(item.id)" style="text-decoration: none">
               <n-image v-if="item.picture_url" width="160" height="140" object-fit="cover" :src="item.picture_url"
                 preview-disabled style="
                   border-radius: 8px;

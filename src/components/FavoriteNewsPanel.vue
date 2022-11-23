@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-07 00:40
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 11:06
+ * @LastEditTime: 2022-11-23 17:02
 -->
 
 <template>
@@ -16,7 +16,7 @@
           {{getDateTitle(item, id)}}
         </n-text>
         <n-list-item>
-          <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none;">
+          <n-a :href="item.url" target="_blank" @click="newsClick(item.id)" style="text-decoration: none;">
             <news-panel-entry :id="item.id" :url="item.url" :title="item.title"
             :media="item.media" :picture_url="item.picture_url"
             :visit_time="historyMode ? item.visit_time : undefined"/>
