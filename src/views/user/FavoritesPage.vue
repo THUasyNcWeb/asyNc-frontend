@@ -144,7 +144,7 @@ function init(to: RouteLocationNormalized) {
     state.page_count = data.page_count;
     for (const entry of data.news) {
       // Construct Date object
-      state.news.push({
+      let news = {
         // Pass empty content, if not provided
         content: '',
         ...entry,
@@ -153,7 +153,15 @@ function init(to: RouteLocationNormalized) {
         keywords: [],
         title_keywords: [],
         is_favorites: entry.is_favorite,
-      });
+      };
+      
+      // AI summary
+      if (entry.summary) {
+        news.content = '智能摘要：' + entry.summary;
+        news.keywords = [[0, 5]];
+      }
+
+      state.news.push(news);
     }
   }).catch(() => {
     error();
