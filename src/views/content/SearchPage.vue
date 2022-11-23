@@ -42,7 +42,6 @@ import {
 import NewsEntry from '@/components/NewsEntry.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
-import { decodeToken,judgeToken } from '@/main';
 
 // import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
@@ -52,23 +51,13 @@ const state = reactive({
   query: null,
   word: '',
   page: 0,
+  sort: '',
 
   loading: true,
 
   news: [],
   page_count: 0,
-
-  username: decodeToken(),
 })
-
-async function init_username() {
-  const value = await judgeToken()
-  console.log(value)
-  console.log("异步请求")
-  state.username = value
-}
-
-init_username()
 
 // Reference to the layout content, for scrolling
 const contentRef: any = inject('contentRef');
