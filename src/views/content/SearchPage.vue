@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-17 13:26
+ * @LastEditTime: 2022-11-23 13:55
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -66,9 +66,7 @@ const contentRef: any = inject('contentRef');
 const tags: Tag[] = inject('inclusionExclusionTags');
 
 // Refresh when router changed
-// router.beforeEach(to => init(to));
 onBeforeRouteUpdate(to => init(to));
-// router.beforeResolve
 
 init(router.currentRoute.value);
 
@@ -81,7 +79,11 @@ function error() {
 
 // Jump to specified page
 function jump(page: number) {
-  router.push(`search?q=${state.word}&page=${page}`);
+  let path = `search?q=${state.word}&page=${page}`;
+  if (state.sort) {
+    path += `&sort=${state.sort}`;
+  }
+  router.push(path);
 }
 
 function init(to: RouteLocationNormalized) {
@@ -89,6 +91,7 @@ function init(to: RouteLocationNormalized) {
   state.query = to.query;
   state.word = state.query.q as string || '';
   state.page = parseInt(state.query.page as string) || 1;
+  state.sort = state.query.sort as string || '';
 
   state.news = [];
   
@@ -110,6 +113,7 @@ function init(to: RouteLocationNormalized) {
     data: {
       query: state.word,
       page: state.page,
+      sort: !!state.sort,
       include: tags
         .filter(value => value.type === 'include')
         .map(tag => tag.value),
