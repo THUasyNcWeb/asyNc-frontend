@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 01:45
+ * @LastEditTime: 2022-11-23 13:25
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -11,7 +11,7 @@
       <router-link to="/">
         <n-gradient-text type="success" size="24"> asyNc </n-gradient-text>
       </router-link>
-      <search-box :text="state.word" style="width: 40vw" />
+      <search-box :text="state.word" :sort="state.sort" style="width: 40vw" />
     </n-space>
 
     <n-space justify="end">
@@ -377,6 +377,7 @@ const message = useMessage();
 
 const state = reactive({
   word: router.currentRoute.value.query.q as string ?? '',
+  sort: router.currentRoute.value.query.sort as string ?? '',
   history: {
     loading: false,
     news: [],

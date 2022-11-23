@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 11:15
+ * @LastEditTime: 2022-11-23 13:25
 -->
 
 <template>
@@ -65,10 +65,11 @@ import API from '@/store/axiosInstance';
 // Props & data
 const props = defineProps({
   text: String,
+  sort: String,
 });
 
 const text = ref(props.text ?? '');
-const sort = ref('');
+const sort = ref(props.sort ?? '');
 
 // Tag input
 const tagInputRef = ref<InputInst | null>(null);
@@ -138,6 +139,10 @@ const tagMenuOptions = [
       return h(NCheckbox, {
         label: '时间优先',
         style: 'padding: 6px 10px;',
+        checked: sort.value,
+        checkedValue: 'time',
+        uncheckedValue: null,
+        'onUpdate:checked': value => sort.value = value,
       });
     },
   }
@@ -234,7 +239,11 @@ function search() {
   // Change current route slightly
   // to force update the router view
   router.currentRoute.value.hash = '0';
-  router.push(`/search?q=${text.value}?sort=${sort.value}`);
+  let path = `/search?q=${text.value}`;
+  if (sort.value) {
+    path += `&sort=${sort.value}`;
+  }
+  router.push(path);
 
   // Update suggestion timestamp
   // to stop receiving suggestion
