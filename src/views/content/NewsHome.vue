@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-07 00:00
+ * @LastEditTime: 2022-11-23 18:55
  -->
 
 <script setup lang="ts">
@@ -14,9 +14,6 @@ import NewsCategory from "@/components/NewsCategory.vue";
 import SelectMore from "@/components/SelectMore.vue";
 import { NTabs, NTabPane, NSpin, NIcon, NH2, NResult, NButton } from "naive-ui";
 import { FastFoodOutline } from "@vicons/ionicons5";
-import { format } from "date-fns";
-// 按需引入naive-ui组件
-// 之后可能会把上述引入集中在一个固定的ts文件中
 
 export interface All_News {
   id: number;
@@ -109,14 +106,15 @@ function get_personalize(index: number) {
   })
     .then((res) => {
       state.loading = false;
-      if (res.data.news.length > num) {
-        res.data.news = res.data.news.slice(0, num);
+      if (res.data.data.news.length > num) {
+        res.data.data.news = res.data.data.news.slice(0, num);
       }
       for (const entry of res.data.data.news) {
         // Construct Date object
         state.all_news.push({
           ...entry,
-          pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+          pub_time: new Date(entry.pub_time),
+          is_favorites: entry.is_favorite,
         });
       }
     })
