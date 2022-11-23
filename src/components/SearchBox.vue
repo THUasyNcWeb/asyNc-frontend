@@ -3,11 +3,12 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 13:25
+ * @LastEditTime: 2022-11-23 17:44
 -->
 
 <template>
   <n-auto-complete
+    ref="autoCompleteRef"
     clearable
     size="large"
     placeholder="搜索"
@@ -54,7 +55,7 @@ import { computed, defineProps, h, inject, nextTick, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
 import { InputInst, NAutoComplete, NButton, NCheckbox, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
-import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
+import { AutoCompleteInst, AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
 import { Search, AddCircleOutline, RemoveCircleOutline } from '@vicons/ionicons5/';
 
@@ -70,6 +71,9 @@ const props = defineProps({
 
 const text = ref(props.text ?? '');
 const sort = ref(props.sort ?? '');
+
+// Auto complete input
+const autoCompleteRef = ref<AutoCompleteInst | null>(null);
 
 // Tag input
 const tagInputRef = ref<InputInst | null>(null);
@@ -101,6 +105,9 @@ function tagInputSubmit() {
   });
   tagInputVisible.value = false;
   tagInputValue.value = '';
+
+  // Focus to auto complete
+  autoCompleteRef.value.focus();
 }
 
 // Tags
