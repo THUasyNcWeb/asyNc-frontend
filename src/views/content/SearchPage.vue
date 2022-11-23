@@ -11,7 +11,7 @@
       <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
       <template v-else>
         <n-text depth="3">
-          找到 {{getNewsCount}} 条结果 (用时 {{getTiming}} 秒)
+          找到 {{state.total}} 条结果 (用时 {{getTiming}} 秒)
         </n-text>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
@@ -58,7 +58,7 @@ const state = reactive({
   sort: '',
 
   loading: true,
-
+  total: 0,
   news: [],
   page_count: 0,
   timing: 0,
@@ -81,15 +81,6 @@ const message = useMessage();
 function error() {
   message.error('搜索时出现错误😢');
 }
-
-// Calculate news count
-const getNewsCount = computed(() => {
-  if (state.page_count <= 1) {
-    return state.news.length;
-  } else {
-    return state.page_count * 10 + '+';
-  }
-});
 
 // Calculate time elapsed
 const getTiming = computed(() => {
@@ -147,8 +138,8 @@ function init(to: RouteLocationNormalized) {
     },
   }).then(response => {
     state.loading = false;
-
     let data = response.data.data;
+    state.total = data.total
     state.page_count = data.page_count;
     for (const entry of data.news) {
       // Construct Date object
