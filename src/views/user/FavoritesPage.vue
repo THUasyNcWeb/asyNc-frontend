@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-16 20:59
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 01:46
+ * @LastEditTime: 2022-11-23 10:27
 -->
 <template>
   <n-space vertical>
@@ -102,7 +102,6 @@ function handleRemove(id: number) {
   }).then(response => {
     if (response.status === 200) {
       message.success(`移除历史记录成功`);
-      emits('update', 'history');
       handleUpdate('history');
     } else {
       message.error(`移除历史记录失败`);
@@ -114,6 +113,7 @@ function handleRemove(id: number) {
 
 // Refresh the page when favorites are updated
 function handleUpdate(type: 'favorites' | 'readlater' | 'history') {
+  emits('update');
   if (type === props.path) {
     init(router.currentRoute.value);
   }

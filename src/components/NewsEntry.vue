@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 21:23
+ * @LastEditTime: 2022-11-23 10:27
 -->
 
 <template>
@@ -98,6 +98,8 @@ const state = reactive({
 
 const message = useMessage();
 
+const emits = defineEmits(['update']);
+
 // Add or remove this news to or from favorites or read later
 function favoritesClick(type: 'favorites' | 'readlater') {
   // Ask user to login first
@@ -125,6 +127,8 @@ function favoritesClick(type: 'favorites' | 'readlater') {
     if (response.status === 200) {
       message.success(`${action}${target}成功`);
       reloadNavigationBar();
+      emits('update', type);
+
     } else {
       state['is_' + type] = false;
       message.error(`${action}${target}失败`);
