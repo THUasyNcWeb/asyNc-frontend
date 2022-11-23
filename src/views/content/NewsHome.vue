@@ -240,7 +240,7 @@ function colChange(category: string, label: string) {
           v-if="!state.error"
           :show="state.loading"
           size="large"
-          style="top: 200px"
+          style="margin-top: 200px"
         >
           <NewsCategory
             v-if="state.loading == false"
