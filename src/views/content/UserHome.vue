@@ -197,18 +197,6 @@ const menuOptions = [
   {
     label: () =>
       h(RouterLink, {
-        innerHTML: "浏览历史",
-        to: {
-          path: "/user/history",
-        },
-      }),
-    key: "history",
-    path: "/user/history",
-    icon: renderIcon(HistoryIcon),
-  },
-  {
-    label: () =>
-      h(RouterLink, {
         innerHTML: "我的收藏",
         to: {
           path: "/user/favorites",
@@ -229,6 +217,18 @@ const menuOptions = [
     key: "readlater",
     path: "/user/readlater",
     icon: renderIcon(ReadlaterIcon),
+  },
+  {
+    label: () =>
+      h(RouterLink, {
+        innerHTML: "浏览历史",
+        to: {
+          path: "/user/history",
+        },
+      }),
+    key: "history",
+    path: "/user/history",
+    icon: renderIcon(HistoryIcon),
   },
   {
     label: () =>
