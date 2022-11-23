@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 14:24
+ * @LastEditTime: 2022-11-23 16:59
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -11,7 +11,7 @@
       <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
       <template v-else>
         <n-text depth="3">
-          找到 {{getNewsCount}} 条结果
+          找到 {{getNewsCount}} 条结果 (用时 {{getTiming}} 秒)
         </n-text>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
@@ -47,7 +47,7 @@ import NewsEntry from '@/components/NewsEntry.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-import '@/mock/SearchPage.mock';
+// import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
 
 const state = reactive({
@@ -61,6 +61,7 @@ const state = reactive({
 
   news: [],
   page_count: 0,
+  timing: 0,
 })
 
 // Reference to the layout content, for scrolling
@@ -90,6 +91,13 @@ const getNewsCount = computed(() => {
   }
 });
 
+// Calculate time elapsed
+const getTiming = computed(() => {
+  // Timing uses millisecond as unit, so / 1000 to
+  // convert it to seconds
+  return (state.timing / 1000).toFixed(2);
+})
+
 // Jump to specified page
 function jump(page: number) {
   let path = `search?q=${state.word}&page=${page}`;
@@ -115,6 +123,9 @@ function init(to: RouteLocationNormalized) {
 
   // Scroll to top
   contentRef.value?.scrollTo({ top: 0 });
+
+  // For timing
+  const start_time = performance.now();
 
   // Fetch news and page count
   API({
@@ -147,6 +158,8 @@ function init(to: RouteLocationNormalized) {
         is_favorites: entry.is_favorite
       });
     }
+
+    state.timing = performance.now() - start_time;
   }).catch(() => {
     error();
   });
