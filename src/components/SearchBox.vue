@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 18:02
+ * @LastEditTime: 2022-11-23 18:09
 -->
 
 <template>
@@ -245,8 +245,6 @@ function suggestionSelect(keyword: string) {
 
 // Routing
 const router = useRouter();
-
-sort.value = router.currentRoute.value.query.sort as string;
 
 // Update keywords when route updates, e.g. routing back and forth
 onBeforeRouteUpdate(to => {
