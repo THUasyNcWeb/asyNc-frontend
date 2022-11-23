@@ -3,12 +3,12 @@
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 01:39
+ * @LastEditTime: 2022-11-23 19:23
  -->
 
 <template>
-  <n-spin :show="state.empty" size="large" style="margin-top: 20%">
-    <div v-if="!state.empty" class="main_card">
+  <n-spin :show="state.empty" size="large">
+    <div v-if="!state.empty">
       <n-layout style="width: 100%; height: 100%; border-radius: 10px">
         <n-layout has-sider>
           <n-layout-sider bordered :width="250">
@@ -36,13 +36,12 @@
           <!-- 侧边导航栏，包括详细信息与修改密码 -->
           <n-layout-content
             ref="usersContentRef"
-            content-style="padding: 24px; height: calc(85vh - 74px)"
-            style="margin-top: 2%"
+            content-style="padding: 24px 24px; height: calc(100vh - 74px)"
           >
             <router-view
               :key="state.random"
               @update="$emit('update')"
-            ></router-view>
+            />
             <!-- 中心部分按照当前路由进行显示 -->
           </n-layout-content>
         </n-layout>
@@ -320,14 +319,3 @@ function update_menu(new_key: string) {
   }
 }
 </script>
-
-<style scoped>
-.main_card {
-  width: 60%;
-  margin: auto;
-  margin-top: 3%;
-  margin-bottom: 3%;
-  border-radius: 10px;
-  margin-top: -20%;
-}
-</style>
