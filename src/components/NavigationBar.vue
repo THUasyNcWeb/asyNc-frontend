@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 13:25
+ * @LastEditTime: 2022-11-23 19:43
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -25,14 +25,14 @@
       >
         <template #trigger>
           <n-image
-            style="border-radius: 50%; vertical-align: middle"
+            style="border-radius: 50%; vertical-align: middle; cursor: pointer"
             width="40"
             height="40"
             object-fit="cover"
             :src="userRef.avatar"
             preview-disabled
             :fallback-src="default_logo"
-            @click="handleToUserHome"
+            @click="handleJump('/user/userInformation')"
           />
         </template>
         <template #header>
@@ -53,6 +53,7 @@
             :underline="true"
             :depth="2"
             type="success"
+            @click="handleJump('/user/userInformation')"
             style="
               vertical-align: -10%;
               margin-left: 6px;
@@ -60,7 +61,6 @@
               padding-bottom: 5px;
               font-size: large;
             "
-            @click="handleToUserHome"
           >
             {{ userRef.user_name }}
           </n-text>
@@ -71,7 +71,7 @@
             type="primary"
             size="medium"
             style="margin: 2px; width: 172px"
-            @click="handleToUserHome"
+            @click="handleJump('/user/userInformation')"
           >
             <template #icon>
               <n-icon :size="20">
@@ -215,7 +215,8 @@
           <n-icon
             :size="25"
             color="#0e7a0d"
-            style="margin-left: 25px; margin-top: 8px"
+            style="margin-left: 25px; margin-top: 8px; cursor: pointer"
+            @click="handleJump('/user/favorites')"
           >
             <StarLineHorizontal316Regular />
           </n-icon>
@@ -241,7 +242,12 @@
 
       <n-popover trigger="hover" placement="bottom" :show-arrow="false" style="border-radius: 5px;">
         <template #trigger>
-          <n-icon :size="25" color="#0e7a0d" style="margin-left: 25px; margin-top: 8px;">
+          <n-icon
+            :size="25"
+            color="#0e7a0d"
+            style="margin-left: 25px; margin-top: 8px; cursor: pointer"
+            @click="handleJump('/user/readlater')"
+          >
             <bookmark-icon />
           </n-icon>
         </template>
@@ -265,7 +271,8 @@
           <n-icon
             :size="25"
             color="#0e7a0d"
-            style="margin-left: 25px; margin-top: 8px"
+            style="margin-left: 25px; margin-top: 8px; cursor: pointer"
+            @click="handleJump('/user/history')"
           >
             <History20Regular />
           </n-icon>
@@ -300,7 +307,8 @@
           <n-icon
             :size="25"
             color="#0e7a0d"
-            style="margin-left: 25px; margin-top: 8px"
+            style="margin-left: 25px; margin-top: 8px; cursor: pointer"
+            @click="handleLogout"
           >
             <SignOut20Regular />
           </n-icon>
@@ -417,8 +425,13 @@ if (decodeToken()) {
   });
 }
 
-function handleToUserHome() {
-  router.push("/user/userInformation");
+function handleJump(path: string) {
+  // Not logged in
+  if (!userRef.value.user_name && path.startsWith('/user')) {
+    message.warning('请先登录或注册🙂️');
+    return;
+  }
+  router.push(path);
 }
 
 function handleLogout() {
