@@ -93,6 +93,14 @@ const tagInputPlaceholder = computed(() => {
 
 // Clear input value when tag input blurs
 function tagInputBlur() {
+  // Submit if user has already input something
+  // Note that we don't focus to auto complete here
+  if (tagInputValue.value) {
+    tags.push({
+      type: tagInputType.value,
+      value: tagInputValue.value,
+    });
+  }
   tagInputVisible.value = false;
   tagInputValue.value = '';
 }
