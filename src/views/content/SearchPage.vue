@@ -3,13 +3,16 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 13:55
+ * @LastEditTime: 2022-11-23 14:24
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
     <template v-if="!state.loading">
       <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
       <template v-else>
+        <n-text depth="3">
+          找到 {{getNewsCount}} 条结果
+        </n-text>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
             <news-entry :news="entry" />
@@ -27,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, reactive } from 'vue';
+import { computed, inject, reactive } from 'vue';
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import {
   NEmpty,
@@ -36,6 +39,7 @@ import {
   NPagination,
   NSkeleton,
   NSpace,
+  NText,
   useMessage,
 } from 'naive-ui';
 
@@ -43,7 +47,7 @@ import NewsEntry from '@/components/NewsEntry.vue'
 import router from '@/router';
 import API from '@/store/axiosInstance';
 
-// import '@/mock/SearchPage.mock';
+import '@/mock/SearchPage.mock';
 import { Tag } from '../MainSurface.vue';
 
 const state = reactive({
@@ -76,6 +80,15 @@ const message = useMessage();
 function error() {
   message.error('搜索时出现错误😢');
 }
+
+// Calculate news count
+const getNewsCount = computed(() => {
+  if (state.page_count <= 1) {
+    return state.news.length;
+  } else {
+    return state.page_count * 10 + '+';
+  }
+});
 
 // Jump to specified page
 function jump(page: number) {
