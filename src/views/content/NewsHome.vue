@@ -165,7 +165,7 @@ function get_news(category: string) {
         // Construct Date object
         state.all_news.push({
           ...entry,
-          pub_time: format(new Date(entry.pub_time), "yyyy-MM-dd HH:mm:ss"),
+          pub_time: new Date(entry.pub_time),
         });
       }
     })

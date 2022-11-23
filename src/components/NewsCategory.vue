@@ -61,54 +61,8 @@
       </n-grid>
 
       <n-list hoverable clickable>
-        <n-list-item v-for="(item, id) in state.show_news.slice(0, 180)" :key="id">
-          <n-space justify="space-between" stlye="display:inline-block">
-            <n-space vertical justify="space-between" :style="{
-              'max-width': item.picture_url ? '800px' : '1100px',
-              'min-height': '140px',
-            }">
-              <n-h2 stlye="width:200%" prefix="bar">
-                <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
-                  <n-ellipsis :line-clamp="2" :tooltip="false">
-                    <n-text type="primary">
-                      {{ item.title }}
-                    </n-text>
-                  </n-ellipsis>
-                </n-a>
-              </n-h2>
-              <n-space :size="30">
-                <n-space :size="5">
-                  <n-icon size="20">
-                    <people-circle-outline />
-                  </n-icon>
-                  <n-text type="info" size="20">
-                    {{ item.media }}
-                  </n-text>
-                </n-space>
-                <n-space :size="5">
-                  <n-icon size="20" style="margin-left: 5%">
-                    <calendar-number-outline />
-                  </n-icon>
-                  <n-text size="20">
-                    {{ item.pub_time }}
-                  </n-text>
-                </n-space>
-                <n-space :size="5">
-                  <n-icon @click="favorites" size="20">
-                    <star-outline />
-                  </n-icon>
-                  <n-text @click="favorites" size="20"> 收藏 </n-text>
-                </n-space>
-              </n-space>
-            </n-space>
-            <n-a :href="item.url" @click="newsClick(item.id)" style="text-decoration: none">
-              <n-image v-if="item.picture_url" width="160" height="140" object-fit="cover" :src="item.picture_url"
-                preview-disabled style="
-                  border-radius: 8px;
-                  box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.16);
-                " />
-            </n-a>
-          </n-space>
+        <n-list-item v-for="(entry, id) in state.show_news.slice(0, 180)" :key="id">
+          <news-entry :news="entry" />
         </n-list-item>
       </n-list>
     </template>
@@ -118,9 +72,6 @@
 <script setup lang="ts">
 import { defineProps, reactive, watch } from "vue";
 import {
-  PeopleCircleOutline,
-  CalendarNumberOutline,
-  StarOutline,
   ArrowBack,
   ArrowForward,
   Bonfire,
@@ -128,7 +79,6 @@ import {
 
 import {
   NA,
-  NH2,
   NIcon,
   NText,
   NSpace,
@@ -145,6 +95,8 @@ import {
 } from "naive-ui";
 
 import { newsClick } from "@/main";
+import { News } from "./NewsEntry.vue";
+import NewsEntry from './NewsEntry.vue';
 
 export interface All_News {
   id: number;
@@ -153,6 +105,8 @@ export interface All_News {
   media: string;
   pub_time: Date;
   picture_url?: string;
+  is_favorite?: boolean,
+  is_readlater?: boolean,
 }
 
 const props = defineProps<{
@@ -166,7 +120,7 @@ const state = reactive({
   img_width: window.innerWidth * 0.4,
   picture_news: new Array<All_News>(),
   // 用于走马灯
-  show_news: new Array<All_News>(),
+  show_news: new Array<News>(),
   // 用于正常新闻栏目展示
 });
 
@@ -175,9 +129,6 @@ window.onresize = () => {
   state.img_width = window.innerWidth * 0.4;
 };
 
-function favorites() {
-  alert("我先占个位置，代表收藏了");
-}
 const default_logo = require("@/assets/asyNc.png");
 
 function choose_pictures() {
@@ -187,7 +138,14 @@ function choose_pictures() {
     if (element.picture_url != "" && state.picture_news.length < 10) {
       state.picture_news.push(element);
     } else {
-      state.show_news.push(element);
+      state.show_news.push({
+        ...element,
+        content: '',
+        title_keywords: [],
+        keywords: [],
+        is_favorites: element.is_favorite ?? false,
+        is_readlater: element.is_readlater ?? false,
+      });
     }
   }
   // 防止图片过少

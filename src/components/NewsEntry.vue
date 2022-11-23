@@ -3,11 +3,11 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:05
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 10:27
+ * @LastEditTime: 2022-11-23 17:02
 -->
 
 <template>
-  <n-a :href="news.url" style="text-decoration: none;" @click="newsClick(news.id)">
+  <n-a :href="news.url" target="_blank" style="text-decoration: none;" @click="newsClick(news.id)">
     <n-thing>
       <n-h2 align-text prefix="bar">
         <span v-for="span, id in titleSpans" :key="id" :class="{ em: span.em }">
