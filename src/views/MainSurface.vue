@@ -12,7 +12,10 @@
       <Navigation :key="reloader.timestamp" style="padding: 18px 96px" />
     </n-layout-header>
     <n-layout-content ref="contentRef" style="top: 74px" position="absolute">
-      <router-view @reload="reloadNavigationBar" @update="reloadNavigationBar"></router-view>
+      <router-view
+        @reload="reloadNavigationBar"
+        @update="reloadNavigationBar"
+      ></router-view>
     </n-layout-content>
   </n-layout>
 </template>
@@ -32,11 +35,16 @@ export interface Tag {
   value: string;
 }
 
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
 export interface UserInfo {
   id: string;
   user_name: string;
   signature: string;
-  tags: object[];
+  tags: UserTag[];
   mail: string;
   avatar: string;
 }
@@ -57,10 +65,21 @@ async function getUser() {
       .then((res) => {
         console.log(res);
         userRef.value = res.data.data;
-        userRef.value.tags = userRef.value.tags.slice(0, 50);
+        let use_tag: UserTag[] = [];
+        console.log(userRef.value.tags);
+        for (var x = 0; x < userRef.value.tags.length; x++) {
+          let now_tag = userRef.value.tags[x]["key"].trim();
+          if (now_tag.length != 0) {
+            use_tag.push({ key: now_tag, value: userRef.value.tags[x].value });
+          }
+        }
         // 截取前50个tags
-
-        console.log(res);
+        userRef.value.tags = use_tag;
+        // 去除空格
+        if (userRef.value.tags.length > 50) {
+          userRef.value.tags = userRef.value.tags.slice(0, 50);
+        }
+        console.log(userRef.value.tags);
       })
       .catch((error) => {
         console.log(error);

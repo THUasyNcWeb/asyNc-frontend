@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { reactive, h, ref, inject, watch } from "vue";
-// import "@/mock/SearchPage.mock";
+// import "@/mock/Personalize.mock";
 import API from "../../store/axiosInstance";
 import NewsCategory from "@/components/NewsCategory.vue";
 import SelectMore from "@/components/SelectMore.vue";
@@ -80,36 +80,26 @@ watch(userRef, () => {
   }
 });
 
-function get_personalize(index: number) {
-  if (userRef.value.tags.length <= index) {
-    return;
+async function get_personalize() {
+  let tag_num = 3;
+  if (tag_num > userRef.value.tags.length) {
+    tag_num = userRef.value.tags.length;
   }
-  let tag = userRef.value.tags[index];
-  let num = 100;
-  if (index == 1) {
-    num = 60;
-  } else if (index > 1) {
-    num = 40;
+  let query = "";
+  for (var x = 0; x < tag_num; x++) {
+    query = query + userRef.value.tags[x].key;
   }
+  console.log(tag_num);
   API({
-    headers: {
-      Authorization: window.localStorage.getItem("token"),
-    },
-    url: "search",
-    method: "post",
+    url: "personalize",
+    method: "get",
     data: {
-      query: tag.key,
-      page: 1,
-      include: [],
-      exclude: [],
+      query: query,
     },
   })
     .then((res) => {
       state.loading = false;
-      if (res.data.data.news.length > num) {
-        res.data.data.news = res.data.data.news.slice(0, num);
-      }
-      for (const entry of res.data.data.news) {
+      for (const entry of res.data.data) {
         // Construct Date object
         state.all_news.push({
           ...entry,
@@ -136,42 +126,40 @@ function get_news(category: string) {
     if (userRef.value.user_name != "") {
       state.empty_content = "你还没有在这里留下足迹，去尽情探索吧。";
       // 当登录状态有效，获取tags对应的新闻
-      get_personalize(0);
-      get_personalize(1);
-      get_personalize(2);
+      get_personalize();
     } else {
       // 不属于报错，需要提醒要登录
       state.empty_content = "登录以畅享独特的个人推荐";
       state.loading = false;
       state.error = false;
     }
-    return;
-  }
-
-  API({
-    headers: { Authorization: window.localStorage.getItem("token") },
-    url: "allnews",
-    params: {
-      category: category,
-    },
-    method: "get",
-    // 根据不同类别，把类别放在了对应的请求参数中
-  })
-    .then((res) => {
-      state.loading = false;
-      for (const entry of res.data.data) {
-        // Construct Date object
-        state.all_news.push({
-          ...entry,
-          pub_time: new Date(entry.pub_time),
-        });
-      }
+  } else {
+    API({
+      headers: { Authorization: window.localStorage.getItem("token") },
+      url: "allnews",
+      params: {
+        category: category,
+      },
+      method: "get",
+      // 根据不同类别，把类别放在了对应的请求参数中
     })
-    .catch((error) => {
-      console.log(error);
-      state.loading = false;
-      state.error = true;
-    });
+      .then((res) => {
+        state.loading = false;
+        for (const entry of res.data.data) {
+          // Construct Date object
+          state.all_news.push({
+            ...entry,
+            pub_time: new Date(entry.pub_time),
+            is_favorites: entry.is_favorite,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        state.loading = false;
+        state.error = true;
+      });
+  }
 }
 
 function main_news(content: string) {
