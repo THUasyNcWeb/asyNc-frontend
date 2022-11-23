@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 18:09
+ * @LastEditTime: 2022-11-24 01:51
 -->
 
 <template>
@@ -260,11 +260,14 @@ function search() {
   // Change current route slightly
   // to force update the router view
   router.currentRoute.value.hash = '0';
-  let path = `/search?q=${text.value}`;
-  if (sort.value) {
-    path += `&sort=${sort.value}`;
-  }
-  router.push(path);
+
+  router.push({
+    path:'/search',
+    query: {
+      q: text.value,
+      sort: sort.value || undefined,
+    },
+  });
 
   // Update suggestion timestamp
   // to stop receiving suggestion

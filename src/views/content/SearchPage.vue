@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 16:59
+ * @LastEditTime: 2022-11-24 01:54
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -91,11 +91,14 @@ const getTiming = computed(() => {
 
 // Jump to specified page
 function jump(page: number) {
-  let path = `search?q=${state.word}&page=${page}`;
-  if (state.sort) {
-    path += `&sort=${state.sort}`;
-  }
-  router.push(path);
+  router.push({
+    path:'/search',
+    query: {
+      q: state.word,
+      page,
+      sort: state.sort || undefined,
+    },
+  });
 }
 
 function init(to: RouteLocationNormalized) {
