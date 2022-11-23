@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-03 01:10
+ * @LastEditTime: 2022-11-23 11:15
 -->
 
 <template>
@@ -40,7 +40,7 @@
       </n-space>
     </template>
     <template #suffix>
-      <n-dropdown :options="tagMenuOptions" @select="tagMenuSelect">
+      <n-dropdown class="search-box-dropdown" :options="tagMenuOptions" @select="tagMenuSelect">
         <n-button large circle quaternary type="primary" @click="search">
           <n-icon size="large" :component="Search" />
         </n-button>
@@ -53,10 +53,10 @@
 import { computed, defineProps, h, inject, nextTick, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { InputInst, NAutoComplete, NButton, NCheckbox, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
 import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
-import { Search, AddCircle, RemoveCircle } from '@vicons/ionicons5/';
+import { Search, AddCircleOutline, RemoveCircleOutline } from '@vicons/ionicons5/';
 
 import { Tag, TagType } from '@/views/MainSurface.vue';
 
@@ -68,6 +68,7 @@ const props = defineProps({
 });
 
 const text = ref(props.text ?? '');
+const sort = ref('');
 
 // Tag input
 const tagInputRef = ref<InputInst | null>(null);
@@ -123,13 +124,23 @@ const tagMenuOptions = [
   {
     label: '添加必含词',
     key: 'include',
-    icon: renderIcon(AddCircle),
+    icon: renderIcon(AddCircleOutline),
   },
   {
     label: '添加排除词',
     key: 'exclude',
-    icon: renderIcon(RemoveCircle),
+    icon: renderIcon(RemoveCircleOutline),
   },
+  {
+    type: 'render',
+    key: 'sort',
+    render: () => {
+      return h(NCheckbox, {
+        label: '时间优先',
+        style: 'padding: 6px 10px;',
+      });
+    },
+  }
 ]
 
 // Render function for icons
@@ -207,11 +218,14 @@ function suggestionSelect(keyword: string) {
 // Routing
 const router = useRouter();
 
+sort.value = router.currentRoute.value.query.sort as string;
+
 // Update keywords when route updates, e.g. routing back and forth
 onBeforeRouteUpdate(to => {
   // Update only when the query keyword is specified in the query parameters
   if (to.query.q) {
     text.value = to.query.q as string;
+    sort.value = to.query.sort as string;
   }
 });
 
@@ -220,10 +234,16 @@ function search() {
   // Change current route slightly
   // to force update the router view
   router.currentRoute.value.hash = '0';
-  router.push(`/search?q=${text.value}`);
+  router.push(`/search?q=${text.value}?sort=${sort.value}`);
 
   // Update suggestion timestamp
   // to stop receiving suggestion
   suggestionTimestamp++;
 }
 </script>
+
+<style>
+.search-box-dropdown .n-checkbox-box-wrapper {
+  margin-right: 2px;
+}
+</style>
