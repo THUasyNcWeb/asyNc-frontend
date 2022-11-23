@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 17:52
+ * @LastEditTime: 2022-11-23 18:02
 -->
 
 <template>
@@ -225,6 +225,10 @@ function suggestionUpdate() {
     });
 
     suggestion_list.forEach(value => {
+      // Avoid redundancy
+      if (value === text.value) {
+        return;
+      }
       suggestions.push({
         label: value,
         value,
