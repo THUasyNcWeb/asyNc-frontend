@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { inject, reactive, defineEmits, defineProps } from 'vue';
-import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
+import { RouteLocationNormalized } from 'vue-router';
 import {
   NButton,
   NEmpty,

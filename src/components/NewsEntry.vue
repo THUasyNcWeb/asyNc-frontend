@@ -58,7 +58,7 @@
 </template>
   
 <script setup lang="ts">
-import { computed, defineProps, reactive } from 'vue';
+import { computed, defineEmits, defineProps, reactive } from 'vue';
 import { NA, NButton, NEllipsis, NH2, NIcon, NImage, NSpace, NText, NThing, useMessage } from 'naive-ui';
 
 import {
