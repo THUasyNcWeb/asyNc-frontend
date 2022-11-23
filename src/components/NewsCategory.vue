@@ -1,9 +1,19 @@
 <template>
   <n-space vertical>
-    <n-result v-if="!props.news.length" status="404" title="404 资源不存在" :description="props.empty_content">
+    <n-result
+      v-if="!props.news.length"
+      status="404"
+      title="404 资源不存在"
+      :description="props.empty_content"
+    >
     </n-result>
     <template v-else>
-      <n-grid :item-responsive="true" :x-gap="16" :y-gap="16" style="margin-left: 20px">
+      <n-grid
+        :item-responsive="true"
+        :x-gap="16"
+        :y-gap="16"
+        style="margin-left: 20px"
+      >
         <n-grid-item span="0:24 640:14 1024:14">
           <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
             <template #arrow="{ prev, next }">
@@ -20,11 +30,23 @@
                 </button>
               </div>
             </template>
-            <n-carousel-item v-for="(news, pic_index) in state.picture_news" :key="pic_index">
+            <n-carousel-item
+              v-for="(news, pic_index) in state.picture_news"
+              :key="pic_index"
+            >
               <div class="pic_item">
-                <n-a :href="news.url" target="_blank" @click="newsClick(news.id)">
-                  <n-image :width="state.img_width" object-fit="cover" :src="news.picture_url" preview-disabled
-                    :fallback-src="default_logo" />
+                <n-a
+                  :href="news.url"
+                  target="_blank"
+                  @click="newsClick(news.id)"
+                >
+                  <n-image
+                    :width="state.img_width"
+                    object-fit="cover"
+                    :src="news.picture_url"
+                    preview-disabled
+                    :fallback-src="default_logo"
+                  />
                 </n-a>
                 <h2>
                   <n-ellipsis :tooltip="false" :line-clamp="1">
@@ -40,13 +62,21 @@
             <n-scrollbar style="max-height: 340px" trigger="none">
               <n-list bordered>
                 <template #header>
-                  <n-icon :size="20" color="#0e7a0d" style="vertical-align: -20%; margin-right: 5px">
+                  <n-icon
+                    :size="20"
+                    color="#0e7a0d"
+                    style="vertical-align: -20%; margin-right: 5px"
+                  >
                     <Bonfire />
                   </n-icon>
                   <n-text style="font-size: larger"> Hot News </n-text>
                 </template>
-                <n-list-item v-for="(item, id) in state.show_news.slice(180, 190)" :key="id">
-                  <n-a :href="item.url" target="_blank" @click="newsClick(item.id)">
+                <n-list-item v-for="(item, id) in state.side_news" :key="id">
+                  <n-a
+                    :href="item.url"
+                    target="_blank"
+                    @click="newsClick(item.id)"
+                  >
                     <n-ellipsis :line-clamp="1" :tooltip="false">
                       <n-text type="primary">
                         {{ item.title }}
@@ -61,7 +91,7 @@
       </n-grid>
 
       <n-list hoverable clickable>
-        <n-list-item v-for="(entry, id) in state.show_news.slice(0, 180)" :key="id">
+        <n-list-item v-for="(entry, id) in state.show_news" :key="id">
           <news-entry :news="entry" />
         </n-list-item>
       </n-list>
@@ -71,11 +101,7 @@
 
 <script setup lang="ts">
 import { defineProps, reactive, watch } from "vue";
-import {
-  ArrowBack,
-  ArrowForward,
-  Bonfire,
-} from "@vicons/ionicons5";
+import { ArrowBack, ArrowForward, Bonfire } from "@vicons/ionicons5";
 
 import {
   NA,
@@ -96,7 +122,7 @@ import {
 
 import { newsClick } from "@/main";
 import { News } from "./NewsEntry.vue";
-import NewsEntry from './NewsEntry.vue';
+import NewsEntry from "./NewsEntry.vue";
 
 export interface All_News {
   id: number;
@@ -105,8 +131,8 @@ export interface All_News {
   media: string;
   pub_time: Date;
   picture_url?: string;
-  is_favorite?: boolean,
-  is_readlater?: boolean,
+  is_favorite?: boolean;
+  is_readlater?: boolean;
 }
 
 const props = defineProps<{
@@ -122,6 +148,7 @@ const state = reactive({
   // 用于走马灯
   show_news: new Array<News>(),
   // 用于正常新闻栏目展示
+  side_news: new Array<News>(),
 });
 
 // change the offset dynamically
@@ -140,7 +167,7 @@ function choose_pictures() {
     } else {
       state.show_news.push({
         ...element,
-        content: '',
+        content: "",
         title_keywords: [],
         keywords: [],
         is_favorites: element.is_favorite ?? false,
@@ -154,9 +181,21 @@ function choose_pictures() {
     state.show_news.length > state.picture_news.length
   ) {
     state.picture_news.push(state.show_news[state.show_news.length - 1]);
-    // state.show_news = state.show_news.slice(state.show_news.length - 1, 1);
     state.show_news.pop();
   }
+  while (
+    state.side_news.length < 10 &&
+    state.show_news.length > state.side_news.length
+  ) {
+    state.side_news.push(state.show_news[state.show_news.length - 1]);
+    state.show_news.pop();
+  }
+  console.log("主页");
+  console.log(state.show_news);
+  console.log("边界");
+  console.log(state.side_news);
+  console.log("图片");
+  console.log(state.picture_news);
 }
 
 choose_pictures();
@@ -214,8 +253,10 @@ watch(
   display: flex;
   inset: 0;
   height: 100%;
-  background-image: var(--mask-gradient,
-      linear-gradient(to top, #020e33, rgba(2, 14, 51, 0) 120px));
+  background-image: var(
+    --mask-gradient,
+    linear-gradient(to top, #020e33, rgba(2, 14, 51, 0) 120px)
+  );
   box-shadow: 5px 5px 5px 2px #dcdcdc;
   /*下边阴影  */
 }

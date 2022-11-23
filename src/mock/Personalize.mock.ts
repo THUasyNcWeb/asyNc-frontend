@@ -1,11 +1,6 @@
 import Mock from "better-mock";
-import { thTH } from "naive-ui";
-
-import config from "../../config/config.json";
 
 Mock.setup({ timeout: "200-400" });
-
-const URL = `${config.url}:${config.port}`;
 
 Mock.mock(/personalize/, "get", () => {
   const data = [];

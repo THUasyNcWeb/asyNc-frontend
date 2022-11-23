@@ -100,7 +100,6 @@ async function get_personalize() {
     .then((res) => {
       state.loading = false;
       for (const entry of res.data.data) {
-        // Construct Date object
         state.all_news.push({
           ...entry,
           pub_time: new Date(entry.pub_time),
