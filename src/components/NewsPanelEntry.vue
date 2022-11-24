@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-11-14 19:07
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-22 10:52
+ * @LastEditTime: 2022-11-24 14:09
 -->
 
 <template>
@@ -20,10 +20,12 @@
             <n-icon size="18">
               <time-icon />
             </n-icon>
-            {{visit_time.getMonth() + '-'
-              + visit_time.getDate() + ' '
-              + visit_time.getHours() + ':'
-              + visit_time.getMinutes()}}
+            {{visit_time.toLocaleString([], {
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}}
           </n-space>
           <n-space size="small">
             <n-icon size="18">
