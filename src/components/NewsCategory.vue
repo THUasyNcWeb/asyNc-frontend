@@ -12,10 +12,9 @@
         :item-responsive="true"
         :x-gap="16"
         :y-gap="16"
-        style="margin-left: 20px"
       >
         <n-grid-item span="0:24 640:14 1024:14">
-          <n-carousel class="carousel_size" autoplay dot-type="line" show-arrow>
+          <n-carousel class="carousel_size" style="width:95%" autoplay dot-type="line" show-arrow>
             <template #arrow="{ prev, next }">
               <div class="custom-arrow">
                 <button type="button" class="custom-arrow--left" @click="prev">
