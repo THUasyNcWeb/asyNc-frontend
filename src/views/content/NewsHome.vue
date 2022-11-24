@@ -92,14 +92,14 @@ async function get_personalize() {
   console.log(tag_num);
   API({
     url: "personalize",
-    method: "get",
+    method: "post",
     data: {
       query: query,
     },
   })
     .then((res) => {
       state.loading = false;
-      for (const entry of res.data.data) {
+      for (const entry of res.data.data.news) {
         state.all_news.push({
           ...entry,
           pub_time: new Date(entry.pub_time),
