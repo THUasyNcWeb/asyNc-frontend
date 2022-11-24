@@ -26,7 +26,10 @@ describe('NewsEntry.vue', () => {
 
     // Test date correctness
     const date = wrapper.findAll('.n-text')[1].text();
-    expect(news.pub_time.toLocaleDateString()).toMatch(date);
+    expect(news.pub_time.toLocaleString([], {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    })).toMatch(date);
   });
 
   test('test picture rendering', () => {
