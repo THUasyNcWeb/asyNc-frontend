@@ -3,14 +3,22 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 19:43
+ * @LastEditTime: 2022-11-24 13:54
 -->
 <template>
   <n-space align="center" justify="space-between">
     <n-space>
-      <router-link to="/">
-        <n-gradient-text type="success" size="24"> asyNc </n-gradient-text>
-      </router-link>
+      <n-popover style="width: 114px" trigger="hover" @update:show="handlePopoverShow">
+        <template #trigger>
+          <router-link to="/">
+            <n-gradient-text type="success" size="24"> asyNc </n-gradient-text>
+          </router-link>
+        </template>
+        <n-statistic label="新闻总量" tabular-nums>
+          <n-number-animation ref="numberAnimationRef" show-separator
+            :from="0" :to="1919810" />
+        </n-statistic>
+      </n-popover>
       <search-box :text="state.word" :sort="state.sort" style="width: 40vw" />
     </n-space>
 
@@ -334,10 +342,13 @@ import {
   NGradientText,
   NIcon,
   NImage,
+  NNumberAnimation,
   NPopover,
   NSpace,
   NSpin,
+  NStatistic,
   NText,
+  NumberAnimationInst,
   useDialog,
   useMessage,
 } from 'naive-ui';
@@ -375,6 +386,8 @@ export interface UserInfo {
 
 const userRef = ref<UserInfo>(inject("userRef"));
 
+const numberAnimationRef = ref<NumberAnimationInst | null>(null);
+
 const updateUserLocal: Function = inject("updateUserLocal");
 
 const default_logo = require("@/assets/asyNc.png");
@@ -384,6 +397,7 @@ const exitDialog = useDialog();
 const message = useMessage();
 
 const state = reactive({
+  news_count: 0,
   word: router.currentRoute.value.query.q as string ?? '',
   sort: router.currentRoute.value.query.sort as string ?? '',
   history: {
@@ -398,6 +412,17 @@ const state = reactive({
     loading: false,
     news: [],
   },
+});
+
+// Fetch news count
+API({
+  headers: {
+    Authorization: window.localStorage.getItem('token'),
+  },
+  url: 'newscount',
+  method: 'get',
+}).then(response => {
+  state.news_count = response.data.data;
 });
 
 // Fetch news if logged in
@@ -423,6 +448,13 @@ if (decodeToken()) {
       });
     })
   });
+}
+
+// Play animation
+function handlePopoverShow(show: boolean) {
+  if (show) {
+    numberAnimationRef.value?.play();
+  }
 }
 
 function handleJump(path: string) {
