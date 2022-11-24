@@ -249,7 +249,7 @@ const menuOptions = [
                 url: "logout",
                 method: "post",
               })
-                .then((res) => {
+                .then(() => {
                   window.localStorage.removeItem("token");
                   updateUserLocal({ user_name: "", tags: {} } as UserInfo);
                   router.push("/");
