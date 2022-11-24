@@ -120,6 +120,9 @@ const message = useMessage();
 
 let router = useRouter();
 
+const userRef = ref<UserInfo>(inject("userRef"));
+const updateUserLocal:Function = inject('updateUserLocal')
+
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
@@ -128,10 +131,12 @@ watch(
         const flag = decodeToken();
         if (flag == "") {
           message.error("请先登录或者注册😢");
+          updateUserLocal({ user_name: "", tags: [] } as UserInfo);
           router.push("/");
         }
       } else {
         message.error("请先登录或者注册😢");
+        updateUserLocal({ user_name: "", tags: [] } as UserInfo);
         router.push("/");
       }
     }
@@ -145,7 +150,6 @@ const state = reactive({
   empty: false,
 });
 
-const userRef = ref<UserInfo>(inject("userRef"));
 
 state.empty = userRef.value.user_name == "";
 
@@ -153,7 +157,6 @@ watch(userRef, () => {
   state.empty = userRef.value.user_name == "";
 });
 
-const updateUserLocal: Function = inject("updateUserLocal");
 
 // Provide content ref for scrolling in favorites page
 const usersContentRef = ref<LayoutInst | null>(null);
