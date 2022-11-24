@@ -3,20 +3,20 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-24 13:54
+ * @LastEditTime: 2022-11-24 14:25
 -->
 <template>
   <n-space align="center" justify="space-between">
     <n-space>
-      <n-popover style="width: 114px" trigger="hover" @update:show="handlePopoverShow">
+      <n-popover style="width: 114px" trigger="hover" :delay="500" @update:show="handlePopoverShow">
         <template #trigger>
           <router-link to="/">
             <n-gradient-text type="success" size="24"> asyNc </n-gradient-text>
           </router-link>
         </template>
         <n-statistic label="新闻总量" tabular-nums>
-          <n-number-animation ref="numberAnimationRef" show-separator
-            :from="0" :to="1919810" />
+          <n-number-animation ref="numberAnimationRef" show-separator :duration="4000"
+            :from="0" :to="state.news_count" />
         </n-statistic>
       </n-popover>
       <search-box :text="state.word" :sort="state.sort" style="width: 40vw" />
