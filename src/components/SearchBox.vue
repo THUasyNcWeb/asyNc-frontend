@@ -3,11 +3,12 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-03 01:10
+ * @LastEditTime: 2022-11-24 01:51
 -->
 
 <template>
   <n-auto-complete
+    ref="autoCompleteRef"
     clearable
     size="large"
     placeholder="搜索"
@@ -40,7 +41,7 @@
       </n-space>
     </template>
     <template #suffix>
-      <n-dropdown :options="tagMenuOptions" @select="tagMenuSelect">
+      <n-dropdown class="search-box-dropdown" :options="tagMenuOptions" @select="tagMenuSelect">
         <n-button large circle quaternary type="primary" @click="search">
           <n-icon size="large" :component="Search" />
         </n-button>
@@ -53,10 +54,10 @@
 import { computed, defineProps, h, inject, nextTick, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-import { InputInst, NAutoComplete, NButton, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
-import { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
+import { InputInst, NAutoComplete, NButton, NCheckbox, NDropdown, NIcon, NInput, NSpace, NTag } from 'naive-ui';
+import { AutoCompleteInst, AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface';
 
-import { Search, AddCircle, RemoveCircle } from '@vicons/ionicons5/';
+import { Search, AddCircleOutline, RemoveCircleOutline } from '@vicons/ionicons5/';
 
 import { Tag, TagType } from '@/views/MainSurface.vue';
 
@@ -65,9 +66,14 @@ import API from '@/store/axiosInstance';
 // Props & data
 const props = defineProps({
   text: String,
+  sort: String,
 });
 
 const text = ref(props.text ?? '');
+const sort = ref(props.sort ?? '');
+
+// Auto complete input
+const autoCompleteRef = ref<AutoCompleteInst | null>(null);
 
 // Tag input
 const tagInputRef = ref<InputInst | null>(null);
@@ -87,18 +93,33 @@ const tagInputPlaceholder = computed(() => {
 
 // Clear input value when tag input blurs
 function tagInputBlur() {
+  // Submit if user has already input something
+  // Note that we don't focus to auto complete here
+  if (tagInputValue.value) {
+    tags.push({
+      type: tagInputType.value,
+      value: tagInputValue.value,
+    });
+  }
   tagInputVisible.value = false;
   tagInputValue.value = '';
 }
 
 // Append a new tag
 function tagInputSubmit() {
-  tags.push({
-    type: tagInputType.value,
-    value: tagInputValue.value,
-  });
+  // Reject empty tag
+  if (tagInputValue.value) {
+    tags.push({
+      type: tagInputType.value,
+      value: tagInputValue.value,
+    });
+  }
+
   tagInputVisible.value = false;
   tagInputValue.value = '';
+
+  // Focus to auto complete
+  autoCompleteRef.value.focus();
 }
 
 // Tags
@@ -123,13 +144,27 @@ const tagMenuOptions = [
   {
     label: '添加必含词',
     key: 'include',
-    icon: renderIcon(AddCircle),
+    icon: renderIcon(AddCircleOutline),
   },
   {
     label: '添加排除词',
     key: 'exclude',
-    icon: renderIcon(RemoveCircle),
+    icon: renderIcon(RemoveCircleOutline),
   },
+  {
+    type: 'render',
+    key: 'sort',
+    render: () => {
+      return h(NCheckbox, {
+        label: '时间优先',
+        style: 'padding: 6px 10px;',
+        checked: sort.value,
+        checkedValue: 'time',
+        uncheckedValue: null,
+        'onUpdate:checked': value => sort.value = value,
+      });
+    },
+  }
 ]
 
 // Render function for icons
@@ -190,6 +225,10 @@ function suggestionUpdate() {
     });
 
     suggestion_list.forEach(value => {
+      // Avoid redundancy
+      if (value === text.value) {
+        return;
+      }
       suggestions.push({
         label: value,
         value,
@@ -212,6 +251,7 @@ onBeforeRouteUpdate(to => {
   // Update only when the query keyword is specified in the query parameters
   if (to.query.q) {
     text.value = to.query.q as string;
+    sort.value = to.query.sort as string;
   }
 });
 
@@ -220,10 +260,23 @@ function search() {
   // Change current route slightly
   // to force update the router view
   router.currentRoute.value.hash = '0';
-  router.push(`/search?q=${text.value}`);
+
+  router.push({
+    path:'/search',
+    query: {
+      q: text.value,
+      sort: sort.value || undefined,
+    },
+  });
 
   // Update suggestion timestamp
   // to stop receiving suggestion
   suggestionTimestamp++;
 }
 </script>
+
+<style>
+.search-box-dropdown .n-checkbox-box-wrapper {
+  margin-right: 2px;
+}
+</style>

@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils';
 import NewsEntry from '@/components/NewsEntry.vue';
+import { NMessageProvider } from 'naive-ui';
+import { h } from 'vue';
 
 describe('NewsEntry.vue', () => {
   test('test news entry rendering', () => {
@@ -12,8 +14,10 @@ describe('NewsEntry.vue', () => {
       title_keywords: [],
       keywords: [[1, 5]],
     };
-    const wrapper = mount(NewsEntry, {
-      props: { news }
+    const wrapper = mount(NMessageProvider, {
+      slots: {
+        default: h(NewsEntry, { news }),
+      }
     });
     expect(wrapper.find('h2').text()).toMatch(news.title);
     expect(wrapper.find('a').element.href).toMatch(news.url);
@@ -36,8 +40,10 @@ describe('NewsEntry.vue', () => {
       title_keywords: [],
       keywords: [[1, 5]],
     };
-    const wrapper = mount(NewsEntry, {
-      props: { news }
+    const wrapper = mount(NMessageProvider, {
+      slots: {
+        default: h(NewsEntry, { news }),
+      }
     });
     expect(wrapper.find('img').element.src).toMatch(news.picture_url);
   })
@@ -52,8 +58,10 @@ describe('NewsEntry.vue', () => {
       title_keywords: [[0, 1], [3, 4], [4, 5]],
       keywords: [[1, 3], [7, 10]],
     };
-    const wrapper = mount(NewsEntry, {
-      props: { news }
+    const wrapper = mount(NMessageProvider, {
+      slots: {
+        default: h(NewsEntry, { news }),
+      }
     });
     const content = wrapper.find('#content').element;
     expect(content.childElementCount).toBe(5);

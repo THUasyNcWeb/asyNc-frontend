@@ -1,66 +1,121 @@
 <template>
-  <div id="chart2" style="width:100%;height: 200px;">
-  </div>
+  <div v-if="!state.empty" id="chart" class="wordcloud"></div>
+  <n-result
+    v-else
+    status="404"
+    title="还没有留下什么足迹"
+    description="快去探索一番吧"
+  />
 </template>
 
 <script setup lang="ts">
-import Js2WordCloud from "js2wordcloud";
-import {defineProps, onMounted, watch} from 'vue'
-const props = defineProps<{
-  tags:{},
-}>();
+import { onMounted, inject, ref, onBeforeUnmount, watch, reactive } from "vue";
+import { NResult } from "naive-ui";
+import "echarts-wordcloud/dist/echarts-wordcloud.min";
+import "echarts-wordcloud/dist/echarts-wordcloud";
 
-function init_chart(tags:Object) {
-  console.log("初始化")
-  console.log(tags)
-  var wc = new Js2WordCloud(document.getElementById("chart2"));
-  let list = [];
-  if( typeof(tags) == 'object' && Object.keys(tags).length !== 0) {
-    for(var key in tags) {
-      list.push([key, tags[key]])  
-    }
-    let option = {
-      fontSizeFactor: 0.2,                                    // 当词云值相差太大，可设置此值进字体行大小微调，默认0.1
-      maxFontSize: 60,                                        // 最大fontSize，用来控制weightFactor，默认60
-      minFontSize: 30,                                        // 最小fontSize，用来控制weightFactor，默认12
-      list: list,
-      noDataLoadingOption: {                                  // 无数据提示。
-        backgroundColor: '#eee',
-        text: '暂无数据',
-        textStyle: {
-          color: '#888',
-          fontSize: 14
-        }
+export interface UserTag {
+  key: string;
+  value: number;
+}
+
+export interface UserInfo {
+  id: string;
+  user_name: string;
+  signature: string;
+  tags: UserTag[];
+  mail: string;
+  avatar: string;
+}
+const userRef = ref<UserInfo>(inject("userRef"));
+const echarts = require("echarts");
+
+const state = reactive({ empty: false });
+
+watch(userRef, () => {
+  state.empty = userRef.value.tags.length == 0;
+  setTimeout(() => {
+    init_chart(userRef.value.tags);
+  }, 200);
+});
+function init_chart(tags: UserTag[]) {
+  const domMap = document.getElementById("chart");
+  // 清除Echarts默认添加的属性
+  domMap.removeAttribute("_echarts_instance_");
+  let myChart = echarts.init(domMap);
+  if (tags.length != 0) {
+    let now_tags = [];
+    for (const x of tags) {
+      if (x.key == "") {
+        continue;
       }
-    };
-    wc.setOption(option);
-    window.onresize = function () {
-      wc.setOption(option);
-    };
-  }
-  else {
-    let loadingOption = {
-      backgroundColor: '#eee',
-      text: '正在加载...',
-      effect: 'spin'
+      now_tags.push({
+        name: x.key,
+        value: x.value,
+      });
     }
-    wc.showLoading(loadingOption)
+    myChart.hideLoading();
+    myChart.setOption({
+      series: [
+        {
+          type: "wordCloud",
+          //用来调整词之间的距离
+          gridSize: 10,
+          //用来调整字的大小范围
+          // Text size range which the value in data will be mapped to.
+          // Default to have minimum 12px and maximum 60px size.
+          sizeRange: [18, 60],
+          // Text rotation range and step in degree. Text will be rotated randomly in range [-90,                                                                             90] by rotationStep 45
+          //用来调整词的旋转方向，，[0,0]--代表着没有角度，也就是词为水平方向，需要设置角度参考注释内容
+          // rotationRange: [-45, 0, 45, 90],
+          // rotationRange: [ 0,90],
+          rotationRange: [0, 0],
+          //随机生成字体颜色
+          // maskImage: maskImage,
+          textStyle: {
+            fontFamily: "宋体",
+            color: function () {
+              return (
+                "rgb(" +
+                [
+                  Math.round(Math.random() * 250),
+                  Math.round(Math.random() * 250),
+                  Math.round(Math.random() * 250),
+                ].join(",") +
+                ")"
+              );
+            },
+          },
+          //位置相关设置
+          left: "center",
+          top: "center",
+          right: null,
+          bottom: null,
+          // width: "200%",
+          // height: "200%",
+          //数据
+          data: now_tags,
+        },
+      ],
+    });
+  } else {
+    state.empty = true;
   }
 }
 
+onMounted(() => {
+  state.empty = Object.keys(userRef.value.tags).length == 0;
+  setTimeout(() => {
+    init_chart(userRef.value.tags);
+  }, 200);
+});
 
-
-onMounted(() => 
-  {
-    init_chart(props.tags)
-  }
-) 
-watch(
-  () => props.tags,
-  (new_tag, ) => {
-    /* ... */
-    init_chart(new_tag)
-  }
-)
-
+onBeforeUnmount(() => {});
 </script>
+
+<style>
+.wordcloud {
+  width: 100%;
+  height: 300px;
+}
+</style>
