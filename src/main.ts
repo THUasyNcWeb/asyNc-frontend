@@ -34,11 +34,8 @@ function decodeToken(): string {
         encodeURIComponent(window.atob(tokenString.split(".")[1]))
       )
     );
-    console.log(token);
     const expire_date = new Date(token.expire_time * 1000);
-    console.log(expire_date);
     const now_date = new Date();
-    console.log(now_date);
     if (expire_date < now_date) {
       throw Error("The token has expired!");
     }
@@ -87,8 +84,7 @@ async function judgeToken(): Promise<string> {
     url: "checklogin",
     method: "post",
   })
-    .then((res) => {
-      console.log(res);
+    .then(() => {
     })
     .catch((error) => {
       console.log(error);

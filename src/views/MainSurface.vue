@@ -63,10 +63,8 @@ async function getUser() {
       // 根据不同类别，把类别放在了对应的请求参数中
     })
       .then((res) => {
-        console.log(res);
         userRef.value = res.data.data;
         let use_tag: UserTag[] = [];
-        console.log(userRef.value.tags);
         for (var x = 0; x < userRef.value.tags.length; x++) {
           let now_tag = userRef.value.tags[x]["key"].trim();
           if (now_tag.length != 0) {
@@ -79,7 +77,6 @@ async function getUser() {
         if (userRef.value.tags.length > 50) {
           userRef.value.tags = userRef.value.tags.slice(0, 50);
         }
-        console.log(userRef.value.tags);
       })
       .catch((error) => {
         console.log(error);

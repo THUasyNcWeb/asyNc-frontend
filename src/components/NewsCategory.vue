@@ -140,8 +140,6 @@ const props = defineProps<{
   empty_content: string;
 }>();
 
-console.log(props.news);
-
 const state = reactive({
   img_width: window.innerWidth * 0.4,
   picture_news: new Array<All_News>(),
@@ -190,21 +188,14 @@ function choose_pictures() {
     state.side_news.push(state.show_news[state.show_news.length - 1]);
     state.show_news.pop();
   }
-  console.log("主页");
-  console.log(state.show_news);
-  console.log("边界");
-  console.log(state.side_news);
-  console.log("图片");
-  console.log(state.picture_news);
 }
 
 choose_pictures();
 
 watch(
   () => props.news,
-  (new_content) => {
+  () => {
     /* ... */
-    console.log(new_content);
     choose_pictures();
   }
 );

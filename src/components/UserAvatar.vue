@@ -113,7 +113,6 @@ function beforeUpload(data: {
   var cate = ["image/png", "image/jpg", "image/jpeg"];
   var flag = false;
   for (var x of cate) {
-    console.log(x);
     if (data.file.file.type === x) {
       flag = true;
       break;

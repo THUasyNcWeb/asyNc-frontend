@@ -74,7 +74,6 @@ get_news("home");
 
 watch(userRef, () => {
   // 监听用户状态变化，改变个性化推荐
-  console.log(state.now_category);
   if (state.now_category == "person") {
     get_news(state.now_category);
   }
@@ -87,9 +86,8 @@ async function get_personalize() {
   }
   let query = "";
   for (var x = 0; x < tag_num; x++) {
-    query = query + userRef.value.tags[x].key;
+    query = query + userRef.value.tags[x].key + ' ';
   }
-  console.log(tag_num);
   API({
     url: "personalize",
     method: "post",
