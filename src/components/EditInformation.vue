@@ -219,8 +219,7 @@ function changeStatus() {
       },
       // 根据不同类别，把类别放在了对应的请求参数中
     })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         state.edit_status = false;
         state.button_text = "编辑信息";
         state.title = "详细信息";
@@ -265,7 +264,6 @@ function checkUsername() {
 function checkMail() {
   var reg =
     /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-  console.log(now_mail);
   if (
     !(
       state.user.mail == "" ||
@@ -293,7 +291,6 @@ function checkSignature() {
   ) {
     state.user.signature = state.user.signature.trim();
     var now_signature = state.user.signature;
-    console.log(now_signature);
     state.user.sign_valid = now_signature.length <= 50;
     checkSend();
     return;

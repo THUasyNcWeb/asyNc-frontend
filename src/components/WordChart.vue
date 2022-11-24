@@ -54,7 +54,6 @@ function init_chart(tags: UserTag[]) {
         value: x.value,
       });
     }
-    console.log(now_tags);
     myChart.hideLoading();
     myChart.setOption({
       series: [

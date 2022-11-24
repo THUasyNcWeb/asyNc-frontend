@@ -81,8 +81,6 @@ const state = reactive({
 
 async function init_valid() {
     const value = await judgeToken()
-    console.log(value)
-    console.log("异步请求")
     if(value=='') {
         message.error("请先登录或者注册😢")
         router.push("/")
@@ -137,9 +135,8 @@ function modify() {
             "old_password":state.old_password,
             "new_password":state.new_password,
         }
-    }).then((res) => {
+    }).then(() => {
         // 若成功响应，则修改成功
-        console.log(res)
         message.success("修改成功🥳")
         state.old_password = ''
         state.new_password = ''

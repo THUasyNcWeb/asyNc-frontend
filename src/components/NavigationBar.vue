@@ -447,8 +447,7 @@ function handleLogout() {
         url: "logout",
         method: "post",
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           window.localStorage.removeItem("token");
           const new_user: UserInfo = { user_name: "", tags: {} } as UserInfo;
           updateUserLocal(new_user);

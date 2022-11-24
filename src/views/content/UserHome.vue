@@ -250,7 +250,6 @@ const menuOptions = [
                 method: "post",
               })
                 .then((res) => {
-                  console.log(res);
                   window.localStorage.removeItem("token");
                   updateUserLocal({ user_name: "", tags: {} } as UserInfo);
                   router.push("/");

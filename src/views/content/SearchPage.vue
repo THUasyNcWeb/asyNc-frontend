@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-20 01:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 16:59
+ * @LastEditTime: 2022-11-24 03:35
 -->
 <template>
   <n-space vertical style="padding: 18px 96px">
@@ -11,7 +11,7 @@
       <n-empty v-if="!state.news.length" size="large" description="什么也没有找到" />
       <template v-else>
         <n-text depth="3">
-          找到 {{getNewsCount}} 条结果 (用时 {{getTiming}} 秒)
+          找到 {{state.total}} 条结果 (用时 {{getTiming}} 秒)
         </n-text>
         <n-list hoverable clickable>
           <n-list-item v-for="entry, id in state.news" :key="id">
@@ -58,7 +58,7 @@ const state = reactive({
   sort: '',
 
   loading: true,
-
+  total: 0,
   news: [],
   page_count: 0,
   timing: 0,
@@ -73,7 +73,10 @@ const tags: Tag[] = inject('inclusionExclusionTags');
 // Refresh when router changed
 onBeforeRouteUpdate(to => init(to));
 
-init(router.currentRoute.value);
+// Only init once when setup
+if (state.query === null) {
+  init(router.currentRoute.value);
+}
 
 // Message box
 const message = useMessage();
@@ -81,15 +84,6 @@ const message = useMessage();
 function error() {
   message.error('搜索时出现错误😢');
 }
-
-// Calculate news count
-const getNewsCount = computed(() => {
-  if (state.page_count <= 1) {
-    return state.news.length;
-  } else {
-    return state.page_count * 10 + '+';
-  }
-});
 
 // Calculate time elapsed
 const getTiming = computed(() => {
@@ -100,11 +94,14 @@ const getTiming = computed(() => {
 
 // Jump to specified page
 function jump(page: number) {
-  let path = `search?q=${state.word}&page=${page}`;
-  if (state.sort) {
-    path += `&sort=${state.sort}`;
-  }
-  router.push(path);
+  router.push({
+    path:'/search',
+    query: {
+      q: state.word,
+      page,
+      sort: state.sort || undefined,
+    },
+  });
 }
 
 function init(to: RouteLocationNormalized) {
@@ -147,9 +144,13 @@ function init(to: RouteLocationNormalized) {
     },
   }).then(response => {
     state.loading = false;
-
     let data = response.data.data;
+    state.total = data.total
     state.page_count = data.page_count;
+
+    // Ensure we don't replicate news
+    state.news = [];
+
     for (const entry of data.news) {
       // Construct Date object
       state.news.push({
