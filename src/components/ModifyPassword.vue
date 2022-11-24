@@ -72,7 +72,7 @@ const router = useRouter()
 const message = useMessage()
 
 const userRef = ref<UserInfo>(inject('userRef')) 
-
+const updateUserLocal:Function = inject('updateUserLocal')
 const state = reactive({
   old_password:"", 
   new_password: "", 
@@ -83,6 +83,7 @@ async function init_valid() {
     const value = await judgeToken()
     if(value=='') {
         message.error("请先登录或者注册😢")
+        updateUserLocal({ user_name: "", tags: [] } as UserInfo);
         router.push("/")
     }
 }

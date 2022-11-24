@@ -219,7 +219,7 @@ function changeStatus() {
       },
       // 根据不同类别，把类别放在了对应的请求参数中
     })
-      .then(() => {
+      .then((res) => {
         state.edit_status = false;
         state.button_text = "编辑信息";
         state.title = "详细信息";
@@ -231,11 +231,11 @@ function changeStatus() {
         };
         updateUserLocal(new_user);
         message.success("修改成功🥳");
-        // alert("修改成功")
+        window.localStorage.setItem('token',res.data.data.token)
+        // 更新token
       })
       .catch((error) => {
         console.log(error);
-        // alert("修改失败")
         message.error("修改失败😢");
       });
     // 发送接口
