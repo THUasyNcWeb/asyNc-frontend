@@ -88,7 +88,7 @@ async function get_personalize() {
   for (var x = 0; x < tag_num; x++) {
     query = query + userRef.value.tags[x].key + ' ';
   }
-  API({
+  await API({
     url: "personalize",
     method: "post",
     data: {
@@ -111,7 +111,7 @@ async function get_personalize() {
     });
 }
 
-function get_news(category: string) {
+async function get_news(category: string) {
   state.empty_content = "自己探索的世界才更为真实";
   if (category == "more") {
     return;
@@ -131,7 +131,7 @@ function get_news(category: string) {
       state.error = false;
     }
   } else {
-    API({
+    await API({
       headers: { Authorization: window.localStorage.getItem("token") },
       url: "allnews",
       params: {
