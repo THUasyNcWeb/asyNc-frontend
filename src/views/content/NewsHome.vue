@@ -79,7 +79,7 @@ watch(userRef, () => {
   }
 });
 
-async function get_personalize() {
+function get_personalize() {
   let tag_num = 3;
   if (tag_num > userRef.value.tags.length) {
     tag_num = userRef.value.tags.length;
@@ -88,7 +88,7 @@ async function get_personalize() {
   for (var x = 0; x < tag_num; x++) {
     query = query + userRef.value.tags[x].key + ' ';
   }
-  await API({
+  API({
     url: "personalize",
     method: "post",
     data: {
@@ -96,13 +96,16 @@ async function get_personalize() {
     },
   })
     .then((res) => {
-      state.loading = false;
-      for (const entry of res.data.data.news) {
-        state.all_news.push({
-          ...entry,
-          pub_time: new Date(entry.pub_time),
-          is_favorites: entry.is_favorite,
-        });
+      if(state.now_category == 'person'){
+        // 仅接受最后一次请求
+        state.loading = false;
+        for (const entry of res.data.data.news) {
+          state.all_news.push({
+            ...entry,
+            pub_time: new Date(entry.pub_time),
+            is_favorites: entry.is_favorite,
+          });
+        }
       }
     })
     .catch(() => {
@@ -111,7 +114,7 @@ async function get_personalize() {
     });
 }
 
-async function get_news(category: string) {
+function get_news(category: string) {
   state.empty_content = "自己探索的世界才更为真实";
   if (category == "more") {
     return;
@@ -131,7 +134,7 @@ async function get_news(category: string) {
       state.error = false;
     }
   } else {
-    await API({
+    API({
       headers: { Authorization: window.localStorage.getItem("token") },
       url: "allnews",
       params: {
@@ -141,14 +144,17 @@ async function get_news(category: string) {
       // 根据不同类别，把类别放在了对应的请求参数中
     })
       .then((res) => {
-        state.loading = false;
-        for (const entry of res.data.data) {
-          // Construct Date object
-          state.all_news.push({
-            ...entry,
-            pub_time: new Date(entry.pub_time),
-            is_favorites: entry.is_favorite,
-          });
+        if(state.now_category == category) {
+          // 防止因为异步出现问题，仅接受最后一次请求
+          state.loading = false;
+          for (const entry of res.data.data) {
+            // Construct Date object
+            state.all_news.push({
+              ...entry,
+              pub_time: new Date(entry.pub_time),
+              is_favorites: entry.is_favorite,
+            });
+          }
         }
       })
       .catch((error) => {
