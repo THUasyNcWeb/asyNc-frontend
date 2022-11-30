@@ -262,7 +262,7 @@ function colChange(category: string, label: string) {
         <n-result
           v-else
           status="500"
-          title="500 服务器链接错误"
+          title="服务器链接错误"
           description="你家服务器怎么又炸了"
           style="margin-top: 3%"
         >
