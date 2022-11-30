@@ -51,10 +51,8 @@
             用户名不符合格式
           </n-text>
         </n-space>
-        <!-- </n-card> -->
       </n-grid-item>
       <n-grid-item span="0:24 640:14 1024:14">
-        <!-- <n-card class="card_border" style="width: 100%;"> -->
         <n-space :vertical="true">
           <n-space>
             <n-icon :size="25">
