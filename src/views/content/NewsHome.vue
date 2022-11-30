@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
  * @LastEditors: 郑友捷
- * @LastEditTime: 2022-11-28 09:21
+ * @LastEditTime: 2022-11-30 20:19
  -->
 
 <script setup lang="ts">
@@ -221,15 +221,8 @@ function colChange(category: string, label: string) {
       pane-style="margin-left:15%;width:70%;min-height:500px;"
       size="large"
       default-value="home"
+      justify-content="center"
     >
-      <template #prefix>
-        <div :style="{width:state.window_width + 'px'}">
-        </div>
-      </template>
-      <template #suffix>
-        <div :style="{width:state.window_width + 'px'}">
-        </div>
-      </template>
       <n-tab-pane
         v-for="item in state.all_category"
         :key="item.key"
