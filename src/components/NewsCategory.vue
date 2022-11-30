@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 新闻分栏展示
+ * @Author: 郑友捷
+ * @Date: 2022-11-07 23:30
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-30 19:23
+ -->
 <template>
   <n-space vertical>
     <n-result
@@ -149,9 +156,9 @@ const state = reactive({
 });
 
 // change the offset dynamically
-window.onresize = () => {
+window.addEventListener('resize', () => {
   state.img_width = window.innerWidth * 0.4;
-};
+});
 
 const default_logo = require("@/assets/asyNc.png");
 

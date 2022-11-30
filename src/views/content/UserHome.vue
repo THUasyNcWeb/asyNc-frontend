@@ -2,13 +2,13 @@
  * @FileDescription: 用户主页
  * @Author: 郑友捷
  * @Date: 2022-10-07 23:30
- * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 19:23
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-30 19:23
  -->
 
 <template>
-  <n-spin :show="state.empty" size="large">
-    <div v-if="!state.empty">
+  <n-spin :show="state.empty" size="large" style="margin-top:20%">
+    <div v-if="!state.empty" style="margin-top:-20%">
       <n-layout style="width: 100%; height: 100%; border-radius: 10px">
         <n-layout has-sider>
           <n-layout-sider bordered :width="250">
@@ -156,7 +156,7 @@ watch(
               // 去除空格
               if (new_user.tags.length > 50) {
                 new_user.tags = new_user.tags.slice(0, 50);
-              }
+              } 
               updateUserLocal(new_user)
             })
             .catch((error) => {
@@ -306,6 +306,7 @@ const menuOptions = [
 function updateSelected(route: RouteLocationNormalized) {
   for (const item of menuOptions) {
     if (route.path === item.path) {
+      // get the value of the user menu
       state.now_value = item.key;
       break;
     }

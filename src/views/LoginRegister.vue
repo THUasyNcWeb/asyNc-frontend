@@ -27,6 +27,7 @@
             <n-input size="large" placeholder="请输入用户名" v-model:value="username" style="" />
             <n-text v-if="state.title == '注册'" depth="3" style="font-size: small; margin-top: 0%; padding-top: 0%; ">
               |&nbsp;用户名为包含 "中英文数字 _ -" 在内的 1-14 位字符，且首字符需为中文或英文
+              <!-- 注册时的规范提示 -->
             </n-text>
           </n-space>
         </n-grid-item>
@@ -96,31 +97,37 @@ const state = reactive({ title })
 const message = useMessage()
 
 watch(() => router.currentRoute.value.path, (newValue) => {
+  // 根据当前路由判断是登录状态还是注册状态
   if (newValue == "/login") {
     state.title = "登录"
   } else {
     state.title = "注册"
   }
 }, { immediate: true })
+
 var username: Ref<string> = ref("")
 var password: Ref<string> = ref("")
 var re_password: Ref<string> = ref("")
 
 function handleRegister() {
+  // 成功注册
   router.push('/register')
   state.title = "注册"
 }
 
 function handleLogin() {
+  // 成功登录
   router.push('/login')
   state.title = "登录"
 }
 
 function handleHomePage() {
+  // 成功返回主页
   router.push("/")
 }
 
 function judgeUser(username: string) {
+  // 判断用户名是否合法
   if (username.length > 14) {
     message.error('用户名不应超过 14 个字符');
     return false;
@@ -133,6 +140,7 @@ function judgeUser(username: string) {
 }
 
 function judgePassword(password: string) {
+  // 判断密码是否合法
   if (password.length > 14 || password.length < 8) {
     message.error('密码长度应为 8-14 个字符');
     return false;
@@ -145,11 +153,15 @@ function judgePassword(password: string) {
 }
 
 function judgeRepassword() {
+  // 判断第二次输入的密码是否合法
+  // 首先判断第二次密码是否与第一次密码一样
+  // 如果不不一样直接报错
   if (re_password.value != password.value) {
     message.error("两次输入的密码不一致")
     return false;
   }
-  return true;
+  // 否则检查当前密码的格式
+  return judgePassword(re_password.value);
 }
 
 function login() {
@@ -170,6 +182,8 @@ function login() {
     // 存储token
     message.success("欢迎回来，" + username.value + "!")
     router.back();
+    // 回到原来的状态
+
   }).catch(() => {
     message.error("用户名或密码错误")
   })

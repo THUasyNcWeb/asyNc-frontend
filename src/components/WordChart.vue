@@ -1,15 +1,26 @@
+<!--
+ * @FileDescription: 词云图
+ * @Author: 郑友捷
+ * @Date: 2022-11-07 23:30
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-30 19:23
+ -->
+
 <template>
-  <div v-if="!state.empty" id="chart" class="wordcloud"></div>
-  <n-result
-    v-else
-    status="404"
-    title="还没有留下什么足迹"
-    description="快去探索一番吧"
-  />
+  <body>
+    <div v-if="!state.empty" id="chart" class="wordcloud"></div>
+    <n-result
+      v-else
+      status="404"
+      title="还没有留下什么足迹"
+      description="快去探索一番吧"
+    />
+    <!-- 若没有数据，则不加载词云图 -->
+  </body>
 </template>
 
 <script setup lang="ts">
-import { onMounted, inject, ref, onBeforeUnmount, watch, reactive } from "vue";
+import { onMounted, inject, ref, watch, reactive } from "vue";
 import { NResult } from "naive-ui";
 import "echarts-wordcloud/dist/echarts-wordcloud.min";
 import "echarts-wordcloud/dist/echarts-wordcloud";
@@ -37,6 +48,7 @@ watch(userRef, () => {
   setTimeout(() => {
     init_chart(userRef.value.tags);
   }, 200);
+  // 重新加载词云图
 });
 function init_chart(tags: UserTag[]) {
   const domMap = document.getElementById("chart");
@@ -91,8 +103,6 @@ function init_chart(tags: UserTag[]) {
           top: "center",
           right: null,
           bottom: null,
-          // width: "200%",
-          // height: "200%",
           //数据
           data: now_tags,
         },
@@ -104,13 +114,13 @@ function init_chart(tags: UserTag[]) {
 }
 
 onMounted(() => {
+  // 初始化加载
   state.empty = Object.keys(userRef.value.tags).length == 0;
   setTimeout(() => {
     init_chart(userRef.value.tags);
   }, 200);
 });
 
-onBeforeUnmount(() => {});
 </script>
 
 <style>
