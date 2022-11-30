@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 选择更多新闻
+ * @Author: 郑友捷
+ * @Date: 2022-11-07 23:30
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-30 19:23
+ -->
 <template>
   <n-card class="card_bordered">
     <n-space vertical :size="40">

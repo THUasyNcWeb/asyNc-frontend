@@ -1,3 +1,10 @@
+<!--
+ * @FileDescription: 用户头像
+ * @Author: 郑友捷
+ * @Date: 2022-11-07 23:30
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-30 19:23
+ -->
 <template>
   <div
     class="img_div"
