@@ -3,7 +3,7 @@
     <n-result
       v-if="!props.news.length"
       status="404"
-      title="404 资源不存在"
+      title="资源不存在"
       :description="props.empty_content"
     >
     </n-result>
