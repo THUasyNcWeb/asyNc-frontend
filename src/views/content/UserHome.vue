@@ -134,6 +134,36 @@ watch(
           updateUserLocal({ user_name: "", tags: [] } as UserInfo);
           router.push("/");
         }
+        else {
+          API({
+            headers: { Authorization: window.localStorage.getItem("token") },
+            url: "userinfo",
+            method: "get",
+            // 根据不同类别，把类别放在了对应的请求参数中
+          })
+            .then((res) => {
+              var new_user = { user_name: "", tags: [] } as UserInfo;
+              new_user = res.data.data;
+              let use_tag: UserTag[] = [];
+              for (var x = 0; x < new_user.tags.length; x++) {
+                let now_tag = new_user.tags[x]["key"].trim();
+                if (now_tag.length != 0) {
+                  use_tag.push({ key: now_tag, value: new_user.tags[x].value });
+                }
+              }
+              // 截取前50个tags
+              new_user.tags = use_tag;
+              // 去除空格
+              if (new_user.tags.length > 50) {
+                new_user.tags = new_user.tags.slice(0, 50);
+              }
+              updateUserLocal(new_user)
+            })
+            .catch((error) => {
+              console.log(error);
+              updateUserLocal({ user_name: "", tags: [] } as UserInfo);
+            });
+        }
       } else {
         message.error("请先登录或者注册😢");
         updateUserLocal({ user_name: "", tags: [] } as UserInfo);

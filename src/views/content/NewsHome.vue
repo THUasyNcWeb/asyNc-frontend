@@ -2,8 +2,8 @@
  * @FileDescription: 新闻搜索与展示主页
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
- * @LastEditors: 王博文
- * @LastEditTime: 2022-11-23 18:55
+ * @LastEditors: 郑友捷
+ * @LastEditTime: 2022-11-28 09:21
  -->
 
 <script setup lang="ts">
@@ -41,7 +41,7 @@ export interface UserInfo {
 const state = reactive({
   all_news: new Array<All_News>(),
 
-  window_width: window.innerWidth * 0.35,
+  window_width: window.innerWidth * 0.34,
   all_category: new Array(),
   // 所有的分类
   now_category: "home",
@@ -58,7 +58,7 @@ const userRef = ref<UserInfo>(inject("userRef"));
 
 // change the offset dynamically
 window.onresize = () => {
-  state.window_width = window.innerWidth * 0.35;
+  state.window_width = window.innerWidth * 0.34;
 };
 
 state.all_category.push(
@@ -79,7 +79,7 @@ watch(userRef, () => {
   }
 });
 
-async function get_personalize() {
+function get_personalize() {
   let tag_num = 3;
   if (tag_num > userRef.value.tags.length) {
     tag_num = userRef.value.tags.length;
@@ -96,13 +96,16 @@ async function get_personalize() {
     },
   })
     .then((res) => {
-      state.loading = false;
-      for (const entry of res.data.data.news) {
-        state.all_news.push({
-          ...entry,
-          pub_time: new Date(entry.pub_time),
-          is_favorites: entry.is_favorite,
-        });
+      if(state.now_category == 'person'){
+        // 仅接受最后一次请求
+        state.loading = false;
+        for (const entry of res.data.data.news) {
+          state.all_news.push({
+            ...entry,
+            pub_time: new Date(entry.pub_time),
+            is_favorites: entry.is_favorite,
+          });
+        }
       }
     })
     .catch(() => {
@@ -141,14 +144,17 @@ function get_news(category: string) {
       // 根据不同类别，把类别放在了对应的请求参数中
     })
       .then((res) => {
-        state.loading = false;
-        for (const entry of res.data.data) {
-          // Construct Date object
-          state.all_news.push({
-            ...entry,
-            pub_time: new Date(entry.pub_time),
-            is_favorites: entry.is_favorite,
-          });
+        if(state.now_category == category) {
+          // 防止因为异步出现问题，仅接受最后一次请求
+          state.loading = false;
+          for (const entry of res.data.data) {
+            // Construct Date object
+            state.all_news.push({
+              ...entry,
+              pub_time: new Date(entry.pub_time),
+              is_favorites: entry.is_favorite,
+            });
+          }
         }
       })
       .catch((error) => {
@@ -210,11 +216,18 @@ function colChange(category: string, label: string) {
       "
       type="line"
       animated
-      :tabs-padding="state.window_width"
       pane-style="margin-left:15%;width:70%;min-height:500px;"
       size="large"
       default-value="home"
     >
+      <template #prefix>
+        <div :style="{width:state.window_width + 'px'}">
+        </div>
+      </template>
+      <template #suffix>
+        <div :style="{width:state.window_width + 'px'}">
+        </div>
+      </template>
       <n-tab-pane
         v-for="item in state.all_category"
         :key="item.key"
@@ -249,7 +262,7 @@ function colChange(category: string, label: string) {
         <n-result
           v-else
           status="500"
-          title="500 服务器链接错误"
+          title="服务器链接错误"
           description="你家服务器怎么又炸了"
           style="margin-top: 3%"
         >
