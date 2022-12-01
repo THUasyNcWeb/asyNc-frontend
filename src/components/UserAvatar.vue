@@ -111,6 +111,7 @@ function update() {
     })
     .catch((error) => {
       console.log(error);
+      message.error("获取用户信息失效😢")
     });
 }
 function beforeUpload(data: {
