@@ -3,7 +3,7 @@
  * @Author: 王博文
  * @Date: 2022-10-19 23:28
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-24 01:51
+ * @LastEditTime: 2022-12-01 11:18
 -->
 
 <template>
@@ -15,7 +15,6 @@
     v-model:value="text"
     :options="suggestions"
     @keyup.enter="search"
-    @select="suggestionSelect"
     @update:value="suggestionUpdate">
     <template #prefix>
       <n-space>
@@ -235,12 +234,6 @@ function suggestionUpdate() {
       });
     });
   });
-}
-
-// Handle select event, update query keyword and perform search
-function suggestionSelect(keyword: string) {
-  text.value = keyword;
-  search();
 }
 
 // Routing
