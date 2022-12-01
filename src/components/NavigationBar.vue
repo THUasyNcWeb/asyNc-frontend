@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-30 20:17
+ * @LastEditTime: 2022-12-01 11:26
 -->
 <template>
   <n-space align="center" justify="space-between">
@@ -144,7 +144,7 @@
             >
               <AnalyticsOutline />
             </n-icon>
-            <n-text> 畅享百万数据模型 </n-text>
+            <n-text> 畅享千万数据模型 </n-text>
           </div>
 
           <div style="margin: 8px; border: 0; padding: 0">
