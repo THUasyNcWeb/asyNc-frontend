@@ -3,7 +3,7 @@
  * @Author: 郑友捷
  * @Date: 2022-10-03 11:00
  * @LastEditors: 郑友捷
- * @LastEditTime: 2022-11-28 09:21
+ * @LastEditTime: 2022-11-30 20:19
  -->
 
 <script setup lang="ts">
@@ -41,7 +41,7 @@ export interface UserInfo {
 const state = reactive({
   all_news: new Array<All_News>(),
 
-  window_width: window.innerWidth * 0.34,
+  window_width: document.body.clientWidth * 0.33,
   all_category: new Array(),
   // 所有的分类
   now_category: "home",
@@ -58,7 +58,7 @@ const userRef = ref<UserInfo>(inject("userRef"));
 
 // change the offset dynamically
 window.onresize = () => {
-  state.window_width = window.innerWidth * 0.34;
+  state.window_width = document.body.clientWidth * 0.33;
 };
 
 state.all_category.push(
@@ -89,6 +89,7 @@ function get_personalize() {
     query = query + userRef.value.tags[x].key + ' ';
   }
   API({
+    headers: { Authorization: window.localStorage.getItem("token") },
     url: "personalize",
     method: "post",
     data: {
@@ -98,6 +99,7 @@ function get_personalize() {
     .then((res) => {
       if(state.now_category == 'person'){
         // 仅接受最后一次请求
+        // 对其他请求直接驳回
         state.loading = false;
         for (const entry of res.data.data.news) {
           state.all_news.push({
@@ -219,15 +221,8 @@ function colChange(category: string, label: string) {
       pane-style="margin-left:15%;width:70%;min-height:500px;"
       size="large"
       default-value="home"
+      justify-content="center"
     >
-      <template #prefix>
-        <div :style="{width:state.window_width + 'px'}">
-        </div>
-      </template>
-      <template #suffix>
-        <div :style="{width:state.window_width + 'px'}">
-        </div>
-      </template>
       <n-tab-pane
         v-for="item in state.all_category"
         :key="item.key"
@@ -259,6 +254,7 @@ function colChange(category: string, label: string) {
             </n-icon>
           </template>
         </n-spin>
+        <!-- 设置预加载界面 -->
         <n-result
           v-else
           status="500"
@@ -266,11 +262,13 @@ function colChange(category: string, label: string) {
           description="你家服务器怎么又炸了"
           style="margin-top: 3%"
         >
+        <!-- 服务器出现问题，无法加载数据 -->
           <template #footer>
             <n-button type="primary" @click="get_news(state.now_category)"
               >头铁再来一次</n-button
             >
           </template>
+          <!-- 重新请求 -->
         </n-result>
       </n-tab-pane>
       <n-tab-pane :name="state.more_key" :tab="more_news">
@@ -279,6 +277,7 @@ function colChange(category: string, label: string) {
           :mainCategory="state.all_category"
           @update="colChange"
         />
+        <!-- 更多新闻选择界面 -->
         <n-spin
           v-else
           :show="state.loading"

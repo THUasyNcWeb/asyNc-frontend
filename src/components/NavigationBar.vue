@@ -3,20 +3,22 @@
  * @Author: 郑友捷
  * @Date: 2022-10-31 9:21
  * @LastEditors: 王博文
- * @LastEditTime: 2022-11-24 14:25
+ * @LastEditTime: 2022-12-01 11:26
 -->
 <template>
   <n-space align="center" justify="space-between">
     <n-space>
-      <n-popover style="width: 114px" trigger="hover" :delay="500" @update:show="handlePopoverShow">
+      <n-popover style="width: 129px" trigger="hover" :delay="500" @update:show="handlePopoverShow">
         <template #trigger>
           <router-link to="/">
             <n-gradient-text type="success" size="24"> asyNc </n-gradient-text>
           </router-link>
         </template>
         <n-statistic label="新闻总量" tabular-nums>
-          <n-number-animation ref="numberAnimationRef" show-separator :duration="4000"
-            :from="0" :to="state.news_count" />
+          <n-space justify="end">
+            <n-number-animation ref="numberAnimationRef" show-separator :duration="4000"
+              :from="0" :to="state.news_count" />
+          </n-space>
         </n-statistic>
       </n-popover>
       <search-box :text="state.word" :sort="state.sort" style="width: 40vw" />
@@ -142,7 +144,7 @@
             >
               <AnalyticsOutline />
             </n-icon>
-            <n-text> 畅享百万数据模型 </n-text>
+            <n-text> 畅享千万数据模型 </n-text>
           </div>
 
           <div style="margin: 8px; border: 0; padding: 0">
