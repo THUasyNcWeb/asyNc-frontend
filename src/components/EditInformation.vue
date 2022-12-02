@@ -234,7 +234,28 @@ function changeStatus() {
       })
       .catch((error) => {
         console.log(error);
-        message.error("修改失败😢");
+        if(error.code == undefined) {
+          message.error("修改失败😢");
+        }
+        else if(error.code == 1001) {
+          message.error("登录状态失效😢");
+        }
+        else if(error.code == 6) {
+          message.error('原用户名错误😢')
+        }
+        else if(error.code == 7) {
+          message.error("新用户名格式不合法😢")
+        }
+        else if(error.code == 8) {
+          message.error("数据格式错误或者不合法😢")
+        }
+        else if(error.code == 9) {
+          message.error("用户名已被占用😢")
+        }
+        else {
+          message.error("修改失败😢")
+        }
+        
       });
     // 发送接口
   }

@@ -6,6 +6,7 @@
  * @LastEditTime: 2022-11-23 01:49
  */
 
+import { messageDark } from "naive-ui";
 import { createApp, reactive } from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -88,8 +89,12 @@ async function judgeToken(): Promise<string> {
     })
     .catch((error) => {
       console.log(error);
-      localStorage.removeItem("token");
       return_value = "";
+      if (error.code != undefined) { 
+        if(error.code == 1001) {
+          localStorage.removeItem("token");
+        }
+      }
     });
   return return_value;
 }

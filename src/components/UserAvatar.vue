@@ -27,13 +27,7 @@
           :show-file-list="false"
           @before-upload="beforeUpload"
         >
-          <n-a
-            v-if="props.width == 120"
-            style="color: aliceblue; font-size: 30px"
-          >
-            上传头像
-          </n-a>
-          <n-a v-else style="color: aliceblue; font-size: 20px"> 上传头像 </n-a>
+          <n-a :style="{'color': 'aliceblue', 'font-size': props.width * 0.15 + 'px'}"> 上传头像 </n-a>
         </n-upload>
       </div>
     </div>
@@ -111,6 +105,7 @@ function update() {
     })
     .catch((error) => {
       console.log(error);
+      message.error("获取用户信息失效😢")
     });
 }
 function beforeUpload(data: {
