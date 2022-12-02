@@ -26,7 +26,7 @@ import { provide, reactive, ref } from "vue";
 import Navigation from "../components/NavigationBar.vue";
 import { judgeToken, reloadNavigationBar, reloader } from "@/main";
 import API from "@/store/axiosInstance";
-import { NLayout, NLayoutHeader, NLayoutContent, LayoutInst } from "naive-ui";
+import { NLayout, NLayoutHeader, NLayoutContent, LayoutInst, useMessage } from "naive-ui";
 import { RouterView } from "vue-router";
 
 export type TagType = "include" | "exclude" | null;
@@ -57,6 +57,8 @@ function updateUserLocal(new_user: UserInfo) {
   userRef.value = new_user;
 }
 
+const message = useMessage()
+
 async function getUser() {
   // 获取用户信息
   if ((await judgeToken()) != "") {
@@ -85,6 +87,7 @@ async function getUser() {
       })
       .catch((error) => {
         console.log(error);
+        message.error("获取用户信息失败😢")
         updateUserLocal({ user_name: "", tags: [] } as UserInfo);
       });
   } else {

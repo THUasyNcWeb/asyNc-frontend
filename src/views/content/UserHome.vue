@@ -161,6 +161,7 @@ watch(
             })
             .catch((error) => {
               console.log(error);
+              message.error("请求用户信息失败😢");
               updateUserLocal({ user_name: "", tags: [] } as UserInfo);
             });
         }
