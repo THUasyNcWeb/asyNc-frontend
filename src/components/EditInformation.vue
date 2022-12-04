@@ -234,22 +234,22 @@ function changeStatus() {
       })
       .catch((error) => {
         console.log(error);
-        if(error.code == undefined) {
+        if(error.response.data.code  == undefined) {
           message.error("修改失败😢");
         }
-        else if(error.code == 1001) {
+        else if(error.response.data.code  == 1001) {
           message.error("登录状态失效😢");
         }
-        else if(error.code == 6) {
+        else if(error.response.data.code  == 6) {
           message.error('原用户名错误😢')
         }
-        else if(error.code == 7) {
+        else if(error.response.data.code  == 7) {
           message.error("新用户名格式不合法😢")
         }
-        else if(error.code == 8) {
+        else if(error.response.data.code  == 8) {
           message.error("数据格式错误或者不合法😢")
         }
-        else if(error.code == 9) {
+        else if(error.response.data.code  == 9) {
           message.error("用户名已被占用😢")
         }
         else {
