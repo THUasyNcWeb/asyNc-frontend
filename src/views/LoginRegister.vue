@@ -184,7 +184,7 @@ function login() {
     router.back();
     // 回到原来的状态
   }).catch((error) => {
-    if(error.code == 4) {
+    if(error.response.data.code == 4) {
       message.error("用户名或密码错误😢")
     }
     else {
@@ -221,25 +221,19 @@ function register() {
     message.success("欢迎来到知识的世界，" + username.value + "!")
     router.back();
   }).catch((error) => {
-    if (error.code == undefined) {
-      // 非正常返回
-      message.error("注册失败😢")
+    console.log(error)
+    if(error.response.data.code  == 1) {
+      message.error("用户名重复😢")
     }
-    else{
-      console.log(error)
-      if(error.code == 1) {
-        message.error("用户名重复😢")
-      }
-      else if (error.code == 2) {
-        message.error("用户名格式不合法😢")
-      }
-      else if (error.code == 3) {
-        message.error("密码格式不合法😢")
-      }
-      else {
-        message.error("注册失败😢")
-      }
-    }    
+    else if (error.response.data.code  == 2) {
+      message.error("用户名格式不合法😢")
+    }
+    else if (error.response.data.code  == 3) {
+      message.error("密码格式不合法😢")
+    }
+    else {
+      message.error("注册失败😢")
+    }  
   })
 }
 </script>

@@ -90,10 +90,8 @@ async function judgeToken(): Promise<string> {
     .catch((error) => {
       console.log(error);
       return_value = "";
-      if (error.code != undefined) { 
-        if(error.code == 1001) {
-          localStorage.removeItem("token");
-        }
+      if(error.response.data.code == 1001) {
+        localStorage.removeItem("token");
       }
     });
   return return_value;
