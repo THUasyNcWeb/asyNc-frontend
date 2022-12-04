@@ -147,11 +147,11 @@ function modify() {
     }).catch((error)=>{
         // 否则修改失败，根据失败码来进行对应的响应
         console.log(error)
-        var code = error.data.code
-        if(code == 3) {
+        var code = error.response.data.code
+        if(code == 4) {
           message.error("输入的旧密码错误😢")
         }
-        else if (code == 4) {
+        else if (code == 3) {
           message.error("输入的新密码不规范😢")
         }
         message.error("修改失败😢")
